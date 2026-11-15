@@ -1,0 +1,18 @@
+{
+  "name": "securitylab-engineering-simulator",
+  "version": "0.11.0",
+  "private": true,
+  "type": "module",
+  "description": "SecurityLab cumulative engineering source through Stage 11: evidence-based competency reporting and ten practical scenarios (runtime acceptance pending)",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

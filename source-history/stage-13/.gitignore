@@ -1,0 +1,8 @@
+node_modules/
+frontend-react/node_modules/
+dist/
+dist-react/
+*.log
+.env
+.env.*
+!.env.example

@@ -1,0 +1,27 @@
+{
+  "format": "securitylab-integration-source-lineage/v1",
+  "date": "2026-11-14",
+  "source_parent_archive": "SecurityLab_Stage15_INTEGRATION_CORRECTED_CUMULATIVE_SOURCE_2026-11-14.zip",
+  "source_parent_sha256": "1bc0db11efbe5ce00ef851d9702d42ffb51f187045861b5880b3a269daa2e09c",
+  "current_application_root": "SecurityLab/",
+  "historical_sources_root": "source-history/",
+  "source_only": true,
+  "no_active_sign_in_database_or_cloud": true,
+  "production_accepted": false,
+  "modified_active_files": {
+    "SecurityLab/src/scenarios/evaluation.ts": {
+      "before": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1",
+      "after": "6cbb567adddae63c49fcb51dbc0a506e256223816e80290e4666c3544c06d53b"
+    }
+  },
+  "change_notes": [
+    "Budget compliance is not awarded for a zero-device installation",
+    "Grant evidence requires an enabled identity and current powered reader/lock, retaining the event clock for schedule validity",
+    "Exit evidence requires a still-functioning wired exit button"
+  ],
+  "known_acceptance_blockers": [
+    "React/Vite npm dependencies unavailable locally",
+    "Real-browser navigation blocked by administrator policy",
+    "PWA and native file-picker testing on supported devices outstanding"
+  ]
+}

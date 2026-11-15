@@ -1,0 +1,15 @@
+{
+  "name": "securitylab-engineering-simulator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first virtual CCTV engineering and troubleshooting simulator",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {"typescript": "5.9.3"},
+  "engines": {"node": ">=20"}
+}

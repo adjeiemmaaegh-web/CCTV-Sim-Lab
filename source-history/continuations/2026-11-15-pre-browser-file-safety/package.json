@@ -1,0 +1,16 @@
+{
+  "name": "securitylab-offline-engineering-simulator",
+  "version": "0.15.0-source",
+  "private": true,
+  "type": "module",
+  "description": "SecurityLab Stage 15 integrated offline-first engineering simulator source (no accounts, cloud or database)",
+  "scripts": {
+    "dev": "npm --prefix frontend-react run dev",
+    "check": "npm --prefix frontend-react run check",
+    "build": "npm --prefix frontend-react run build",
+    "preview": "npm --prefix frontend-react run preview"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

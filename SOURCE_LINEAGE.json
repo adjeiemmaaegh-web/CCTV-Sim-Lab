@@ -1,0 +1,3619 @@
+{
+  "format": "securitylab-source-lineage/v2",
+  "created_utc_date": "2026-11-14",
+  "purpose": "Reconcile source history without confusing previous tests/screenshots with source code",
+  "accepted_release": false,
+  "current_active_source_root": "SecurityLab/",
+  "source_history_root": "source-history/",
+  "active_source_archive": "SecurityLab_Stage14_RECONCILED_COMPLETE_SOURCE_2026-11-14.zip",
+  "active_source_archive_sha256": "1b15b0c37cf0e0936b17b954613167cf71a919e193778f2c5362750a43be80f1",
+  "active_source_files": 63,
+  "active_source_uncompressed_bytes": 535490,
+  "legacy_stage11_retired_paths_validated": [
+    "assets/icon.svg",
+    "db/schema.sql",
+    "index.html",
+    "manifest.webmanifest",
+    "scripts/build.mjs",
+    "scripts/serve.mjs",
+    "service-worker.js",
+    "src/persistence/projects.ts",
+    "src/state/autosave.ts",
+    "src/state/crosstab.ts",
+    "src/ui/app.ts",
+    "styles.css",
+    "tsconfig.json",
+    "vercel.json"
+  ],
+  "no_active_database": true,
+  "stage_snapshots": {
+    "1": {
+      "archive": "SecurityLab_Stage1_MVP_2026-11-14.zip",
+      "source_entries": 22,
+      "uncompressed_source_bytes": 107265,
+      "new_paths": [
+        ".gitignore",
+        "README.md",
+        "assets/icon.svg",
+        "db/schema.sql",
+        "index.html",
+        "manifest.webmanifest",
+        "package.json",
+        "scripts/build.mjs",
+        "scripts/serve.mjs",
+        "service-worker.js",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/assessment.ts",
+        "src/engine/geometry.ts",
+        "src/engine/network.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts",
+        "src/scenarios/index.ts",
+        "src/ui/app.ts",
+        "styles.css",
+        "tsconfig.json",
+        "vercel.json"
+      ],
+      "removed_paths": [],
+      "modified_paths": [],
+      "archive_sha256": "ab64c7e284490fb481fce4cdfb657cccab6c1b7a75f38167fe69e3af76d8bd28"
+    },
+    "2": {
+      "archive": "SecurityLab_Stage2_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 41,
+      "uncompressed_source_bytes": 183982,
+      "new_paths": [
+        "frontend-react/index.html",
+        "frontend-react/package.json",
+        "frontend-react/public/assets/icon.svg",
+        "frontend-react/public/manifest.webmanifest",
+        "frontend-react/scripts-build-pwa.mjs",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/main.tsx",
+        "frontend-react/src/offline.ts",
+        "frontend-react/src/workstation.css",
+        "frontend-react/tsconfig.json",
+        "frontend-react/vite.config.ts",
+        "src/state/autosave.ts",
+        "src/state/crosstab.ts",
+        "src/state/history.ts"
+      ],
+      "removed_paths": [
+        "README.md"
+      ],
+      "modified_paths": [
+        "manifest.webmanifest",
+        "package.json",
+        "scripts/build.mjs",
+        "service-worker.js",
+        "src/domain/types.ts",
+        "src/persistence/projects.ts",
+        "src/scenarios/index.ts",
+        "src/ui/app.ts",
+        "styles.css"
+      ],
+      "archive_sha256": "c6cf4a38fe31875065926b1cfb0a732e68777b13bfbcece3d04cc58aaae3ed36"
+    },
+    "3": {
+      "archive": "SecurityLab_Stage3_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 42,
+      "uncompressed_source_bytes": 224903,
+      "new_paths": [
+        "src/property/editor.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        ".gitignore",
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/types.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "91a0189c725b039abf3a6695410fc3038f6406d94a426a52e4de19aacf505801"
+    },
+    "4": {
+      "archive": "SecurityLab_Stage4_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 44,
+      "uncompressed_source_bytes": 264659,
+      "new_paths": [
+        "frontend-react/src/components/CctvConfig.tsx",
+        "src/engine/cctv.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/assessment.ts",
+        "src/engine/geometry.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "84d4c49126472961b6cd0725eba11d6b4eefa7e966e642d0a56171e8eafbab04"
+    },
+    "5": {
+      "archive": "SecurityLab_Stage5_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 46,
+      "uncompressed_source_bytes": 310309,
+      "new_paths": [
+        "frontend-react/src/components/NetworkConfig.tsx",
+        "src/engine/networking.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "bffa3980775014eb6475a58e10399eba1942d9d0aa27a1d7b3d991cada8f7eeb"
+    },
+    "6": {
+      "archive": "SecurityLab_Stage6_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 49,
+      "uncompressed_source_bytes": 363672,
+      "new_paths": [
+        "frontend-react/src/components/AlarmConfig.tsx",
+        "frontend-react/src/components/AlarmConsole.tsx",
+        "src/engine/alarm.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/networking.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "a07c61b073306b433f174a464e6a382eb62db535f47036b5dc6efa7f7cd8363a"
+    },
+    "7": {
+      "archive": "SecurityLab_Stage7_SOURCE_ONLY_2026-11-14.zip",
+      "source_entries": 52,
+      "uncompressed_source_bytes": 416212,
+      "new_paths": [
+        "frontend-react/src/components/AccessConfig.tsx",
+        "frontend-react/src/components/AccessConsole.tsx",
+        "src/engine/access.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/networking.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "7ebe143e6d58c6baebcd2e747e6d0b5a2217f380fbdaaf0ad2663f754f6f4c48"
+    },
+    "8": {
+      "archive": "SecurityLab_Stage8_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 55,
+      "uncompressed_source_bytes": 459257,
+      "new_paths": [
+        "frontend-react/src/components/PowerConfig.tsx",
+        "frontend-react/src/components/PowerConsole.tsx",
+        "src/engine/power.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/access.ts",
+        "src/engine/alarm.ts",
+        "src/engine/networking.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "cc628264173e7d31599097add4c911b2355882b265ecf47608c06156b92f463d"
+    },
+    "9": {
+      "archive": "SecurityLab_Stage9_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 63,
+      "uncompressed_source_bytes": 484945,
+      "new_paths": [
+        "src/domain/manufacturers/ajax.ts",
+        "src/domain/manufacturers/dahua.ts",
+        "src/domain/manufacturers/factory.ts",
+        "src/domain/manufacturers/hikvision.ts",
+        "src/domain/manufacturers/index.ts",
+        "src/domain/manufacturers/reolink.ts",
+        "src/domain/manufacturers/tplink.ts",
+        "src/domain/manufacturers/ubiquiti.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/CctvConfig.tsx",
+        "frontend-react/src/components/Inspector.tsx",
+        "frontend-react/src/workstation.css",
+        "src/domain/catalog.ts",
+        "src/domain/types.ts",
+        "src/engine/assessment.ts",
+        "src/engine/cctv.ts",
+        "src/engine/power.ts",
+        "src/engine/simulator.ts",
+        "src/persistence/projects.ts"
+      ],
+      "archive_sha256": "1615301bd021e80f7b7c96047147aad233e7f3b4c0ba406507b7bac7aa9a3b01"
+    },
+    "10": {
+      "archive": "SecurityLab_Stage10_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 66,
+      "uncompressed_source_bytes": 517408,
+      "new_paths": [
+        "frontend-react/src/components/ScenarioConsole.tsx",
+        "src/scenarios/definitions.ts",
+        "src/scenarios/evaluation.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Catalog.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/types.ts",
+        "src/engine/assessment.ts",
+        "src/persistence/projects.ts",
+        "src/scenarios/index.ts"
+      ],
+      "archive_sha256": "03513b0efe17c91812b307555cdf28c4cf83d41270602b73a0c28f1f8f0f708a"
+    },
+    "11": {
+      "archive": "SecurityLab_Stage11_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 69,
+      "uncompressed_source_bytes": 551503,
+      "new_paths": [
+        "frontend-react/src/components/AssessmentConsole.tsx",
+        "src/engine/competency.ts",
+        "src/engine/reports.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/types.ts",
+        "src/engine/assessment.ts",
+        "src/persistence/projects.ts",
+        "src/scenarios/evaluation.ts",
+        "src/ui/app.ts"
+      ],
+      "archive_sha256": "e78b592b62aaa42062f1430740d8164adbbf74d4155338f6cd97cbaa14ab5146"
+    },
+    "12": {
+      "archive": "SecurityLab_Stage12_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 58,
+      "uncompressed_source_bytes": 480561,
+      "new_paths": [
+        "README.md",
+        "src/persistence/file-projects.ts",
+        "src/persistence/validation.ts"
+      ],
+      "removed_paths": [
+        "assets/icon.svg",
+        "db/schema.sql",
+        "index.html",
+        "manifest.webmanifest",
+        "scripts/build.mjs",
+        "scripts/serve.mjs",
+        "service-worker.js",
+        "src/persistence/projects.ts",
+        "src/state/autosave.ts",
+        "src/state/crosstab.ts",
+        "src/ui/app.ts",
+        "styles.css",
+        "tsconfig.json",
+        "vercel.json"
+      ],
+      "modified_paths": [
+        ".gitignore",
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/offline.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/state/history.ts"
+      ],
+      "archive_sha256": "72bca4152039594f67ec829e8b2295b0441015346b676fb94ed3085c3d10501e"
+    },
+    "13": {
+      "archive": "SecurityLab_Stage13_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 60,
+      "uncompressed_source_bytes": 493315,
+      "new_paths": [
+        "frontend-react/src/components/CheckpointDialog.tsx",
+        "src/persistence/safe-images.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "README.md",
+        "frontend-react/index.html",
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Canvas.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/persistence/file-projects.ts"
+      ],
+      "archive_sha256": "bb9866270d59bb1d82b3cc5910921ed7843ad910a1d30234835cdb530252b97c"
+    },
+    "14": {
+      "archive": "SecurityLab_Stage14_COMPLETE_CUMULATIVE_SOURCE_2026-11-14.zip",
+      "source_entries": 62,
+      "uncompressed_source_bytes": 522195,
+      "new_paths": [
+        "frontend-react/src/components/FieldReviewConsole.tsx",
+        "src/field/field-validation.ts"
+      ],
+      "removed_paths": [],
+      "modified_paths": [
+        "README.md",
+        "frontend-react/package.json",
+        "frontend-react/src/SecurityLab.tsx",
+        "frontend-react/src/components/Console.tsx",
+        "frontend-react/src/components/TopBar.tsx",
+        "frontend-react/src/hooks/useWorkbench.ts",
+        "frontend-react/src/workstation.css",
+        "package.json",
+        "src/domain/types.ts",
+        "src/persistence/file-projects.ts",
+        "src/persistence/validation.ts"
+      ],
+      "archive_sha256": "88b3210d4cf98868e682bf2ed8e69b8b65e7c212c3d7b44b17a25965a7f3a10b"
+    }
+  },
+  "files": {
+    "SOURCE_ARCHIVE_README.md": {
+      "bytes": 2161,
+      "sha256": "73c4fca7e5a09776708e859181bbd71921388da4d428901ba79bfbb5e1374766"
+    },
+    "SecurityLab/.gitignore": {
+      "bytes": 93,
+      "sha256": "977c833787f6f811e18e0c006827fb362f82b625f606dad61467e61c12e7f8c2"
+    },
+    "SecurityLab/README.md": {
+      "bytes": 11085,
+      "sha256": "5064c8275bc404693657ced065e1680816bfbd6538d6651dcdf0128d03ddae60"
+    },
+    "SecurityLab/SOURCE_PRESERVATION.json": {
+      "bytes": 11794,
+      "sha256": "1acf7e5bab630bfc65c7a444581f0e3994761ee69a2bbd42725191bfe90479a2"
+    },
+    "SecurityLab/frontend-react/index.html": {
+      "bytes": 527,
+      "sha256": "2d09355c2e0d981871cf87fd8e782f3513a0d84fb373211cad99a1b0f825a396"
+    },
+    "SecurityLab/frontend-react/package.json": {
+      "bytes": 836,
+      "sha256": "d572666e6ed64c33760bd9e3a4a1ff191073d7c137b087d53dc7c03ab9189f94"
+    },
+    "SecurityLab/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "SecurityLab/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "SecurityLab/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "SecurityLab/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 4461,
+      "sha256": "3447f97c9856d2a1031e695655e4dad2a2df530deb2a7a8112bbadbdc518daf5"
+    },
+    "SecurityLab/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "SecurityLab/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "SecurityLab/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "SecurityLab/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "SecurityLab/frontend-react/src/components/AssessmentConsole.tsx": {
+      "bytes": 5836,
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee"
+    },
+    "SecurityLab/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 33220,
+      "sha256": "852a3e895743d4282c5f42548832cec42ca97e961dc3937b1615f03feee66a1d"
+    },
+    "SecurityLab/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "SecurityLab/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "SecurityLab/frontend-react/src/components/CheckpointDialog.tsx": {
+      "bytes": 2527,
+      "sha256": "0be39823db6e554f4c0d0deba251bf3607d9e23e159b8f51afd5b85af0e9ca31"
+    },
+    "SecurityLab/frontend-react/src/components/Console.tsx": {
+      "bytes": 11670,
+      "sha256": "1b6e6e60143a04261daa1f0359ce191de22154f7f80db877c93315579b95df68"
+    },
+    "SecurityLab/frontend-react/src/components/FieldReviewConsole.tsx": {
+      "bytes": 10004,
+      "sha256": "a43aa5412006b1cc3a50abd4f4c9cf615a68a9c06347ac45a9d40af1ea0e68de"
+    },
+    "SecurityLab/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "SecurityLab/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "SecurityLab/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "SecurityLab/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "SecurityLab/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "SecurityLab/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 4019,
+      "sha256": "5aa260cfb758df4b9bd8877ef1352228c7adaecee99fa75dcdcf2fd090a2c903"
+    },
+    "SecurityLab/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 40389,
+      "sha256": "f5d705d4661053d7bcbef4c351636a53037eac7f0cb4ba6384ee4e700710e91e"
+    },
+    "SecurityLab/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "SecurityLab/frontend-react/src/offline.ts": {
+      "bytes": 2916,
+      "sha256": "44d358bb4a5ce4b53a73c201e1591e347ab1ecbcd52507837751f33b50ea2ace"
+    },
+    "SecurityLab/frontend-react/src/workstation.css": {
+      "bytes": 33270,
+      "sha256": "4648935c1456d3cccb3fec20ed407a4419a6674abe8e62b5c9cffabe2596106c"
+    },
+    "SecurityLab/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "SecurityLab/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "SecurityLab/package.json": {
+      "bytes": 509,
+      "sha256": "84e675e58752d095516415d3b3fc493e7e49f1fd75bd22186c0f9b40f48a3f2a"
+    },
+    "SecurityLab/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "SecurityLab/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "SecurityLab/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "SecurityLab/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "SecurityLab/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "SecurityLab/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "SecurityLab/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "SecurityLab/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "SecurityLab/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "SecurityLab/src/domain/types.ts": {
+      "bytes": 17061,
+      "sha256": "e10942fbb1eee608ac6eeacd6aca8942c80bb52983e86e0a879cc49b6856f118"
+    },
+    "SecurityLab/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "SecurityLab/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "SecurityLab/src/engine/assessment.ts": {
+      "bytes": 1939,
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a"
+    },
+    "SecurityLab/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "SecurityLab/src/engine/competency.ts": {
+      "bytes": 12258,
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b"
+    },
+    "SecurityLab/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "SecurityLab/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "SecurityLab/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "SecurityLab/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "SecurityLab/src/engine/reports.ts": {
+      "bytes": 5110,
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484"
+    },
+    "SecurityLab/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "SecurityLab/src/field/field-validation.ts": {
+      "bytes": 7657,
+      "sha256": "397c098a1e1100eb787bb92509f92f610e7d68fe8b24b63ab9813bde4ea81102"
+    },
+    "SecurityLab/src/persistence/file-projects.ts": {
+      "bytes": 11346,
+      "sha256": "bfa5b944a902fc0f4d4a0004ec7d559de682af9e7004ada94b6f7c6ee6fa36aa"
+    },
+    "SecurityLab/src/persistence/safe-images.ts": {
+      "bytes": 2693,
+      "sha256": "ed1a3e95d28e073acc31a65307fa434804a3f62235390e9e8c689e75bb1e8e0c"
+    },
+    "SecurityLab/src/persistence/validation.ts": {
+      "bytes": 29156,
+      "sha256": "0641d24958ae722e859a2a29286c3121d4524d022e6dd4604fa12dc22449ceb7"
+    },
+    "SecurityLab/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "SecurityLab/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "SecurityLab/src/scenarios/evaluation.ts": {
+      "bytes": 9211,
+      "sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1"
+    },
+    "SecurityLab/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "SecurityLab/src/state/history.ts": {
+      "bytes": 3128,
+      "sha256": "dbe1793840a70260587b1c0eedc592c7cf020d8b5626e48336f42d02cdab2183"
+    },
+    "source-history/stage-01/.gitignore": {
+      "bytes": 56,
+      "sha256": "ea47de34738ef29e928736c459702668fe4ac6291b32f73040bbf2b20f81dfb9"
+    },
+    "source-history/stage-01/README.md": {
+      "bytes": 7265,
+      "sha256": "ef71e2c7b9cdc070de9431a9c48dae54a07af5fc07b89908272cc597246c835c"
+    },
+    "source-history/stage-01/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-01/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-01/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-01/manifest.webmanifest": {
+      "bytes": 358,
+      "sha256": "b60e78292583d68b86c803b50b36e8990162992af04478250b5fd012e9ede5e6"
+    },
+    "source-history/stage-01/package.json": {
+      "bytes": 462,
+      "sha256": "b6c79eea5e7c0f8537218b2656211e599bd883caa51bc4420c1271477fa70ac9"
+    },
+    "source-history/stage-01/scripts/build.mjs": {
+      "bytes": 736,
+      "sha256": "e494cc8fc125795c48ddb3719a14cba5e941175366d0c56b41334163f10d1536"
+    },
+    "source-history/stage-01/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-01/service-worker.js": {
+      "bytes": 992,
+      "sha256": "4d8bbaf14100007883fdd62ca8d9e6c4842165eef01c8cfd66db47f4f13989e2"
+    },
+    "source-history/stage-01/src/domain/catalog.ts": {
+      "bytes": 3032,
+      "sha256": "8724c9b940e2853467d7c4a2e734c00bd62bd67a3e96462862fc8b8f4fa0d2e6"
+    },
+    "source-history/stage-01/src/domain/types.ts": {
+      "bytes": 2818,
+      "sha256": "cc82c06732f427d5cec6cfecffe00eb34aab48389ee4535f050c931681dd9df3"
+    },
+    "source-history/stage-01/src/engine/assessment.ts": {
+      "bytes": 4198,
+      "sha256": "e0729a301640bedbe7d294a8176fffbcdfb82a2284164e04c4540c7ff01dc33a"
+    },
+    "source-history/stage-01/src/engine/geometry.ts": {
+      "bytes": 1917,
+      "sha256": "15b4929839f666045bfd0f2e7eaab0ccb70ead3553e8143c3f9b37f480b78498"
+    },
+    "source-history/stage-01/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-01/src/engine/simulator.ts": {
+      "bytes": 10246,
+      "sha256": "9b15eb3035c0e71b220a0a01fa91e99de001ad7de82629f30511b9d1572ca120"
+    },
+    "source-history/stage-01/src/persistence/projects.ts": {
+      "bytes": 5622,
+      "sha256": "252132fe96bbd0bc5beb14600788664d49fb60d4ed8f67559e132d479f9910ae"
+    },
+    "source-history/stage-01/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "ef70e8d89e2c30e9fc419e5446e92478835300e61576278765fb49beb54a809f"
+    },
+    "source-history/stage-01/src/ui/app.ts": {
+      "bytes": 39190,
+      "sha256": "c5f49610d7f78a3b002db3c7c4e3c4217d0c61148fefcf631e1331eff58b07e2"
+    },
+    "source-history/stage-01/styles.css": {
+      "bytes": 13260,
+      "sha256": "6859eab2a3398b374d64f8fe46545daee093579e21db4ba5ea0091bc0a8d2dfb"
+    },
+    "source-history/stage-01/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-01/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-02/.gitignore": {
+      "bytes": 56,
+      "sha256": "ea47de34738ef29e928736c459702668fe4ac6291b32f73040bbf2b20f81dfb9"
+    },
+    "source-history/stage-02/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-02/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-02/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-02/frontend-react/package.json": {
+      "bytes": 841,
+      "sha256": "4d5f044a117b36a17c7d688fda0f92a29419542163be0a996b7f3b65ca4a0400"
+    },
+    "source-history/stage-02/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-02/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-02/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-02/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 4626,
+      "sha256": "83f434400c55a0e9d7ad3b414f5cb16a7cf4d0da352eecfa6e27c96a85bcd7a4"
+    },
+    "source-history/stage-02/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 10594,
+      "sha256": "6617785498ee96bcff836f506675073a38c1a3fb90d16d51e2c37d417579e186"
+    },
+    "source-history/stage-02/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 1737,
+      "sha256": "c7962a51e0b690de08f8cdbd3254aacef55a91d474c1a11f4cc4481b48dfbe6c"
+    },
+    "source-history/stage-02/frontend-react/src/components/Console.tsx": {
+      "bytes": 2565,
+      "sha256": "79b622d181f0baf45a350dc19d18d07ec2b90b4933d53bd145340d3ab5398617"
+    },
+    "source-history/stage-02/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 5720,
+      "sha256": "a913900236c6631cceadfb4708f3ee6afa8c3fa5f2db05a186532b68cf26b639"
+    },
+    "source-history/stage-02/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2139,
+      "sha256": "559b6ab16fa2ae7ce0031a51e0dcbb1cb5e99810bd0e70b8ca47db7945ac65b0"
+    },
+    "source-history/stage-02/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 14804,
+      "sha256": "e7c50cedda9d745bb2ceb89953a897273b657cc4f0f1e0e5ee9d45ab4ad48296"
+    },
+    "source-history/stage-02/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-02/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-02/frontend-react/src/workstation.css": {
+      "bytes": 9408,
+      "sha256": "550d5dd5c7d31ccbf12b5775e4ec65ef0ff2c21e08725b5705cfa659f1e9b4b1"
+    },
+    "source-history/stage-02/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-02/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-02/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-02/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-02/package.json": {
+      "bytes": 734,
+      "sha256": "df9791863716dbe11598c169d8768a753d996932b8e840c4cdabb19e6229d388"
+    },
+    "source-history/stage-02/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-02/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-02/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-02/src/domain/catalog.ts": {
+      "bytes": 3032,
+      "sha256": "8724c9b940e2853467d7c4a2e734c00bd62bd67a3e96462862fc8b8f4fa0d2e6"
+    },
+    "source-history/stage-02/src/domain/types.ts": {
+      "bytes": 2818,
+      "sha256": "cb2235d45d297291f3a146bd3709bdf0fc52d20ca0e365f7c42404cd25e24f32"
+    },
+    "source-history/stage-02/src/engine/assessment.ts": {
+      "bytes": 4198,
+      "sha256": "e0729a301640bedbe7d294a8176fffbcdfb82a2284164e04c4540c7ff01dc33a"
+    },
+    "source-history/stage-02/src/engine/geometry.ts": {
+      "bytes": 1917,
+      "sha256": "15b4929839f666045bfd0f2e7eaab0ccb70ead3553e8143c3f9b37f480b78498"
+    },
+    "source-history/stage-02/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-02/src/engine/simulator.ts": {
+      "bytes": 10246,
+      "sha256": "9b15eb3035c0e71b220a0a01fa91e99de001ad7de82629f30511b9d1572ca120"
+    },
+    "source-history/stage-02/src/persistence/projects.ts": {
+      "bytes": 12054,
+      "sha256": "1462f4781047ddc6d373085804449ce5531c73886d84a6b27bf06678d34c3087"
+    },
+    "source-history/stage-02/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-02/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-02/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-02/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-02/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-02/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-02/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-02/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-03/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-03/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-03/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-03/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-03/frontend-react/package.json": {
+      "bytes": 783,
+      "sha256": "7f480c410166184c06cbe61997dca574e3501f32044b936730974c03b1975cb1"
+    },
+    "source-history/stage-03/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-03/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-03/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-03/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5045,
+      "sha256": "4a2eae1fd4ff104f45ef5d02db0c7671c23de0af399be5825eac87ee90da96bb"
+    },
+    "source-history/stage-03/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 24700,
+      "sha256": "016a7c71efd6c6c4a93bba2c050a27a435d0c85b020a0f36767e10cff63938a0"
+    },
+    "source-history/stage-03/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 1737,
+      "sha256": "ee907022ed506e82974edcbf8d0894c52dea3c5d7710d46ce0e6c2fa0fa8695a"
+    },
+    "source-history/stage-03/frontend-react/src/components/Console.tsx": {
+      "bytes": 2565,
+      "sha256": "79b622d181f0baf45a350dc19d18d07ec2b90b4933d53bd145340d3ab5398617"
+    },
+    "source-history/stage-03/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 11047,
+      "sha256": "fe4da30a4c3d3003922e0f60c9f859ce8c560fc3a98d851874590acd53fcdfde"
+    },
+    "source-history/stage-03/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2351,
+      "sha256": "c494f49b63ab036135dc1007b6e6cd587b1adc8d4d5ea01de83e45bff39f10a0"
+    },
+    "source-history/stage-03/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 22394,
+      "sha256": "9bee2a5cde8f3ca50d6adfbe34dfca74ed9c89f09bc1c80199c086d0ff1d2f99"
+    },
+    "source-history/stage-03/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-03/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-03/frontend-react/src/workstation.css": {
+      "bytes": 11764,
+      "sha256": "953e3bed016b97ac4105edbbff7788fcd511cddb2634da2d9bbdb38d3b4e6d6d"
+    },
+    "source-history/stage-03/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-03/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-03/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-03/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-03/package.json": {
+      "bytes": 489,
+      "sha256": "5bff077153179b74272b6ca60554c9034e4e670288f14d437d38f3d0c2035adb"
+    },
+    "source-history/stage-03/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-03/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-03/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-03/src/domain/catalog.ts": {
+      "bytes": 3032,
+      "sha256": "8724c9b940e2853467d7c4a2e734c00bd62bd67a3e96462862fc8b8f4fa0d2e6"
+    },
+    "source-history/stage-03/src/domain/types.ts": {
+      "bytes": 3218,
+      "sha256": "326cd02ea3bb72414214371ba07ab47e8adb8e947fdaba0027366fbe70fd0ad9"
+    },
+    "source-history/stage-03/src/engine/assessment.ts": {
+      "bytes": 4198,
+      "sha256": "e0729a301640bedbe7d294a8176fffbcdfb82a2284164e04c4540c7ff01dc33a"
+    },
+    "source-history/stage-03/src/engine/geometry.ts": {
+      "bytes": 1917,
+      "sha256": "15b4929839f666045bfd0f2e7eaab0ccb70ead3553e8143c3f9b37f480b78498"
+    },
+    "source-history/stage-03/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-03/src/engine/simulator.ts": {
+      "bytes": 10246,
+      "sha256": "9b15eb3035c0e71b220a0a01fa91e99de001ad7de82629f30511b9d1572ca120"
+    },
+    "source-history/stage-03/src/persistence/projects.ts": {
+      "bytes": 13260,
+      "sha256": "d0e8f72f578a5292c9ea227aa2f959343f9d1dacf48f568e4820f6a3c2d272d3"
+    },
+    "source-history/stage-03/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-03/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-03/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-03/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-03/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-03/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-03/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-03/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-03/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-04/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-04/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-04/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-04/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-04/frontend-react/package.json": {
+      "bytes": 766,
+      "sha256": "59a0f2b08b1baef0eea4a39e3332c8a135bf3907076e07e54a10fdbe807accec"
+    },
+    "source-history/stage-04/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-04/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-04/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-04/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5037,
+      "sha256": "7a11d0e2fefa3191b88998a1c10361dd9ff2d7aa21fd195f407d59315136bc8b"
+    },
+    "source-history/stage-04/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 25835,
+      "sha256": "6c2618f28dd53ffc15167972f015050341132b805da6c942a339721b8abf0838"
+    },
+    "source-history/stage-04/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 1878,
+      "sha256": "5b68a349283099df81d7b7c9193163ad545fb52468ba0ef999529212c2384d31"
+    },
+    "source-history/stage-04/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10470,
+      "sha256": "3a73143f28459a4acec2e18a7e359a2651aa376e5be56fbf67b4502ce91d1e91"
+    },
+    "source-history/stage-04/frontend-react/src/components/Console.tsx": {
+      "bytes": 5081,
+      "sha256": "c63417471e386fade4e2f0bd01e30a406953d1961027519e901186cedad51ec1"
+    },
+    "source-history/stage-04/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 11289,
+      "sha256": "5e4e4063084fae6f70817c60cf28a20eb8b585f7f481c80513534e01af5e1c50"
+    },
+    "source-history/stage-04/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2450,
+      "sha256": "ae91a50f19a5fad9b5b97e6646e9f48bbefcf3bb5041ccd182bdb050c7a1a625"
+    },
+    "source-history/stage-04/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 23232,
+      "sha256": "33b52f13ab14cc5e7abbe873c11d39e1f9f67f63b2437fd7058448ecbbe4fc03"
+    },
+    "source-history/stage-04/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-04/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-04/frontend-react/src/workstation.css": {
+      "bytes": 13444,
+      "sha256": "140a79ac00ff0f40bc03d423ce7382a71739e385cbcead3a8f99f6743c3896a2"
+    },
+    "source-history/stage-04/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-04/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-04/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-04/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-04/package.json": {
+      "bytes": 467,
+      "sha256": "d6264c90257eaa4c78aa21357c9e040dcde7e0ad0fb59cb3f428c4358cfd981a"
+    },
+    "source-history/stage-04/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-04/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-04/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-04/src/domain/catalog.ts": {
+      "bytes": 6134,
+      "sha256": "65643419601cce7846b890ae6bbe0bfed08d5b5957d40b387e0fc121ee76d201"
+    },
+    "source-history/stage-04/src/domain/types.ts": {
+      "bytes": 4976,
+      "sha256": "7e25ac33d78d85d7429aa322e798f804096130c5c2c1a5764a7579f5ff08a2e8"
+    },
+    "source-history/stage-04/src/engine/assessment.ts": {
+      "bytes": 4742,
+      "sha256": "63b423657dcfd6098778aee8e140b51eba4818dbc74eb1c3b32cd5bbb4697653"
+    },
+    "source-history/stage-04/src/engine/cctv.ts": {
+      "bytes": 5463,
+      "sha256": "96e435cc0bf3e5fef89c0944dc80385269b4a7528c4e7408af639205e615424a"
+    },
+    "source-history/stage-04/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-04/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-04/src/engine/simulator.ts": {
+      "bytes": 17767,
+      "sha256": "2b3abe1490a0a3b339420dcaffd3930741874dc0349b93c09902ee17be792217"
+    },
+    "source-history/stage-04/src/persistence/projects.ts": {
+      "bytes": 17507,
+      "sha256": "c04f1e20cb2377e52c1c1de01442400bf29c247468f447cf6f8003ada7b228c1"
+    },
+    "source-history/stage-04/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-04/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-04/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-04/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-04/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-04/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-04/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-04/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-04/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-05/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-05/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-05/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-05/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-05/frontend-react/package.json": {
+      "bytes": 771,
+      "sha256": "443a41c16df0198913bee6257a04f60efa9ca1daa08e85258fe29130ed9d203d"
+    },
+    "source-history/stage-05/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-05/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-05/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-05/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5040,
+      "sha256": "2d0e2c0f0f3e0374ae1751d2e234731f2852d1a7e5d3e7f49e60a4acc04f923c"
+    },
+    "source-history/stage-05/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 26973,
+      "sha256": "8112fe211b025ddc7f1baafe1c5760d76620d198920d103dfe7a2141dcb68368"
+    },
+    "source-history/stage-05/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 2097,
+      "sha256": "af49c1896a871d18621583fae4071f67d45f4d6b15b0f687d5fff60b751dd347"
+    },
+    "source-history/stage-05/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10470,
+      "sha256": "3a73143f28459a4acec2e18a7e359a2651aa376e5be56fbf67b4502ce91d1e91"
+    },
+    "source-history/stage-05/frontend-react/src/components/Console.tsx": {
+      "bytes": 9277,
+      "sha256": "aa0b798e6c7b29fc2caea3e81233a03198a2256590eccd45d2919e7940b0100e"
+    },
+    "source-history/stage-05/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 12405,
+      "sha256": "cdd077f2a9f5b5cd8aa71f23bc822143df2d43781baa23c6fc6fb232f6c62d38"
+    },
+    "source-history/stage-05/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-05/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2463,
+      "sha256": "e6abc38aac1a445985aeecea142478c7fa7f1060bedc75832b50bea52e837064"
+    },
+    "source-history/stage-05/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 23242,
+      "sha256": "78ce8c65b1873a45ecf53e1d89065c6ce76f31086680723c28cd78807be97703"
+    },
+    "source-history/stage-05/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-05/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-05/frontend-react/src/workstation.css": {
+      "bytes": 14806,
+      "sha256": "d816f6a3e994fc3f8fd21dd07fa4342c433466e0a25c1912de84e1ca1194b5dd"
+    },
+    "source-history/stage-05/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-05/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-05/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-05/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-05/package.json": {
+      "bytes": 459,
+      "sha256": "52dd677484e2ef8af85de63ad10239473364d9fba8301816ac36dcb0fdce4625"
+    },
+    "source-history/stage-05/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-05/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-05/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-05/src/domain/catalog.ts": {
+      "bytes": 9022,
+      "sha256": "e5db50b4ffd3934ef3a393d988a55071f016c3348ab7718c38cd9af0c3332c8b"
+    },
+    "source-history/stage-05/src/domain/types.ts": {
+      "bytes": 7082,
+      "sha256": "66b637ff49a3b5394f48670d4efa3f4e224ef09b4955d5ae75c48647ff7f2e3c"
+    },
+    "source-history/stage-05/src/engine/assessment.ts": {
+      "bytes": 4742,
+      "sha256": "63b423657dcfd6098778aee8e140b51eba4818dbc74eb1c3b32cd5bbb4697653"
+    },
+    "source-history/stage-05/src/engine/cctv.ts": {
+      "bytes": 5463,
+      "sha256": "96e435cc0bf3e5fef89c0944dc80385269b4a7528c4e7408af639205e615424a"
+    },
+    "source-history/stage-05/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-05/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-05/src/engine/networking.ts": {
+      "bytes": 16766,
+      "sha256": "32e5a40e61063f017d8509cd9ad3a4a2c5cac7dcfca2f2d3d68d0722751d5a10"
+    },
+    "source-history/stage-05/src/engine/simulator.ts": {
+      "bytes": 19448,
+      "sha256": "f843984918c3382b49d0024e92268f5efddac84d02d495dc6baebf7c0e56c024"
+    },
+    "source-history/stage-05/src/persistence/projects.ts": {
+      "bytes": 21078,
+      "sha256": "b9fe6300ba83098e400e8bd5003f4155598037f34504e5c6f50543ce56f95515"
+    },
+    "source-history/stage-05/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-05/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-05/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-05/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-05/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-05/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-05/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-05/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-05/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-06/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-06/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-06/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-06/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-06/frontend-react/package.json": {
+      "bytes": 779,
+      "sha256": "f07650200adf3504bd17a07320dbd1a133ab54a8c4a13faa8d3b77f54f7c0b24"
+    },
+    "source-history/stage-06/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-06/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-06/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-06/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5036,
+      "sha256": "f69db6d4a0cdc89804b9984529c058a33fd0795d6481621eae1c2966450c9bb3"
+    },
+    "source-history/stage-06/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-06/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-06/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 28413,
+      "sha256": "34ad3b7e29004a8db186b2b527acad026c84ed8d1ffc1c10a3b36c98b07d82ce"
+    },
+    "source-history/stage-06/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 2584,
+      "sha256": "abd073199fdba72ccdddd7d16705412f927d36f2d5d8267cbb671a7be66fad1d"
+    },
+    "source-history/stage-06/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10470,
+      "sha256": "3a73143f28459a4acec2e18a7e359a2651aa376e5be56fbf67b4502ce91d1e91"
+    },
+    "source-history/stage-06/frontend-react/src/components/Console.tsx": {
+      "bytes": 10163,
+      "sha256": "1d640c4eecd548d0ecd7f12685cf56bfaf9babb19b0f62c238e85c6cb9101388"
+    },
+    "source-history/stage-06/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 12757,
+      "sha256": "b7bededa05f29cd10315ddf6977b6602a8f6dc035393db7da1999f8659978725"
+    },
+    "source-history/stage-06/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-06/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2573,
+      "sha256": "dae539c419370e1e5138b2f4b280c31d153d1fe5ebb4ef7a7f29b9bcaa67ff99"
+    },
+    "source-history/stage-06/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 26773,
+      "sha256": "2e795eeb4b9a04dd8af7cef3590883f6a1f57e8ac55ab7bcc2f8eb40a63a4ee8"
+    },
+    "source-history/stage-06/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-06/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-06/frontend-react/src/workstation.css": {
+      "bytes": 18021,
+      "sha256": "7c6208d7412eb09637686cfd377a478a50dd1b9029b8b5393b3389d137796a5b"
+    },
+    "source-history/stage-06/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-06/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-06/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-06/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-06/package.json": {
+      "bytes": 468,
+      "sha256": "ea81785d76048cafcf03864a9de629128fac07166e66ce6e1f8a07b2db1daacf"
+    },
+    "source-history/stage-06/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-06/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-06/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-06/src/domain/catalog.ts": {
+      "bytes": 13639,
+      "sha256": "fdc3877a547c9aec40560f47213038cb0236f52e1338d7a29b33baaa6cc95608"
+    },
+    "source-history/stage-06/src/domain/types.ts": {
+      "bytes": 9058,
+      "sha256": "a78ef08566600ccf0374b913a7a05d5247bbc05c4b9b19e0804424e224c0f938"
+    },
+    "source-history/stage-06/src/engine/alarm.ts": {
+      "bytes": 18938,
+      "sha256": "a720d9585629cfaf8952d615b8429626ea7aaaf87fdba1bcd5a46cd25ed1c8a3"
+    },
+    "source-history/stage-06/src/engine/assessment.ts": {
+      "bytes": 4742,
+      "sha256": "63b423657dcfd6098778aee8e140b51eba4818dbc74eb1c3b32cd5bbb4697653"
+    },
+    "source-history/stage-06/src/engine/cctv.ts": {
+      "bytes": 5463,
+      "sha256": "96e435cc0bf3e5fef89c0944dc80385269b4a7528c4e7408af639205e615424a"
+    },
+    "source-history/stage-06/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-06/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-06/src/engine/networking.ts": {
+      "bytes": 16825,
+      "sha256": "fdccfbe4c43f365faef25050a91eef5b39970420b0d5e79a5c2fbe5619e7fc2a"
+    },
+    "source-history/stage-06/src/engine/simulator.ts": {
+      "bytes": 20178,
+      "sha256": "c1f290d14f52ae85e3e1ec121de95b3a9490cd9914a88418cc9d56f441b9f53e"
+    },
+    "source-history/stage-06/src/persistence/projects.ts": {
+      "bytes": 24092,
+      "sha256": "9759d4813073903e9239b4fa75792f83f4649557d7272fa3037d97068892635b"
+    },
+    "source-history/stage-06/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-06/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-06/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-06/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-06/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-06/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-06/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-06/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-06/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-07/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-07/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-07/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-07/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-07/frontend-react/package.json": {
+      "bytes": 789,
+      "sha256": "885f3345f25e0d8ba40ba19c2c7cf02f3b16b005e03eb0e131b1a34227c80395"
+    },
+    "source-history/stage-07/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-07/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-07/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-07/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5035,
+      "sha256": "42f24a99dac84e82363c47934c3a8e90e16ab874a66bd24dc10eca688139c912"
+    },
+    "source-history/stage-07/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-07/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-07/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-07/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-07/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 29513,
+      "sha256": "3805922288ac80b3b32d711914af57e5be08dc086c6a55b387ef8e59156a2f27"
+    },
+    "source-history/stage-07/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 3326,
+      "sha256": "16dd9b5bf2a1b5d68f119c108e419a7d31bfe7177222525a5c71f6fcfe42fd86"
+    },
+    "source-history/stage-07/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10470,
+      "sha256": "3a73143f28459a4acec2e18a7e359a2651aa376e5be56fbf67b4502ce91d1e91"
+    },
+    "source-history/stage-07/frontend-react/src/components/Console.tsx": {
+      "bytes": 11048,
+      "sha256": "f60b9fcdefeb5e957bb1e696185634b078541691ef4a92b15772412d8486cefe"
+    },
+    "source-history/stage-07/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 13088,
+      "sha256": "6a758cd355285735044ebb60955cd593667770d0b72d1836136f16e111b12819"
+    },
+    "source-history/stage-07/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-07/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2573,
+      "sha256": "dae539c419370e1e5138b2f4b280c31d153d1fe5ebb4ef7a7f29b9bcaa67ff99"
+    },
+    "source-history/stage-07/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 33178,
+      "sha256": "2c6bcf65c5b3a0e497c8617eee11a7db6667cec63392080fc726d9567438d70c"
+    },
+    "source-history/stage-07/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-07/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-07/frontend-react/src/workstation.css": {
+      "bytes": 18792,
+      "sha256": "94b0d5523d81fc50ac43dbcbc006231bffd0308a6833a0a86967fd2dc68277a3"
+    },
+    "source-history/stage-07/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-07/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-07/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-07/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-07/package.json": {
+      "bytes": 468,
+      "sha256": "ea81785d76048cafcf03864a9de629128fac07166e66ce6e1f8a07b2db1daacf"
+    },
+    "source-history/stage-07/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-07/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-07/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-07/src/domain/catalog.ts": {
+      "bytes": 17034,
+      "sha256": "cdc7c584e0dcc9df2403331e8d056b49cb4f7b86d261918d5f134cba7bc8f80e"
+    },
+    "source-history/stage-07/src/domain/types.ts": {
+      "bytes": 11486,
+      "sha256": "b6d6bea1b50f6e25d17751aebc727a89e97a4dfec5fa4ed3ec7e85a4dc33e0ef"
+    },
+    "source-history/stage-07/src/engine/access.ts": {
+      "bytes": 16243,
+      "sha256": "d73c38d8840321376d7bf24901eb1aea7161d84150ae459bfdec85d16066a7d7"
+    },
+    "source-history/stage-07/src/engine/alarm.ts": {
+      "bytes": 18938,
+      "sha256": "a720d9585629cfaf8952d615b8429626ea7aaaf87fdba1bcd5a46cd25ed1c8a3"
+    },
+    "source-history/stage-07/src/engine/assessment.ts": {
+      "bytes": 4742,
+      "sha256": "63b423657dcfd6098778aee8e140b51eba4818dbc74eb1c3b32cd5bbb4697653"
+    },
+    "source-history/stage-07/src/engine/cctv.ts": {
+      "bytes": 5463,
+      "sha256": "96e435cc0bf3e5fef89c0944dc80385269b4a7528c4e7408af639205e615424a"
+    },
+    "source-history/stage-07/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-07/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-07/src/engine/networking.ts": {
+      "bytes": 16875,
+      "sha256": "6c642523222438200e054ce279b36ada25dad632d22be426a744ee96b56a4795"
+    },
+    "source-history/stage-07/src/engine/simulator.ts": {
+      "bytes": 20795,
+      "sha256": "e738e57abfef1a888150509afa39c3faa79b7402879e0b3a6d43c3471b39c709"
+    },
+    "source-history/stage-07/src/persistence/projects.ts": {
+      "bytes": 28478,
+      "sha256": "74e231811d902288fb8c000e078401a3e8e4b1db17a5009c63122aee5253b55e"
+    },
+    "source-history/stage-07/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-07/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-07/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-07/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-07/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-07/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-07/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-07/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-07/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-08/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-08/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-08/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-08/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-08/frontend-react/package.json": {
+      "bytes": 871,
+      "sha256": "46cd27162bd6ad00ce8ba28592bb9aef304febe0a13a72b3c16ab6f5e4842c39"
+    },
+    "source-history/stage-08/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-08/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-08/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-08/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5042,
+      "sha256": "2df04d3995a7bcd4cbd4e4c43c46ea0d16fb7582680e4cfbf6ca6f74c3e0c41b"
+    },
+    "source-history/stage-08/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-08/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-08/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-08/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-08/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 30083,
+      "sha256": "423fc5896c8c76452b083cd9e0067c9e89b92708e934fc9c91b631b1b7dc790c"
+    },
+    "source-history/stage-08/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 4225,
+      "sha256": "eb6d2d8495c2c6c5f98dc4c69b1483e7ef9289c0672160844645ef9921ef416f"
+    },
+    "source-history/stage-08/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10470,
+      "sha256": "3a73143f28459a4acec2e18a7e359a2651aa376e5be56fbf67b4502ce91d1e91"
+    },
+    "source-history/stage-08/frontend-react/src/components/Console.tsx": {
+      "bytes": 11198,
+      "sha256": "e953e911f6dd577a887b4cf72c8b16022d33aef80acbf6a6357fdc502b6db865"
+    },
+    "source-history/stage-08/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 13896,
+      "sha256": "faf5f60a729c1e69a59657898d9d32113efb191289aad7e5d3a5f5e796fea96b"
+    },
+    "source-history/stage-08/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-08/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-08/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-08/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2641,
+      "sha256": "ab9de24569b50b63f6a0ddba180371e54228acf417c3ebd780556b9c64db0d6e"
+    },
+    "source-history/stage-08/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 37077,
+      "sha256": "91395b9b201c5a6481d07d6a7a3a32266efbd9783c215438d272194210bc849b"
+    },
+    "source-history/stage-08/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-08/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-08/frontend-react/src/workstation.css": {
+      "bytes": 20903,
+      "sha256": "5ca5fe9013fb037aa8ed7c95165c9bb48439bf0c0d9fdeaf0633de3a0d6721dc"
+    },
+    "source-history/stage-08/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-08/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-08/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-08/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-08/package.json": {
+      "bytes": 547,
+      "sha256": "b3a27ac7c4c66a37d5c3fafe46cfa8cad3056cf23c8fb83244a9649dcd19f618"
+    },
+    "source-history/stage-08/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-08/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-08/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-08/src/domain/catalog.ts": {
+      "bytes": 21177,
+      "sha256": "9d326bb9a75dd416f2fc14c9564eae07332bf33053e29c047eeaf108f41966aa"
+    },
+    "source-history/stage-08/src/domain/types.ts": {
+      "bytes": 12911,
+      "sha256": "fa981bbb0292717c1dd730f82edd8ed605934a4a360d50990ac80d40557c00b4"
+    },
+    "source-history/stage-08/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-08/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-08/src/engine/assessment.ts": {
+      "bytes": 4742,
+      "sha256": "63b423657dcfd6098778aee8e140b51eba4818dbc74eb1c3b32cd5bbb4697653"
+    },
+    "source-history/stage-08/src/engine/cctv.ts": {
+      "bytes": 5463,
+      "sha256": "96e435cc0bf3e5fef89c0944dc80385269b4a7528c4e7408af639205e615424a"
+    },
+    "source-history/stage-08/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-08/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-08/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-08/src/engine/power.ts": {
+      "bytes": 17900,
+      "sha256": "0bc0bb281b4203ec5fd8857bbca8864fd2ddeaae8f2ac9e65968a1cfa9f70640"
+    },
+    "source-history/stage-08/src/engine/simulator.ts": {
+      "bytes": 21857,
+      "sha256": "80397ee9b9bd82767fed4c2b5b95a68129f139015aec770e2d9031ab4a105d6d"
+    },
+    "source-history/stage-08/src/persistence/projects.ts": {
+      "bytes": 29707,
+      "sha256": "410d10a47354b58cd2fd986a4a245d529668df881ecf9abea5f050af09d02f5c"
+    },
+    "source-history/stage-08/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-08/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-08/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-08/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-08/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-08/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-08/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-08/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-08/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-09/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-09/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-09/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-09/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-09/frontend-react/package.json": {
+      "bytes": 903,
+      "sha256": "d3f2fc14af2fdaa0bc85581559ef9c335d1d385bae6c3345db0c3bb068874ceb"
+    },
+    "source-history/stage-09/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-09/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-09/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-09/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5049,
+      "sha256": "fd3baaf44af947774aec66b4448b1a1dec72c7bd8165aba70e947befd4eb1347"
+    },
+    "source-history/stage-09/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-09/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-09/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-09/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-09/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 30083,
+      "sha256": "423fc5896c8c76452b083cd9e0067c9e89b92708e934fc9c91b631b1b7dc790c"
+    },
+    "source-history/stage-09/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 6993,
+      "sha256": "6446f93496b3c9749ee0888553ca2d51b06ee313129988cdc5aafcd5e6f41939"
+    },
+    "source-history/stage-09/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-09/frontend-react/src/components/Console.tsx": {
+      "bytes": 11198,
+      "sha256": "e953e911f6dd577a887b4cf72c8b16022d33aef80acbf6a6357fdc502b6db865"
+    },
+    "source-history/stage-09/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-09/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-09/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-09/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-09/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2641,
+      "sha256": "ab9de24569b50b63f6a0ddba180371e54228acf417c3ebd780556b9c64db0d6e"
+    },
+    "source-history/stage-09/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 37077,
+      "sha256": "91395b9b201c5a6481d07d6a7a3a32266efbd9783c215438d272194210bc849b"
+    },
+    "source-history/stage-09/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-09/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-09/frontend-react/src/workstation.css": {
+      "bytes": 22480,
+      "sha256": "eae4e178117402a52ff3502961a15b0e0896b8da4d0d89307b84ae5a381c0885"
+    },
+    "source-history/stage-09/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-09/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-09/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-09/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-09/package.json": {
+      "bytes": 547,
+      "sha256": "b3a27ac7c4c66a37d5c3fafe46cfa8cad3056cf23c8fb83244a9649dcd19f618"
+    },
+    "source-history/stage-09/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-09/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-09/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-09/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-09/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-09/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-09/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-09/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-09/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-09/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-09/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-09/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-09/src/domain/types.ts": {
+      "bytes": 13602,
+      "sha256": "5c13fdb1eab09d580765a04cc1a6131ba890d67ca478b34abde78899adffdbae"
+    },
+    "source-history/stage-09/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-09/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-09/src/engine/assessment.ts": {
+      "bytes": 5269,
+      "sha256": "fa907e8df6efa269dde9c219aa6f5d7396376916ac36b801acb37056dbe4ff52"
+    },
+    "source-history/stage-09/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-09/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-09/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-09/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-09/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-09/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-09/src/persistence/projects.ts": {
+      "bytes": 30188,
+      "sha256": "a18799997594884e82da617413113c0ea824f0b9ae3961177ca421c96b0a373a"
+    },
+    "source-history/stage-09/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-09/src/scenarios/index.ts": {
+      "bytes": 4541,
+      "sha256": "c5a05547370788d8abf07bda824ce33b79d6d107b46c7757f4a1d2823e2b4cb9"
+    },
+    "source-history/stage-09/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-09/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-09/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-09/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-09/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-09/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-09/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-10/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-10/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-10/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-10/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-10/frontend-react/package.json": {
+      "bytes": 823,
+      "sha256": "f55ec6ca895e3f70ea6805e714384a5290a080818caac81573ea15df9b652303"
+    },
+    "source-history/stage-10/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-10/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-10/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-10/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5053,
+      "sha256": "ca88b2a7af3e9204fd5de35a6141ee991224aff985fa4bdca2e39de8acecfb92"
+    },
+    "source-history/stage-10/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-10/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-10/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-10/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-10/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 30083,
+      "sha256": "423fc5896c8c76452b083cd9e0067c9e89b92708e934fc9c91b631b1b7dc790c"
+    },
+    "source-history/stage-10/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "source-history/stage-10/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-10/frontend-react/src/components/Console.tsx": {
+      "bytes": 11332,
+      "sha256": "efd781e60a9cbd56ddbe47586d62f5ce544708a3f35820bfa2672aaf9ed4a717"
+    },
+    "source-history/stage-10/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-10/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-10/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-10/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-10/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "source-history/stage-10/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2817,
+      "sha256": "9bbdb109eb7552dff4c9797164ad92abe67f5e12ac77a3cb411439ae9ce3d1b2"
+    },
+    "source-history/stage-10/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 38005,
+      "sha256": "5429117e3b1007e8a68c46a3a2635d9a6d1916be42f2c22d5660d21be4e65f68"
+    },
+    "source-history/stage-10/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-10/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-10/frontend-react/src/workstation.css": {
+      "bytes": 24588,
+      "sha256": "bb2c9f157aab8c11bd764a7219f7220866d330aa78783098b34553929e6064a3"
+    },
+    "source-history/stage-10/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-10/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-10/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-10/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-10/package.json": {
+      "bytes": 499,
+      "sha256": "e1fec97cf991468086b036ec4a2dde8986d99b5083aa865f818f246fd029aa4a"
+    },
+    "source-history/stage-10/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-10/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-10/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-10/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-10/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-10/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-10/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-10/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-10/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-10/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-10/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-10/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-10/src/domain/types.ts": {
+      "bytes": 14834,
+      "sha256": "6d1f6ecf2dac5e52cc9f7111650585757d4d29c18c14ee45aeea8cf58359dc21"
+    },
+    "source-history/stage-10/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-10/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-10/src/engine/assessment.ts": {
+      "bytes": 1674,
+      "sha256": "7934c05b1ce91bb2cc05e2c6e24379ef309e7e32e7414522a7a3dff7c7d7bb27"
+    },
+    "source-history/stage-10/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-10/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-10/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-10/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-10/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-10/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-10/src/persistence/projects.ts": {
+      "bytes": 31360,
+      "sha256": "1ad22462e7d61dec3bf685bd3193e0b4d19022e676672fca428238165cb82cb3"
+    },
+    "source-history/stage-10/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-10/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "source-history/stage-10/src/scenarios/evaluation.ts": {
+      "bytes": 8387,
+      "sha256": "1318bf8ccc1d31e10fc5c39d2701097348966f6110c611bb0c14450930e27809"
+    },
+    "source-history/stage-10/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "source-history/stage-10/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-10/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-10/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-10/src/ui/app.ts": {
+      "bytes": 46658,
+      "sha256": "4cc93789af2f2911c5ed800c960b88d38ff816ea2364baefc623f1134e2a98ac"
+    },
+    "source-history/stage-10/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-10/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-10/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-11/.gitignore": {
+      "bytes": 82,
+      "sha256": "c02a00e053a6d28f929a8f6b23351535bdda93cf768ba1f6c1782badb6ee6601"
+    },
+    "source-history/stage-11/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-11/db/schema.sql": {
+      "bytes": 7500,
+      "sha256": "9f35553b4f3e164b09e5686f237a7cac7ab62c5e2c98de6cbc47c599ed4d5d2d"
+    },
+    "source-history/stage-11/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-11/frontend-react/package.json": {
+      "bytes": 825,
+      "sha256": "6006393a8073b6360d2a94defcc8628ca25026d243f9853f0eb9701a007162ec"
+    },
+    "source-history/stage-11/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-11/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-11/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-11/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5049,
+      "sha256": "ef572a49e0909b1f586c9d2bee3cdd9e13c6f795a1611ac20cd4e460e8b44406"
+    },
+    "source-history/stage-11/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-11/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-11/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-11/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-11/frontend-react/src/components/AssessmentConsole.tsx": {
+      "bytes": 5836,
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee"
+    },
+    "source-history/stage-11/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 30083,
+      "sha256": "423fc5896c8c76452b083cd9e0067c9e89b92708e934fc9c91b631b1b7dc790c"
+    },
+    "source-history/stage-11/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "source-history/stage-11/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-11/frontend-react/src/components/Console.tsx": {
+      "bytes": 11465,
+      "sha256": "ac64676e111ecf6ff5fa19322d6974d5060730f1417f9d1a23fc41feaf30784f"
+    },
+    "source-history/stage-11/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-11/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-11/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-11/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-11/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "source-history/stage-11/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 2817,
+      "sha256": "9bbdb109eb7552dff4c9797164ad92abe67f5e12ac77a3cb411439ae9ce3d1b2"
+    },
+    "source-history/stage-11/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 38868,
+      "sha256": "58f34a470c30c2590c74187a6f794fb676dbe72b3a8b346952d1192deaea8e4f"
+    },
+    "source-history/stage-11/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-11/frontend-react/src/offline.ts": {
+      "bytes": 2815,
+      "sha256": "f0ae474184ac1b672796dade0cfc9b43c2a580afb83f561dfad3b0df1183ac6f"
+    },
+    "source-history/stage-11/frontend-react/src/workstation.css": {
+      "bytes": 27650,
+      "sha256": "cf57a333260d1f64213cce8b0eaaf237a9a2b02613b19766fdcd5be6b849257d"
+    },
+    "source-history/stage-11/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-11/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-11/index.html": {
+      "bytes": 665,
+      "sha256": "a349c18c2aaf9bffc6c7a0beebf1ead7251be184aef3d8febe47f6c99c0e6976"
+    },
+    "source-history/stage-11/manifest.webmanifest": {
+      "bytes": 464,
+      "sha256": "a4b5a89a21872c5d3d1fb13280843d49c79b03fb37f507d398022b33b8481b9c"
+    },
+    "source-history/stage-11/package.json": {
+      "bytes": 504,
+      "sha256": "45400d8c754600d23fae2ffa16161f471a0b70b20d66e9fe04eb46628733c82d"
+    },
+    "source-history/stage-11/scripts/build.mjs": {
+      "bytes": 789,
+      "sha256": "029d9cdec01ca7ebc77e8567318907326b2a5d5bdeaf8538bc708a34cac2a13b"
+    },
+    "source-history/stage-11/scripts/serve.mjs": {
+      "bytes": 1391,
+      "sha256": "9f03880aa4942e00f5e7417c71faec7f6a70f1d1d5917a7b4e4cab6eec48c1d9"
+    },
+    "source-history/stage-11/service-worker.js": {
+      "bytes": 1572,
+      "sha256": "2fb9486e78927f8a7be7dea7344b1dfe74bd8301a89cb94f55ea8a69ad9c5f2c"
+    },
+    "source-history/stage-11/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-11/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-11/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-11/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-11/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-11/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-11/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-11/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-11/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-11/src/domain/types.ts": {
+      "bytes": 16014,
+      "sha256": "35c2185f8269f4da8c2eaa24ca05659911a339c5def16df6211fc6177c328d14"
+    },
+    "source-history/stage-11/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-11/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-11/src/engine/assessment.ts": {
+      "bytes": 1939,
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a"
+    },
+    "source-history/stage-11/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-11/src/engine/competency.ts": {
+      "bytes": 12258,
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b"
+    },
+    "source-history/stage-11/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-11/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-11/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-11/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-11/src/engine/reports.ts": {
+      "bytes": 5110,
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484"
+    },
+    "source-history/stage-11/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-11/src/persistence/projects.ts": {
+      "bytes": 34488,
+      "sha256": "30f42be0028912a0bdd93c38969349dd2396a02dce51eccd03197e89da43926a"
+    },
+    "source-history/stage-11/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-11/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "source-history/stage-11/src/scenarios/evaluation.ts": {
+      "bytes": 9211,
+      "sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1"
+    },
+    "source-history/stage-11/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "source-history/stage-11/src/state/autosave.ts": {
+      "bytes": 3450,
+      "sha256": "f1f9deecda3de966535bf9c7f7a8a052e93c9beacb1c18c10b50cb88cf964e1e"
+    },
+    "source-history/stage-11/src/state/crosstab.ts": {
+      "bytes": 812,
+      "sha256": "dec9af7f7f4284786bfd7fcbcafdb8f2de8068cd06d595245f57ce08237b6e21"
+    },
+    "source-history/stage-11/src/state/history.ts": {
+      "bytes": 3126,
+      "sha256": "7831dce0c3fba679d273e322d4f6c83d77029e77f317c9312e5b2e66e1c5d175"
+    },
+    "source-history/stage-11/src/ui/app.ts": {
+      "bytes": 48091,
+      "sha256": "0be1c8fc8389322b9b27df0454bd01d99a3bd0f474b0895adcff85a483f2403e"
+    },
+    "source-history/stage-11/styles.css": {
+      "bytes": 14533,
+      "sha256": "3a82d702720570883521ea42791d3e7685618e5e12864a13ea78131197ab7cd1"
+    },
+    "source-history/stage-11/tsconfig.json": {
+      "bytes": 342,
+      "sha256": "f0cf2999f8318c450c757285f47f27f1a71a74bd1334d7aa742a00ee7c2e40bb"
+    },
+    "source-history/stage-11/vercel.json": {
+      "bytes": 188,
+      "sha256": "77a10484f0aadfead09ba0e36568718faef6392631d9276aceac87348542e517"
+    },
+    "source-history/stage-12/.gitignore": {
+      "bytes": 93,
+      "sha256": "977c833787f6f811e18e0c006827fb362f82b625f606dad61467e61c12e7f8c2"
+    },
+    "source-history/stage-12/README.md": {
+      "bytes": 4029,
+      "sha256": "a759fb41eb26e26dc847ab1c8d00bcc416d6bfd202d3a33790290d6180081549"
+    },
+    "source-history/stage-12/frontend-react/index.html": {
+      "bytes": 440,
+      "sha256": "81bfef0a0625e226a06ba6bbeb3d4504249ef23d94f5d0f1c3b32119c98d8ce0"
+    },
+    "source-history/stage-12/frontend-react/package.json": {
+      "bytes": 836,
+      "sha256": "b2a372a985cc67e5cb0bf04f38c7c2c41dc42b7bb738e61e9e704084cd794d30"
+    },
+    "source-history/stage-12/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-12/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-12/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-12/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 5011,
+      "sha256": "f95957adce106b7f7b8933d5d4c1857f0df47a96dd25af1c21ee479119deaef2"
+    },
+    "source-history/stage-12/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-12/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-12/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-12/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-12/frontend-react/src/components/AssessmentConsole.tsx": {
+      "bytes": 5836,
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee"
+    },
+    "source-history/stage-12/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 30083,
+      "sha256": "423fc5896c8c76452b083cd9e0067c9e89b92708e934fc9c91b631b1b7dc790c"
+    },
+    "source-history/stage-12/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "source-history/stage-12/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-12/frontend-react/src/components/Console.tsx": {
+      "bytes": 11465,
+      "sha256": "ac64676e111ecf6ff5fa19322d6974d5060730f1417f9d1a23fc41feaf30784f"
+    },
+    "source-history/stage-12/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-12/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-12/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-12/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-12/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "source-history/stage-12/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 3833,
+      "sha256": "da7cf0594a09437d9c4c8136b196f5ad44ce538caedb5d159c4b14581e17e614"
+    },
+    "source-history/stage-12/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 38239,
+      "sha256": "6315e4ba8091efeb2c34681cae9c9d46e4dba52b68aebe9c683a38f06d3cb871"
+    },
+    "source-history/stage-12/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-12/frontend-react/src/offline.ts": {
+      "bytes": 2916,
+      "sha256": "44d358bb4a5ce4b53a73c201e1591e347ab1ecbcd52507837751f33b50ea2ace"
+    },
+    "source-history/stage-12/frontend-react/src/workstation.css": {
+      "bytes": 28531,
+      "sha256": "2206882daedee988d8787683b157f8aedfc84074f5ad767effc78a91e19a1757"
+    },
+    "source-history/stage-12/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-12/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-12/package.json": {
+      "bytes": 509,
+      "sha256": "742e87fd7dba7c3a87c0bfc37014ffde1a270769d6ac78dfc533a80bb4b29598"
+    },
+    "source-history/stage-12/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-12/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-12/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-12/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-12/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-12/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-12/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-12/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-12/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-12/src/domain/types.ts": {
+      "bytes": 16014,
+      "sha256": "35c2185f8269f4da8c2eaa24ca05659911a339c5def16df6211fc6177c328d14"
+    },
+    "source-history/stage-12/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-12/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-12/src/engine/assessment.ts": {
+      "bytes": 1939,
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a"
+    },
+    "source-history/stage-12/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-12/src/engine/competency.ts": {
+      "bytes": 12258,
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b"
+    },
+    "source-history/stage-12/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-12/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-12/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-12/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-12/src/engine/reports.ts": {
+      "bytes": 5110,
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484"
+    },
+    "source-history/stage-12/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-12/src/persistence/file-projects.ts": {
+      "bytes": 10945,
+      "sha256": "a55812d5e8fa5d16777fb9fdcf6bfad934634d7dcbf4125c2542d6bf87709274"
+    },
+    "source-history/stage-12/src/persistence/validation.ts": {
+      "bytes": 27360,
+      "sha256": "f6718bccc2141be03c48e28623b7f47e5f67f1dfb67df9d555d06dac28d334ca"
+    },
+    "source-history/stage-12/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-12/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "source-history/stage-12/src/scenarios/evaluation.ts": {
+      "bytes": 9211,
+      "sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1"
+    },
+    "source-history/stage-12/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "source-history/stage-12/src/state/history.ts": {
+      "bytes": 3128,
+      "sha256": "dbe1793840a70260587b1c0eedc592c7cf020d8b5626e48336f42d02cdab2183"
+    },
+    "source-history/stage-13/.gitignore": {
+      "bytes": 93,
+      "sha256": "977c833787f6f811e18e0c006827fb362f82b625f606dad61467e61c12e7f8c2"
+    },
+    "source-history/stage-13/README.md": {
+      "bytes": 6509,
+      "sha256": "fe93da203e319d5352cf38f53c7f632b0a7ffca62941844cef9399de8cdaea31"
+    },
+    "source-history/stage-13/frontend-react/index.html": {
+      "bytes": 527,
+      "sha256": "2d09355c2e0d981871cf87fd8e782f3513a0d84fb373211cad99a1b0f825a396"
+    },
+    "source-history/stage-13/frontend-react/package.json": {
+      "bytes": 836,
+      "sha256": "8457dbd6dc755c2313fd048ac6479f54967cccd8502dcb162f438a1bb373c2dd"
+    },
+    "source-history/stage-13/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-13/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-13/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-13/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 4461,
+      "sha256": "ae25c49eb790cd67e582240fca3bf3df23c5c56691192b713301dafef9738be2"
+    },
+    "source-history/stage-13/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-13/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-13/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-13/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-13/frontend-react/src/components/AssessmentConsole.tsx": {
+      "bytes": 5836,
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee"
+    },
+    "source-history/stage-13/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 33220,
+      "sha256": "852a3e895743d4282c5f42548832cec42ca97e961dc3937b1615f03feee66a1d"
+    },
+    "source-history/stage-13/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "source-history/stage-13/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-13/frontend-react/src/components/CheckpointDialog.tsx": {
+      "bytes": 2527,
+      "sha256": "0be39823db6e554f4c0d0deba251bf3607d9e23e159b8f51afd5b85af0e9ca31"
+    },
+    "source-history/stage-13/frontend-react/src/components/Console.tsx": {
+      "bytes": 11465,
+      "sha256": "ac64676e111ecf6ff5fa19322d6974d5060730f1417f9d1a23fc41feaf30784f"
+    },
+    "source-history/stage-13/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-13/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-13/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-13/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-13/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "source-history/stage-13/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 3833,
+      "sha256": "da7cf0594a09437d9c4c8136b196f5ad44ce538caedb5d159c4b14581e17e614"
+    },
+    "source-history/stage-13/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 38344,
+      "sha256": "3eb1318e3c8d59c1d28e9ea5921e9f5d5158e278aedf9bd239523b3d074aed5a"
+    },
+    "source-history/stage-13/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-13/frontend-react/src/offline.ts": {
+      "bytes": 2916,
+      "sha256": "44d358bb4a5ce4b53a73c201e1591e347ab1ecbcd52507837751f33b50ea2ace"
+    },
+    "source-history/stage-13/frontend-react/src/workstation.css": {
+      "bytes": 30415,
+      "sha256": "5357626f6dacf76160b253066029a8fb5553caf0df6c2f81a60bc135b3ad7713"
+    },
+    "source-history/stage-13/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-13/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-13/package.json": {
+      "bytes": 509,
+      "sha256": "c378aa98cd7fcde28c37544cf84f150914b9092e82ead8c6d227fa6113ea08af"
+    },
+    "source-history/stage-13/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-13/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-13/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-13/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-13/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-13/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-13/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-13/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-13/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-13/src/domain/types.ts": {
+      "bytes": 16014,
+      "sha256": "35c2185f8269f4da8c2eaa24ca05659911a339c5def16df6211fc6177c328d14"
+    },
+    "source-history/stage-13/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-13/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-13/src/engine/assessment.ts": {
+      "bytes": 1939,
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a"
+    },
+    "source-history/stage-13/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-13/src/engine/competency.ts": {
+      "bytes": 12258,
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b"
+    },
+    "source-history/stage-13/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-13/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-13/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-13/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-13/src/engine/reports.ts": {
+      "bytes": 5110,
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484"
+    },
+    "source-history/stage-13/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-13/src/persistence/file-projects.ts": {
+      "bytes": 11336,
+      "sha256": "bc71396af9d408ef380a7e39dcb61150a04d5d1fd44f94ea3606724abb1c2040"
+    },
+    "source-history/stage-13/src/persistence/safe-images.ts": {
+      "bytes": 2693,
+      "sha256": "ed1a3e95d28e073acc31a65307fa434804a3f62235390e9e8c689e75bb1e8e0c"
+    },
+    "source-history/stage-13/src/persistence/validation.ts": {
+      "bytes": 27360,
+      "sha256": "f6718bccc2141be03c48e28623b7f47e5f67f1dfb67df9d555d06dac28d334ca"
+    },
+    "source-history/stage-13/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-13/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "source-history/stage-13/src/scenarios/evaluation.ts": {
+      "bytes": 9211,
+      "sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1"
+    },
+    "source-history/stage-13/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "source-history/stage-13/src/state/history.ts": {
+      "bytes": 3128,
+      "sha256": "dbe1793840a70260587b1c0eedc592c7cf020d8b5626e48336f42d02cdab2183"
+    },
+    "source-history/stage-14/.gitignore": {
+      "bytes": 93,
+      "sha256": "977c833787f6f811e18e0c006827fb362f82b625f606dad61467e61c12e7f8c2"
+    },
+    "source-history/stage-14/README.md": {
+      "bytes": 9584,
+      "sha256": "5e46abe8c2ea13fd285605d9f415307942a16973d3267bf5e893c2bed37d7762"
+    },
+    "source-history/stage-14/frontend-react/index.html": {
+      "bytes": 527,
+      "sha256": "2d09355c2e0d981871cf87fd8e782f3513a0d84fb373211cad99a1b0f825a396"
+    },
+    "source-history/stage-14/frontend-react/package.json": {
+      "bytes": 836,
+      "sha256": "d572666e6ed64c33760bd9e3a4a1ff191073d7c137b087d53dc7c03ab9189f94"
+    },
+    "source-history/stage-14/frontend-react/public/assets/icon.svg": {
+      "bytes": 351,
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e"
+    },
+    "source-history/stage-14/frontend-react/public/manifest.webmanifest": {
+      "bytes": 289,
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca"
+    },
+    "source-history/stage-14/frontend-react/scripts-build-pwa.mjs": {
+      "bytes": 2123,
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8"
+    },
+    "source-history/stage-14/frontend-react/src/SecurityLab.tsx": {
+      "bytes": 4461,
+      "sha256": "3447f97c9856d2a1031e695655e4dad2a2df530deb2a7a8112bbadbdc518daf5"
+    },
+    "source-history/stage-14/frontend-react/src/components/AccessConfig.tsx": {
+      "bytes": 5564,
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2"
+    },
+    "source-history/stage-14/frontend-react/src/components/AccessConsole.tsx": {
+      "bytes": 9614,
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273"
+    },
+    "source-history/stage-14/frontend-react/src/components/AlarmConfig.tsx": {
+      "bytes": 8441,
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228"
+    },
+    "source-history/stage-14/frontend-react/src/components/AlarmConsole.tsx": {
+      "bytes": 5554,
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5"
+    },
+    "source-history/stage-14/frontend-react/src/components/AssessmentConsole.tsx": {
+      "bytes": 5836,
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee"
+    },
+    "source-history/stage-14/frontend-react/src/components/Canvas.tsx": {
+      "bytes": 33220,
+      "sha256": "852a3e895743d4282c5f42548832cec42ca97e961dc3937b1615f03feee66a1d"
+    },
+    "source-history/stage-14/frontend-react/src/components/Catalog.tsx": {
+      "bytes": 7142,
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164"
+    },
+    "source-history/stage-14/frontend-react/src/components/CctvConfig.tsx": {
+      "bytes": 10619,
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450"
+    },
+    "source-history/stage-14/frontend-react/src/components/CheckpointDialog.tsx": {
+      "bytes": 2527,
+      "sha256": "0be39823db6e554f4c0d0deba251bf3607d9e23e159b8f51afd5b85af0e9ca31"
+    },
+    "source-history/stage-14/frontend-react/src/components/Console.tsx": {
+      "bytes": 11670,
+      "sha256": "1b6e6e60143a04261daa1f0359ce191de22154f7f80db877c93315579b95df68"
+    },
+    "source-history/stage-14/frontend-react/src/components/FieldReviewConsole.tsx": {
+      "bytes": 10004,
+      "sha256": "a43aa5412006b1cc3a50abd4f4c9cf615a68a9c06347ac45a9d40af1ea0e68de"
+    },
+    "source-history/stage-14/frontend-react/src/components/Inspector.tsx": {
+      "bytes": 15274,
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719"
+    },
+    "source-history/stage-14/frontend-react/src/components/NetworkConfig.tsx": {
+      "bytes": 10584,
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8"
+    },
+    "source-history/stage-14/frontend-react/src/components/PowerConfig.tsx": {
+      "bytes": 3442,
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd"
+    },
+    "source-history/stage-14/frontend-react/src/components/PowerConsole.tsx": {
+      "bytes": 4488,
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39"
+    },
+    "source-history/stage-14/frontend-react/src/components/ScenarioConsole.tsx": {
+      "bytes": 3343,
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e"
+    },
+    "source-history/stage-14/frontend-react/src/components/TopBar.tsx": {
+      "bytes": 4019,
+      "sha256": "5aa260cfb758df4b9bd8877ef1352228c7adaecee99fa75dcdcf2fd090a2c903"
+    },
+    "source-history/stage-14/frontend-react/src/hooks/useWorkbench.ts": {
+      "bytes": 40389,
+      "sha256": "f5d705d4661053d7bcbef4c351636a53037eac7f0cb4ba6384ee4e700710e91e"
+    },
+    "source-history/stage-14/frontend-react/src/main.tsx": {
+      "bytes": 289,
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83"
+    },
+    "source-history/stage-14/frontend-react/src/offline.ts": {
+      "bytes": 2916,
+      "sha256": "44d358bb4a5ce4b53a73c201e1591e347ab1ecbcd52507837751f33b50ea2ace"
+    },
+    "source-history/stage-14/frontend-react/src/workstation.css": {
+      "bytes": 33270,
+      "sha256": "4648935c1456d3cccb3fec20ed407a4419a6674abe8e62b5c9cffabe2596106c"
+    },
+    "source-history/stage-14/frontend-react/tsconfig.json": {
+      "bytes": 557,
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c"
+    },
+    "source-history/stage-14/frontend-react/vite.config.ts": {
+      "bytes": 1112,
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5"
+    },
+    "source-history/stage-14/package.json": {
+      "bytes": 509,
+      "sha256": "84e675e58752d095516415d3b3fc493e7e49f1fd75bd22186c0f9b40f48a3f2a"
+    },
+    "source-history/stage-14/src/domain/catalog.ts": {
+      "bytes": 21769,
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b"
+    },
+    "source-history/stage-14/src/domain/manufacturers/ajax.ts": {
+      "bytes": 1575,
+      "sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e"
+    },
+    "source-history/stage-14/src/domain/manufacturers/dahua.ts": {
+      "bytes": 2677,
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2"
+    },
+    "source-history/stage-14/src/domain/manufacturers/factory.ts": {
+      "bytes": 831,
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2"
+    },
+    "source-history/stage-14/src/domain/manufacturers/hikvision.ts": {
+      "bytes": 2828,
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5"
+    },
+    "source-history/stage-14/src/domain/manufacturers/index.ts": {
+      "bytes": 2440,
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a"
+    },
+    "source-history/stage-14/src/domain/manufacturers/reolink.ts": {
+      "bytes": 1446,
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37"
+    },
+    "source-history/stage-14/src/domain/manufacturers/tplink.ts": {
+      "bytes": 1226,
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf"
+    },
+    "source-history/stage-14/src/domain/manufacturers/ubiquiti.ts": {
+      "bytes": 1259,
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8"
+    },
+    "source-history/stage-14/src/domain/types.ts": {
+      "bytes": 17061,
+      "sha256": "e10942fbb1eee608ac6eeacd6aca8942c80bb52983e86e0a879cc49b6856f118"
+    },
+    "source-history/stage-14/src/engine/access.ts": {
+      "bytes": 16577,
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6"
+    },
+    "source-history/stage-14/src/engine/alarm.ts": {
+      "bytes": 19238,
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd"
+    },
+    "source-history/stage-14/src/engine/assessment.ts": {
+      "bytes": 1939,
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a"
+    },
+    "source-history/stage-14/src/engine/cctv.ts": {
+      "bytes": 5729,
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1"
+    },
+    "source-history/stage-14/src/engine/competency.ts": {
+      "bytes": 12258,
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b"
+    },
+    "source-history/stage-14/src/engine/geometry.ts": {
+      "bytes": 1964,
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc"
+    },
+    "source-history/stage-14/src/engine/network.ts": {
+      "bytes": 2135,
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5"
+    },
+    "source-history/stage-14/src/engine/networking.ts": {
+      "bytes": 16924,
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697"
+    },
+    "source-history/stage-14/src/engine/power.ts": {
+      "bytes": 17982,
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8"
+    },
+    "source-history/stage-14/src/engine/reports.ts": {
+      "bytes": 5110,
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484"
+    },
+    "source-history/stage-14/src/engine/simulator.ts": {
+      "bytes": 24713,
+      "sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e"
+    },
+    "source-history/stage-14/src/field/field-validation.ts": {
+      "bytes": 7657,
+      "sha256": "397c098a1e1100eb787bb92509f92f610e7d68fe8b24b63ab9813bde4ea81102"
+    },
+    "source-history/stage-14/src/persistence/file-projects.ts": {
+      "bytes": 11346,
+      "sha256": "bfa5b944a902fc0f4d4a0004ec7d559de682af9e7004ada94b6f7c6ee6fa36aa"
+    },
+    "source-history/stage-14/src/persistence/safe-images.ts": {
+      "bytes": 2693,
+      "sha256": "ed1a3e95d28e073acc31a65307fa434804a3f62235390e9e8c689e75bb1e8e0c"
+    },
+    "source-history/stage-14/src/persistence/validation.ts": {
+      "bytes": 29156,
+      "sha256": "0641d24958ae722e859a2a29286c3121d4524d022e6dd4604fa12dc22449ceb7"
+    },
+    "source-history/stage-14/src/property/editor.ts": {
+      "bytes": 9582,
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef"
+    },
+    "source-history/stage-14/src/scenarios/definitions.ts": {
+      "bytes": 15321,
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32"
+    },
+    "source-history/stage-14/src/scenarios/evaluation.ts": {
+      "bytes": 9211,
+      "sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1"
+    },
+    "source-history/stage-14/src/scenarios/index.ts": {
+      "bytes": 7773,
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736"
+    },
+    "source-history/stage-14/src/state/history.ts": {
+      "bytes": 3128,
+      "sha256": "dbe1793840a70260587b1c0eedc592c7cf020d8b5626e48336f42d02cdab2183"
+    }
+  },
+  "notes": [
+    "All source-history/stage-XX/ entries are byte-for-byte copies of the original source-only files from their corresponding original stage ZIP.",
+    "Original Stage 2 engineering ZIP includes screenshots and other non-source artifacts; this package intentionally excludes them.",
+    "Only SecurityLab/ is current active application source; stage history is for traceability and recovery.",
+    "Hash/source validation is not software test execution or proof that the app builds or runs."
+  ]
+}

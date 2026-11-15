@@ -1,0 +1,23 @@
+{
+  "name": "securitylab-engineering-simulator",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Stage 2 offline-first SecurityLab engineering simulator — interim dependency-free build; React/Vite migration gate open",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit",
+    "test": "npm run build && npm run test:unit",
+    "serve": "node scripts/serve.mjs",
+    "test:unit": "node --test tests/*.test.mjs",
+    "test:browser": "python tests/embedded-browser-smoke.py",
+    "test:origin": "python tests/origin-browser-acceptance.py",
+    "lint": "node scripts/lint.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

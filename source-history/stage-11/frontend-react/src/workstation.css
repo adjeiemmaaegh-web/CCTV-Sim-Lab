@@ -1,0 +1,198 @@
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#d9e8f2;background:#081426;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,select,input{font:inherit}button{cursor:pointer;background:#122a43;border:1px solid #33516b;border-radius:5px;color:#d9edf8;padding:8px 11px}button:hover:not(:disabled){background:#1a425c}button:disabled{opacity:.45;cursor:not-allowed}input,select{background:#091d34;border:1px solid #34516a;border-radius:5px;color:#daedf8;padding:8px 10px;min-width:0}input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid #21d7bf;outline-offset:2px}input[type=checkbox]{accent-color:#26d2ba;min-width:auto}.workstation{height:100vh;min-height:740px;display:flex;flex-direction:column;overflow:hidden}.topbar{height:60px;flex:0 0 60px;background:#0a182b;display:flex;align-items:center;padding:0 17px;gap:18px;border-bottom:1px solid #244057}.brand{display:flex;align-items:center;gap:10px;width:295px;flex:0 0 295px}.brand-symbol{font-size:40px;color:#28d0bb;line-height:1}.brand strong{font-size:19px;letter-spacing:.5px}.brand strong span{color:#27d9c5}.brand small{display:block;color:#91aabe;font-size:9px;letter-spacing:1.8px;margin-top:2px}.mode-pill{font-size:10px;font-weight:700;color:#2fdbbb;border:1px solid #126b69;padding:7px 12px;border-radius:5px;letter-spacing:1px;white-space:nowrap}.project-title{font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.top-actions{margin-left:auto;display:flex;gap:7px;align-items:center;white-space:nowrap}.primary{background:#25d5b7;color:#042c32;font-weight:700;border-color:#25d5b7}.subbar{flex:0 0 45px;background:#10233b;border-bottom:1px solid #2e4a63;display:flex;align-items:center;gap:18px;padding:0 17px;font-size:11px;color:#bfd0df}.subbar select{padding:6px 9px;margin-left:7px;max-width:220px}.subbar-right{margin-left:auto;display:flex;align-items:center;gap:18px;white-space:nowrap}.good{color:#37ddb7!important}.warn{color:#f7b56c!important}.muted{color:#7b9bb3}.tiny{font-size:11px}.main-grid{display:grid;grid-template-columns:290px minmax(420px,1fr) 315px;gap:8px;flex:1;min-height:0;padding:8px 8px 0}.panel{border:1px solid #25465d;border-radius:7px;background:#0b1d32;min-width:0;min-height:0;overflow:hidden}.panel-heading{padding:12px 14px;border-bottom:1px solid #2d485b}.panel-heading h2{font-size:15px;margin:0 0 4px}.panel-heading p{font-size:11px;color:#90a8ba;margin:0}.pad{padding:11px}.pad input{width:100%}.catalog{display:flex;flex-direction:column}.catalog-scroll{overflow:auto;padding:0 11px 15px}.catalog-scroll h3{color:#77b6bf;font-size:10px;letter-spacing:1.7px;margin:14px 3px 8px}.equipment{display:flex;width:100%;text-align:left;align-items:center;gap:9px;margin-bottom:5px;padding:8px 7px;background:#132b44;border:1px solid transparent}.equipment.chosen{border-color:#2bcdb8;background:#133d50}.equipment-icon{display:flex;align-items:center;justify-content:center;width:35px;height:35px;flex:0 0 35px;font-size:22px;color:#49dcd0;background:#12454d;border-radius:5px}.equipment-icon.switch{color:#71bafb;background:#1c395c}.equipment-icon.nvr{color:#e8b777;background:#59412a}.equipment-content{min-width:0;flex:1}.equipment strong{font-size:11px;display:block}.equipment small{display:block;color:#90a9b9;font-size:9px;margin-top:3px}.price{font-size:10px;white-space:nowrap;color:#c4dec9}.canvas-panel{display:flex;flex-direction:column}.workspace-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.tabs{display:flex;gap:6px}.tabs button{font-size:11px;padding:7px 10px;background:transparent;border:1px solid transparent;white-space:nowrap}.tabs button.active,.toolbar button.active{color:#27e5c0;background:#153f4b;border-color:#1dbda5}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px;border-bottom:1px solid #284861;background:#0d2238;flex-wrap:wrap}.toolgroup{display:flex;align-items:center;gap:4px}.toolgroup button,.toolgroup label{font-size:11px;padding:7px 9px}.canvas-body{position:relative;flex:1;overflow:hidden;background:#0a1d31}.canvas-body svg{width:100%;height:100%;display:block;touch-action:none}.canvas-body svg [data-device],[data-cable]{cursor:pointer}.canvas-hint{position:absolute;bottom:11px;left:11px;border:1px solid #2c536c;background:#0a1b2de0;padding:6px 10px;font-size:10px;color:#aec8db;border-radius:4px;pointer-events:none}.canvas-status{display:flex;align-items:center;gap:16px;border-top:1px solid #2b455c;padding:8px 10px;font-size:10px;color:#8caabd}.canvas-status .good{margin-left:auto}.inspector{display:flex;flex-direction:column}.inspector-scroll{overflow:auto;flex:1;padding:10px}.device-summary{background:#132b45;border:1px solid #37546b;border-radius:7px;padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:10px}.big-icon{font-size:28px;color:#5cf1d0}.device-summary div{min-width:0;flex:1}.device-summary strong{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.device-summary small{font-size:9px;color:#8eaec1;display:block;margin-top:3px}.device-summary>span:last-child{font-size:10px}.section-heading{font-size:10px;color:#6cbbb4;letter-spacing:1.4px;padding:10px 4px;border-bottom:1px solid #2a4659}.fields{padding:8px 0}.prop-field,.checkfield{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0;font-size:11px}.prop-field span,.checkfield span{flex:1}.prop-field input,.prop-field select{width:55%;padding:7px;font-size:11px}.health>div{display:flex;align-items:center;justify-content:space-between;font-size:11px;border-bottom:1px solid #20364d;padding:8px 3px}.health strong{font-size:10px}.health .warning-line{display:block}.warning-line{color:#f6a76e!important}.specs p{font-size:11px;color:#9eb8c7}.no-selection{text-align:center;margin:130px 14px 25px;color:#8ca8bb}.no-selection>span{font-size:38px}.no-selection h3{font-size:14px;color:#dce8ef}.no-selection p{line-height:1.6;font-size:12px}.danger{border-color:#a0524f;color:#f6a6a0;width:100%;margin-top:14px}.console{margin:8px 8px 0;flex:0 0 182px;display:flex;flex-direction:column}.console-head{display:flex;align-items:center;padding:7px 12px;border-bottom:1px solid #2c4961;gap:18px;flex-wrap:wrap}.console-head strong{font-size:11px;letter-spacing:1px}.fault-controls{margin-left:auto;display:flex;gap:5px}.fault-controls select,.fault-controls button{font-size:10px;padding:5px}.console-body{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:12px;padding:8px 12px;overflow:hidden;flex:1}.log-lines{overflow:auto;font-family:ui-monospace,Consolas,monospace;font-size:10px}.log-lines p{margin:6px 0}.assessment-card{border:1px solid #1a937e;border-radius:6px;padding:10px;background:#0c3337}.assessment-card strong{font-size:12px}.assessment-card p{color:#bdd2d7;font-size:10px}.metric-row{display:flex;justify-content:space-between;gap:8px}.metric-row>div{display:flex;flex-direction:column}.metric-row small{font-size:9px;color:#a3bcc3}.metric-row b{font-size:16px;color:#34dbb9;margin-top:4px}.status-footer{height:38px;flex:0 0 38px;display:flex;gap:16px;padding:5px 12px;align-items:center;justify-content:space-between;font-size:10px;color:#90acc0;background:#071325}.status-footer button{font-size:10px;padding:5px 8px}.save.saved{color:#24ccaa}.save.blocked{color:#ff9c82}.undo-controls{display:flex;gap:4px}.toast,.error-banner{position:fixed;right:12px;bottom:48px;background:#102f42;color:#e3f1f5;border:1px solid #2cb59e;border-radius:7px;padding:12px;z-index:10;font-size:12px;box-shadow:0 12px 30px #0005}.toast button{margin-left:8px}.error-banner{bottom:90px;max-width:600px;background:#52252b;border-color:#dd747c}.error-banner div{display:flex;gap:6px;margin-top:10px}.modal-backdrop{position:fixed;inset:0;background:#020812ca;display:flex;align-items:center;justify-content:center;z-index:12}.modal{background:#10243a;border:1px solid #3e677d;border-radius:9px;max-height:80vh;overflow:auto;width:min(580px,94vw);padding:20px}.modal-header{display:flex;align-items:center;justify-content:space-between}.saved-project{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2f4b61;padding:12px 3px}.saved-project span{display:flex;flex-direction:column}.saved-project small{font-size:10px;color:#8eaebf;margin-top:5px}@media(max-width:1120px){.main-grid{grid-template-columns:235px minmax(380px,1fr) 270px}.brand{width:215px;flex-basis:215px}.mode-pill{display:none}.top-actions button{padding:6px}.catalog-scroll h3{letter-spacing:1px}}@media(max-width:870px){.workstation{height:auto;min-height:100vh;overflow:visible}.topbar{flex-wrap:wrap;height:auto;padding:10px}.top-actions{margin-left:0}.subbar{flex-wrap:wrap;height:auto;padding:10px}.subbar-right{margin-left:0}.main-grid{display:grid;grid-template-columns:1fr;height:auto}.catalog{height:260px}.catalog-scroll{display:flex;gap:10px}.catalog-scroll section{min-width:240px}.canvas-panel{height:600px}.inspector{min-height:350px;max-height:580px}.console{min-height:270px}.console-body{grid-template-columns:1fr}.assessment-card{display:none}.status-footer{height:auto;flex-wrap:wrap;padding:10px}}
+
+.loading-banner{position:fixed;inset:70px 24px auto;z-index:75;background:#10293e;color:#e0f5ff;border:1px solid #19b49b;border-radius:8px;padding:16px 24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+
+/* Stage 3 — blueprint workstation editor: source-only increment. */
+.editor-toolbar{display:flex;flex-direction:column;gap:4px;padding:6px 7px;background:#10283d;border-bottom:1px solid #2b4c61}
+.editor-mode-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;min-height:34px}
+.editor-mode-row .toolgroup{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.editor-mode-row button{padding:6px 8px;font-size:10px;white-space:nowrap}
+.editor-mode-row button.active{background:#104c4c;color:#29efc5;border:1px solid #1ad2aa}
+.editor-mode-row .annotator{padding:2px 4px 6px}
+.editor-mode-row.annotator{border:1px dashed #37647d;padding:6px;border-radius:4px}
+.editor-muted{font-size:10px;color:#94aec1;line-height:1.6;margin:8px 2px}
+.property-options{gap:7px}
+.compact-field,.compact-check{font-size:10px;display:inline-flex;gap:5px;align-items:center;color:#a7c5d5;white-space:nowrap}
+.compact-field select{padding:5px 6px;font-size:10px;max-width:130px}
+.compact-check input{margin:0}
+.toolbar-spacer{flex:1}
+.zoom-readout{font-size:11px;color:#d3e8ed;min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
+.stage-tag{display:inline-block;border:1px solid #187e78;color:#32d6bf;padding:3px 5px;border-radius:4px;font-size:9px;margin-left:6px;vertical-align:2px;letter-spacing:.6px}
+.canvas-body svg [data-room],.canvas-body svg [data-wall],.canvas-body svg [data-site],.canvas-body svg [data-target],.canvas-body svg [data-reference]{cursor:move}
+.canvas-body svg [data-room-handle],.canvas-body svg [data-wall-handle]{cursor:crosshair}
+.site-scale-editor{margin-top:12px;border-top:1px solid #2c4c5f;padding-top:8px}
+.rename-small{padding:2px 5px;border:0;background:transparent;color:#84c8be;font-size:12px;margin-left:5px}
+.canvas-status{flex-wrap:wrap;row-gap:4px}
+.inspector-scroll .prop-field select{width:58%;font-size:10px;padding:6px}
+@media(max-width:1440px){.editor-mode-row{flex-wrap:wrap}.canvas-status{gap:10px}.main-grid{grid-template-columns:235px minmax(430px,1fr) 285px}.stage-tag{display:none}}
+@media(max-width:980px){.editor-toolbar{overflow:auto}.editor-mode-row{min-width:0}.main-grid{grid-template-columns:220px minmax(380px,1fr) 260px}}
+@media(max-width:870px){.main-grid{grid-template-columns:1fr}.canvas-panel{min-height:690px}.canvas-body{min-height:490px}.editor-mode-row .toolgroup{flex-wrap:wrap}}
+
+/* Stage 4 CCTV instrument and recorder panels */
+.cctv-zone{border:1px solid #375871;background:#112a40;border-radius:8px;padding:9px;margin-bottom:10px;display:grid;gap:7px}
+.cctv-zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cctv-preset{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:12px;border:1px solid #37516a;border-radius:6px;padding:5px}
+.cctv-preset span{flex:1;overflow:hidden;text-overflow:ellipsis}
+.weekday-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:11px;color:#bcd6e2}
+.weekday-row>span{width:100%;font-size:12px}
+.weekday-row label{display:flex;gap:3px;align-items:center}
+.recorder-summary{display:grid;gap:4px;background:#122e42;border:1px solid #35576b;border-radius:6px;padding:10px;font-size:12px}
+.recorder-channel{font-size:12px;color:#a5dccf;margin:3px 0}
+.recording-time{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 14px;background:#132b3d;border-top:1px solid #34566d;font-size:12px;color:#d8eaf3}
+.recording-time small{color:#8aaabc}
+.recorder-console{border:1px solid #315270;border-radius:8px;padding:7px;margin:5px 0 10px;display:grid;gap:4px;font-size:11px}
+.recorder-console>span{color:#a9cadb}
+.recorder-channel-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.recorder-channel-tile{min-width:0;display:grid;gap:2px;padding:5px;border-radius:6px;background:#182d40;border:1px solid #385064;color:#8eabba}
+.recorder-channel-tile.active{background:#123c41;border-color:#229687;color:#cbf1e7}
+.recorder-channel-tile span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recorder-channel-tile small{font-size:10px}
+
+/* Stage 5: configurable network infrastructure and diagnostic console */
+.network-settings{border-top:1px solid #294d66;padding-top:5px}
+.network-settings .fields{margin-bottom:7px}
+.network-entry{display:grid;gap:3px;border:1px solid #31546a;background:#102940;border-radius:7px;padding:7px;margin:6px 0}
+.network-entry button{justify-self:end;font-size:10px;padding:5px}
+.network-entry .prop-field{margin:2px 0}
+.port-table{padding:7px 0}
+.port-config{display:grid;grid-template-columns:25px minmax(68px,1fr) 55px minmax(62px,1fr) 74px;gap:3px;align-items:center;font-size:10px;border-bottom:1px solid #23465d;padding:4px 0}
+.port-config select,.port-config input{width:100%;min-width:0;padding:4px 3px;font-size:9px}
+.port-config strong{color:#91d9c9}
+.port-config input[aria-label$="allowed VLANs"]{grid-column:4}
+.network-probe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:10px;background:#123146;border-bottom:1px solid #316179;padding:7px 13px}
+.network-probe label{display:flex;align-items:center;gap:4px}
+.network-probe select,.network-probe button{font-size:10px;padding:5px 7px}
+.network-probe>span{color:#e1d29b;flex-basis:100%;font-size:11px}
+.equipment-icon.router,.equipment-icon.ap,.equipment-icon.server{background:#263c68;color:#b2c8ff}
+@media(max-width:1100px){.port-config{grid-template-columns:20px 1fr 46px 1fr 60px}}
+
+/* Stage 6: intrusion alarm workstation and practical circuit troubleshooting */
+.equipment-icon.alarm-panel,.equipment-icon.alarm-sensor,.equipment-icon.alarm-output,.equipment-icon.alarm-keypad{background:#3b2b60;color:#d9b6ff}
+.alarm-practice{width:calc(100% - 16px);margin:7px 8px;border:1px solid #8e6abd;background:#332952;color:#efdafe;font-size:11px;padding:9px}
+.alarm-config{border-top:1px solid #4c3c64;margin-top:7px}
+.alarm-config .section-heading{color:#c7a6fb}
+.alarm-panel-status{border:1px solid #75519d;border-radius:7px;padding:9px;background:#211f3d;display:grid;gap:3px;font-size:10px;color:#d8cdec}
+.alarm-panel-status strong{color:#d9b8ff;font-size:12px}
+.alarm-zone-table{display:grid;gap:5px;padding:8px 0}
+.alarm-zone-row{display:grid;grid-template-columns:26px 1fr minmax(86px,1fr);gap:4px;align-items:center;background:#1f2b43;border:1px solid #4a4767;border-radius:5px;padding:5px}
+.alarm-zone-row strong{font-size:10px;color:#cbb0e6}
+.alarm-zone-row input:not([type="checkbox"]),.alarm-zone-row select{width:100%;min-width:0;padding:5px;font-size:10px}
+.alarm-zone-row label{font-size:10px;display:flex;align-items:center;gap:3px}
+.alarm-zone-row small{grid-column:2/-1;font-size:10px;color:#b1a5c9}
+.alarm-console{display:grid;gap:9px;min-width:0;padding:4px 0 12px;font-family:Inter,system-ui,sans-serif}
+.alarm-console-heading{display:flex;align-items:center;gap:10px;justify-content:space-between;color:#d9baff}
+.alarm-console-heading button{font-size:10px;background:#37275b;border:1px solid #7058a5}
+.alarm-command-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:7px;background:#152a41;border:1px solid #36526d;border-radius:6px;font-size:10px}
+.alarm-command-row label{display:inline-flex;gap:5px;align-items:center}
+.alarm-command-row strong{color:#e1cbfb;font-size:10px}
+.alarm-command-row small{color:#8eaec1}
+.alarm-command-row input,.alarm-command-row select,.alarm-command-row button{min-width:0;font-size:10px;padding:5px}
+.alarm-command-row input[type="number"]{width:60px}
+.alarm-command-row input[type="password"]{width:75px}
+.alarm-telemetry{display:flex;flex-wrap:wrap;gap:6px}
+.alarm-telemetry span{border-radius:5px;border:1px solid #4a5874;background:#12273d;padding:5px 7px;display:grid;gap:2px;color:#94afbf;font-size:9px}
+.alarm-telemetry b{color:#e4ceff;font-size:12px}
+.alarm-zone-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.alarm-zone-tile{min-width:0;border:1px solid #3c4e68;border-radius:6px;padding:8px;background:#13273d;display:grid;gap:4px;font-size:10px}
+.alarm-zone-tile strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#c9ddea}
+.alarm-zone-tile span{font-size:10px;color:#9bb5cb}
+.alarm-zone-tile small{font-size:9px;color:#91abc0;overflow-wrap:anywhere}
+.alarm-zone-tile.armed{border-color:#239c79;background:#103734}
+.alarm-zone-tile.failed{border-color:#c78b51;background:#3b2a2b}
+.alarm-zone-tile.triggered{border-color:#f26473;background:#492438}
+.alarm-log{border-top:1px solid #354862;padding-top:6px;display:grid;gap:4px}
+.alarm-log p{margin:0;font-size:10px;line-height:1.45}
+@media(max-width:1050px){.alarm-zone-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Stage 7 access-control editing and virtual credential/schedule journal. */
+.access-config,.access-console{display:flex;flex-direction:column;gap:9px;min-width:0}
+.access-credential-list{display:grid;gap:10px;max-height:240px;overflow:auto;padding-right:4px}
+.access-identity{border:1px solid var(--line, #2b4b5f);border-radius:8px;padding:10px;background:rgba(21,45,62,.42);min-width:0}
+.access-identity .alarm-command-row{flex-wrap:wrap}
+.access-identity .editor-muted{overflow-wrap:anywhere}
+.access-console input[type="text"],.access-console input:not([type]){max-width:150px}
+.access-console .alarm-log{max-height:180px;overflow:auto}
+.access-console h3{font-size:12px;letter-spacing:.035em;margin:7px 0 2px}
+.access-console .warning-line{overflow-wrap:anywhere}
+
+/* Stage 8: readable engineering power sub-workstation with real engine bindings. */
+.console:has(.power-lab){flex-basis:350px}
+.power-lab{display:flex;flex-direction:column;gap:8px;padding:10px 13px;overflow:auto;flex:1;min-height:0;background:#0c2235;color:#cde1ed}
+.power-lab-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:11px}
+.power-lab-tools>strong{font-size:11px;color:#7ed7d0;letter-spacing:.8px;margin-right:9px}
+.power-lab-tools label{display:inline-flex;align-items:center;gap:7px}
+.power-lab-tools select{max-width:255px;padding:6px;font-size:11px}
+.power-lab-tools input[type=range]{width:100px;accent-color:#36d2bb;padding:0}
+.power-lab-tools button{padding:5px 9px;font-size:11px}
+.power-metrics{display:grid;grid-template-columns:repeat(6,minmax(95px,1fr));gap:7px}
+.power-metrics>div{border:1px solid #34576c;background:#133246;border-radius:5px;padding:8px;display:flex;flex-direction:column;gap:5px}
+.power-metrics small{font-size:9px;letter-spacing:.5px;color:#93b5c7}
+.power-metrics strong{font-size:15px;font-variant-numeric:tabular-nums;color:#61e2ca}
+.power-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:70px}
+.power-status-grid>div{border:1px solid #284c61;border-radius:5px;min-width:0;padding:7px}
+.power-status-grid h4{font-size:10px;color:#aacbdc;letter-spacing:1px;margin:0 0 6px}
+.power-status-grid p{font-size:10px;color:#8da8bd}
+.power-device-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 7px;margin:3px 0;text-align:left;font-size:10px}
+.power-device-row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.power-device-row strong{font-size:10px;color:#71d2bd;font-variant-numeric:tabular-nums;white-space:nowrap}
+.power-device-row small{font-size:9px}
+.power-config{border-top:1px solid #31546a;padding:6px 1px}
+@media(max-width:1050px){.power-metrics{grid-template-columns:repeat(3,minmax(90px,1fr))}.power-status-grid{grid-template-columns:1fr}}
+@media(max-width:870px){.console:has(.power-lab){min-height:450px}.power-lab-tools{align-items:flex-start}}
+
+/* Stage 9 model search filters and source disclosure. */
+.catalog-filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 12px 12px}
+.catalog-filters label{display:grid;gap:3px;font-size:11px;color:#b9cce0}
+.catalog-filters select{min-width:0;width:100%;background:#17253b;color:#e5f2f8;border:1px solid #38506b;border-radius:5px;padding:6px}
+.catalog-filters small{grid-column:1/-1;color:#9eb4ca;font-size:10px;line-height:1.4}
+.equipment .price{font-size:10px;max-width:78px;text-align:right}
+.specs li{margin-bottom:5px;line-height:1.3}
+.specs a{color:#78d9d0;text-decoration:underline;overflow-wrap:anywhere}
+
+/* Source-backed model browser; reference-only equipment is readable but not draggable. */
+.vendor-browser{padding:6px 12px 10px;border-top:1px solid #29455b;border-bottom:1px solid #29455b}
+.vendor-browser label{display:grid;gap:4px;font-size:11px;color:#b9cce0}
+.vendor-browser select{min-width:0;width:100%;padding:6px;background:#17253b;border:1px solid #38506b;border-radius:5px;color:#e5f2f8}
+.vendor-detail{margin-top:8px;padding:9px;border:1px solid #375b70;border-radius:6px;background:#16283c;max-height:245px;overflow:auto;font-size:11px}
+.vendor-detail>strong{display:block;color:#80e4d7;margin-bottom:4px}
+.vendor-detail>small{display:block;color:#a8c1d5;font-size:10px;line-height:1.4}
+.vendor-detail ul{margin:7px 0;padding-left:17px}
+.vendor-detail li{margin-bottom:4px}
+.vendor-detail p{line-height:1.45;color:#b8cedc}
+.vendor-detail a{display:block;margin-top:7px;color:#7be4d3;text-decoration:underline;overflow-wrap:anywhere}
+
+/* Stage 10: practical exercise briefing and live engineering criteria. */
+.scenario-panel{padding:14px 16px;color:var(--text,#d7e8ef);max-height:340px;overflow:auto}
+.scenario-intro{display:flex;justify-content:space-between;gap:20px;align-items:start}
+.scenario-intro h3{font-size:17px;margin:3px 0 4px}.scenario-intro p{margin:2px 0 8px;color:#b1c8d4}
+.scenario-intro small{font-size:10px;letter-spacing:.06em;color:#77d9cc}
+.scenario-score{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;background:#112d38;border:1px solid #255567;padding:8px;border-radius:9px}
+.scenario-score strong{font-size:23px;color:#75e2cb}.scenario-score span{font-size:11px;color:#c7dbdc}
+.scenario-progress{height:6px;border-radius:9px;overflow:hidden;background:#253f4b;margin:7px 0 10px}.scenario-progress div{height:100%;background:#45c3af;transition:width .12s}
+.scenario-cols{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1fr);gap:22px}
+.scenario-cols h4{margin:4px 0 8px;color:#d9f4f3}.scenario-cols ol{padding-left:20px;margin:4px 0 10px}.scenario-cols li{margin:5px 0;font-size:12px}
+.scenario-objectives{display:grid;gap:5px}.scenario-objective{display:flex;align-items:start;gap:9px;background:#132b36;border:1px solid #2d4952;padding:6px 9px;border-radius:7px}
+.scenario-objective span:nth-child(2){display:flex;flex-direction:column;gap:1px}.scenario-objective strong{font-size:12px}.scenario-objective small{color:#99b8bf;font-size:11px}
+.scenario-footer{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding-top:12px}.scenario-footer small{width:100%;color:#99b8bf}
+.scenario-challenges{padding:8px;border:1px solid #475769;background:#182d3a;border-radius:8px;margin-top:10px}.scenario-challenges p{font-size:12px;margin:5px 0}.scenario-challenges button,.scenario-footer button{background:#145e66;color:#edfffc;border:1px solid #2e8d93;border-radius:6px;padding:6px 10px;cursor:pointer}
+.scenario-history{margin-top:8px;font-size:11px;color:#b9cbd1}
+@media(max-width:850px){.scenario-cols{grid-template-columns:1fr}.scenario-panel{max-height:440px}}
+
+/* Stage 11 — evidence-based, read-only competency report workspace */
+.competency-panel{padding:16px 19px;color:#dceaf1;background:#122331;max-height:420px;overflow:auto;border-top:1px solid #263e4d}
+.competency-header{display:flex;align-items:center;justify-content:space-between;gap:25px;border-bottom:1px solid #35505f;padding-bottom:10px}
+.competency-header h3{margin:2px 0 4px;font-size:19px;color:#f0f8fa}.competency-header p{margin:0;color:#a2bbc7}
+.competency-header small{font-size:10px;letter-spacing:.12em;color:#66c7bd}
+.competency-score{min-width:160px;text-align:right}.competency-score b{display:block;font-size:31px;color:#6cd3c7;line-height:1.1}.competency-score b small{font-size:15px;color:#9cb7c4}.competency-score span{font-size:10px;letter-spacing:.09em;color:#d6e8ed}
+.competency-toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:10px 0}.competency-toolbar select{max-width:310px;margin-left:5px}.competency-toolbar button{white-space:nowrap}
+.competency-context{color:#c4dce8;font-size:12px}.competency-stale{color:#ffcc80;border:1px solid #855d36;padding:7px;border-radius:5px;font-size:12px}
+.competency-disclaimer{font-size:11px;color:#cedce5;background:#203649;padding:8px 10px;border-left:3px solid #bbaa71}
+.competency-cols{display:grid;grid-template-columns:1fr 1.2fr;gap:22px}.competency-cols section{margin:14px 0 20px}.competency-cols h4{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#90cbd0;border-bottom:1px solid #345262;padding-bottom:7px}
+.competency-area{margin:9px 0}.competency-area>div:first-child{display:flex;justify-content:space-between;gap:12px;font-size:12px}.competency-area>div:first-child span{white-space:nowrap;color:#a7c9d3}
+.competency-meter{height:6px;border-radius:8px;overflow:hidden;background:#304452;margin:4px 0}.competency-meter>span{display:block;height:100%;background:#49baa9;border-radius:8px}
+.competency-gate{display:flex;flex-direction:column;font-size:12px;margin:9px 0}.competency-gate span{font-size:11px;color:#a8becb}
+.competency-finding{margin:10px 0;padding:9px 12px;background:#22313c;border-left:3px solid #cc9762;border-radius:3px;font-size:12px}
+.competency-finding small{display:block;font-size:10px;color:#f5bb83}.competency-finding strong{display:block;margin:4px 0}.competency-finding p{margin:5px 0;color:#d2dee6}
+.competency-evidence>div{display:flex;gap:9px;border-bottom:1px solid #2d4552;padding:6px 0;font-size:12px}.competency-evidence small{display:block;color:#a9bdc8}
+.competency-trend{display:flex;align-items:end;gap:9px;height:95px;padding:10px;background:#203444;border-radius:6px}.competency-trend>div{height:100%;display:flex;align-items:center;justify-content:end;flex-direction:column;flex:1;min-width:10px}.competency-trend span{background:#45b6aa;display:block;width:80%;min-height:3px;border-radius:3px 3px 0 0}.competency-trend small{font-size:10px;color:#d8e9ed}
+@media(max-width:800px){.competency-cols{grid-template-columns:1fr}.competency-header{align-items:flex-start}.competency-score{min-width:110px}}

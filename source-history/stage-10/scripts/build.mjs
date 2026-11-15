@@ -1,0 +1,13 @@
+import { spawnSync } from 'node:child_process';
+import { copyFileSync, cpSync, mkdirSync, existsSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
+const exe = process.platform === 'win32' ? 'tsc.cmd' : 'tsc';
+const local = join('node_modules', '.bin', exe);
+const cmd = existsSync(local) ? local : exe;
+rmSync('dist', {recursive:true,force:true});
+const result = spawnSync(cmd, ['-p','tsconfig.json'], { stdio: 'inherit', shell: process.platform === 'win32' });
+if (result.status !== 0) process.exit(result.status || 1);
+mkdirSync('dist', {recursive:true});
+for (const f of ['index.html','styles.css','manifest.webmanifest','service-worker.js']) copyFileSync(f, join('dist',f));
+cpSync('assets', 'dist/assets', {recursive:true});
+console.log('SecurityLab built into dist/');

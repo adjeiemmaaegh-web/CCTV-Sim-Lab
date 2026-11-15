@@ -1,0 +1,290 @@
+{
+  "format": "securitylab-source-cumulative-integration",
+  "original_stage15_archive_sha256": "e9b28320c924ab7d822b9e04e61b0ae197b53c14315334330cc9e94ffc0ad409",
+  "description": "Source-only Stage 15 integration continuation: preserve all historical snapshots; correct assessment budget and stale access evidence; no active database or login.",
+  "modified_active_files": {
+    "SecurityLab/README.md": {
+      "before_sha256": "c333ad5cd9b66ce493332d40b7c13bccfe908f87d77bae90c2a1409e57247f7e",
+      "after_sha256": "94df3b43857a1126fa2404a547197a18ee8ab2eb5e4e343f4c3454c1036540e4"
+    },
+    "SecurityLab/src/domain/manufacturers/ajax.ts": {
+      "before_sha256": "8d1c08578742067746040b1a4f7772fdde0083bf9e36495fe1b6690e5114456e",
+      "after_sha256": "2ee3ff3fc3aae6c09b3cf934f139bbf8b2e85cd9fdc50cbefacad21ef052eca4"
+    },
+    "SecurityLab/src/engine/simulator.ts": {
+      "before_sha256": "d44f2281c53f85c23a2537438b7616ff385c920be85a05f3f0d24ad0f5c6c48e",
+      "after_sha256": "5030e5427a5ad5bfa40a6328d2e15e0c6b52ffb938cbd1c195c5081b0fe6f492"
+    },
+    "SecurityLab/src/scenarios/evaluation.ts": {
+      "before_sha256": "71c664f342e3aa2c38e4051b3942c105af5f7b1b70e2883f73194132dbb5d5b1",
+      "after_sha256": "6cbb567adddae63c49fcb51dbc0a506e256223816e80290e4666c3544c06d53b"
+    }
+  },
+  "active_files": {
+    "SecurityLab/.gitignore": {
+      "sha256": "977c833787f6f811e18e0c006827fb362f82b625f606dad61467e61c12e7f8c2",
+      "bytes": 93
+    },
+    "SecurityLab/README.md": {
+      "sha256": "94df3b43857a1126fa2404a547197a18ee8ab2eb5e4e343f4c3454c1036540e4",
+      "bytes": 7296
+    },
+    "SecurityLab/SOURCE_PRESERVATION.json": {
+      "sha256": "1acf7e5bab630bfc65c7a444581f0e3994761ee69a2bbd42725191bfe90479a2",
+      "bytes": 11794
+    },
+    "SecurityLab/frontend-react/index.html": {
+      "sha256": "2d09355c2e0d981871cf87fd8e782f3513a0d84fb373211cad99a1b0f825a396",
+      "bytes": 527
+    },
+    "SecurityLab/frontend-react/package.json": {
+      "sha256": "ec3b568307c76030916c165c24ca86f7714cb336cf3461a164c0f4d423b0a421",
+      "bytes": 783
+    },
+    "SecurityLab/frontend-react/public/assets/icon.svg": {
+      "sha256": "f45e58ce74cc0bcedf06cf2685488676b4eff50d5a4c161adf40772d1ae3685e",
+      "bytes": 351
+    },
+    "SecurityLab/frontend-react/public/manifest.webmanifest": {
+      "sha256": "dcdb8bfb0ab268e59572ac3d39caeaf896f65ac9adc4dbdbbed92e10a2c92bca",
+      "bytes": 289
+    },
+    "SecurityLab/frontend-react/scripts-build-pwa.mjs": {
+      "sha256": "92c41ffc0ef84b7b99001f59273bad817ab58b05d653f8e7592cf7e3da90a8a8",
+      "bytes": 2123
+    },
+    "SecurityLab/frontend-react/src/SecurityLab.tsx": {
+      "sha256": "b4b7a7a1a016e053d0974455ca8b76a09878ff29e623eeb560866fd9e7916c27",
+      "bytes": 4463
+    },
+    "SecurityLab/frontend-react/src/components/AccessConfig.tsx": {
+      "sha256": "feb3859306d1cab91463c7339a8bf7605f1febb6bb37c01b4a581866eb2f0ac2",
+      "bytes": 5564
+    },
+    "SecurityLab/frontend-react/src/components/AccessConsole.tsx": {
+      "sha256": "7b950f3688c863772e7e28a1a689b4b673112866c14ce7cfff1abd268ae92273",
+      "bytes": 9614
+    },
+    "SecurityLab/frontend-react/src/components/AlarmConfig.tsx": {
+      "sha256": "59d56b839d1b796b465b03bf07a981b07387d08594f5d9414e4bbc7a88cf3228",
+      "bytes": 8441
+    },
+    "SecurityLab/frontend-react/src/components/AlarmConsole.tsx": {
+      "sha256": "56533f2c0823f591b40fddfcbb6493be321275a71ebdf071d0f8b0b34794fae5",
+      "bytes": 5554
+    },
+    "SecurityLab/frontend-react/src/components/AssessmentConsole.tsx": {
+      "sha256": "58c3b82ef05b32471a19cf4a7e2b7e10c39cd3c4bc56ec9aa04f30d4dc1b56ee",
+      "bytes": 5836
+    },
+    "SecurityLab/frontend-react/src/components/Canvas.tsx": {
+      "sha256": "852a3e895743d4282c5f42548832cec42ca97e961dc3937b1615f03feee66a1d",
+      "bytes": 33220
+    },
+    "SecurityLab/frontend-react/src/components/Catalog.tsx": {
+      "sha256": "abe38f6ee095414aff23c00edad9456b1ea13d0815617ce1db10a3ae5ab24164",
+      "bytes": 7142
+    },
+    "SecurityLab/frontend-react/src/components/CctvConfig.tsx": {
+      "sha256": "aa7dfc10972816fbcf6626aa05c20196d57ca5a62df22643d1d74379e8335450",
+      "bytes": 10619
+    },
+    "SecurityLab/frontend-react/src/components/CheckpointDialog.tsx": {
+      "sha256": "0be39823db6e554f4c0d0deba251bf3607d9e23e159b8f51afd5b85af0e9ca31",
+      "bytes": 2527
+    },
+    "SecurityLab/frontend-react/src/components/Console.tsx": {
+      "sha256": "e3a16a69e9ba4d4b2def7c9bad787f5516a2a3a2821f465f429143799330b8f7",
+      "bytes": 11792
+    },
+    "SecurityLab/frontend-react/src/components/FieldReviewConsole.tsx": {
+      "sha256": "496a39fb3dbf7bb0d20752feb866d3d839b71f01c06ab3d1113cdb432c556e3f",
+      "bytes": 9996
+    },
+    "SecurityLab/frontend-react/src/components/Inspector.tsx": {
+      "sha256": "3f4758274bda4efa2367d6a6fd955858247b746003fae5d96c237cb4b82af719",
+      "bytes": 15274
+    },
+    "SecurityLab/frontend-react/src/components/NetworkConfig.tsx": {
+      "sha256": "4073433373331255ff3e182f328d3f2223988c43b0bb7f872ffacdc10b2fa7f8",
+      "bytes": 10584
+    },
+    "SecurityLab/frontend-react/src/components/PowerConfig.tsx": {
+      "sha256": "95cab9a197a828a5ca263ee05c01c1459a87e6440867da6dc9502ff281194dcd",
+      "bytes": 3442
+    },
+    "SecurityLab/frontend-react/src/components/PowerConsole.tsx": {
+      "sha256": "1612ebf1b9a412e8d547cb2a64135a98b19b927bbf32e1ac23164de02b6d4a39",
+      "bytes": 4488
+    },
+    "SecurityLab/frontend-react/src/components/ScenarioConsole.tsx": {
+      "sha256": "2bf01d4b56aa701d1da4115209c0580ce12fe2b2d857b6575bb76c54fbcd3f3e",
+      "bytes": 3343
+    },
+    "SecurityLab/frontend-react/src/components/SystemHealth.tsx": {
+      "sha256": "bd332edbec0330171285f4c748aadb79d98facfad9faade2274291f04ad18648",
+      "bytes": 2207
+    },
+    "SecurityLab/frontend-react/src/components/TopBar.tsx": {
+      "sha256": "5aa260cfb758df4b9bd8877ef1352228c7adaecee99fa75dcdcf2fd090a2c903",
+      "bytes": 4019
+    },
+    "SecurityLab/frontend-react/src/hooks/useWorkbench.ts": {
+      "sha256": "e28efbe3874c3ba5159f0c3b5a0d69be3ac4a282e242819a7788b817f71c29a7",
+      "bytes": 41725
+    },
+    "SecurityLab/frontend-react/src/main.tsx": {
+      "sha256": "1e8ad7cf487024d0d651d32b8e27d0f4dfd19363d61c2fd20da24041e7819b83",
+      "bytes": 289
+    },
+    "SecurityLab/frontend-react/src/offline.ts": {
+      "sha256": "44d358bb4a5ce4b53a73c201e1591e347ab1ecbcd52507837751f33b50ea2ace",
+      "bytes": 2916
+    },
+    "SecurityLab/frontend-react/src/workstation.css": {
+      "sha256": "975737080d5b6491ae958bba28d679f76030b56099b98b2e955ba6df93f3e5da",
+      "bytes": 35049
+    },
+    "SecurityLab/frontend-react/tsconfig.json": {
+      "sha256": "4d4cdd7a97bb645d37725d5f9abe1fb36de254120e36eb073a5e0dc044b7831c",
+      "bytes": 557
+    },
+    "SecurityLab/frontend-react/vite.config.ts": {
+      "sha256": "4a1d1724a98deda0a753b17a47350c682ec6ce12d91991f1ddee832854cff6b5",
+      "bytes": 1112
+    },
+    "SecurityLab/package.json": {
+      "sha256": "5577413228ef1b73026236d79655583fa7b813603ba2e71c4737087300f1b856",
+      "bytes": 534
+    },
+    "SecurityLab/src/domain/catalog.ts": {
+      "sha256": "a6bf3a01dd954ed2cff3a4100e14ad56abf948253ee4ff578b67998cd50ae13b",
+      "bytes": 21769
+    },
+    "SecurityLab/src/domain/manufacturers/ajax.ts": {
+      "sha256": "2ee3ff3fc3aae6c09b3cf934f139bbf8b2e85cd9fdc50cbefacad21ef052eca4",
+      "bytes": 1574
+    },
+    "SecurityLab/src/domain/manufacturers/dahua.ts": {
+      "sha256": "dbd16cdf7560e904d683dfccf27335d8ef8959e127437b6d9755c8f763113dc2",
+      "bytes": 2677
+    },
+    "SecurityLab/src/domain/manufacturers/factory.ts": {
+      "sha256": "450e0e2330ab7afdbb53149ac4f0a9697e8cc8f160fa4d3bb2715947120e63b2",
+      "bytes": 831
+    },
+    "SecurityLab/src/domain/manufacturers/hikvision.ts": {
+      "sha256": "8774419db2220445b53d55ecb059f7dfe5c2d3702f23d658d472edbb14713ae5",
+      "bytes": 2828
+    },
+    "SecurityLab/src/domain/manufacturers/index.ts": {
+      "sha256": "aa6824e6d572874717afc673fff596e1433e4ff03a70ae29f1f35fba5486bc7a",
+      "bytes": 2440
+    },
+    "SecurityLab/src/domain/manufacturers/reolink.ts": {
+      "sha256": "975224d2c37bf0da8b2faa4f3a39542cde74c035dddfce48e5d361463a9c5b37",
+      "bytes": 1446
+    },
+    "SecurityLab/src/domain/manufacturers/tplink.ts": {
+      "sha256": "bb58849825d08c909a705556e1d368f92c5b9bf160339a9ccc01006b8f5946bf",
+      "bytes": 1226
+    },
+    "SecurityLab/src/domain/manufacturers/ubiquiti.ts": {
+      "sha256": "04c879e635140d648911e6c52391f2519c07699e811b7da8a783a92da3036bc8",
+      "bytes": 1259
+    },
+    "SecurityLab/src/domain/types.ts": {
+      "sha256": "e10942fbb1eee608ac6eeacd6aca8942c80bb52983e86e0a879cc49b6856f118",
+      "bytes": 17061
+    },
+    "SecurityLab/src/engine/access.ts": {
+      "sha256": "b30373d7313c1543828e6e6945415986044b52fb9183c6631d43ea6a2b8ab7d6",
+      "bytes": 16577
+    },
+    "SecurityLab/src/engine/alarm.ts": {
+      "sha256": "8d1e19cb1edffa223452945a702566d7b3840b05243f5f4af6c47bffe1bb66fd",
+      "bytes": 19238
+    },
+    "SecurityLab/src/engine/assessment.ts": {
+      "sha256": "c42b56ce3cbf07520f8a65f4b185e1dab42506652d1522ef46688d2bc4f09f7a",
+      "bytes": 1939
+    },
+    "SecurityLab/src/engine/cctv.ts": {
+      "sha256": "4bcc2386e7b151932bfad99d90705fdccff9be00ce1528dd742926062bbae2c1",
+      "bytes": 5729
+    },
+    "SecurityLab/src/engine/competency.ts": {
+      "sha256": "25939a024c71f4652bd311e7b110f7c5693d62824b8ebcd85bfb13437e02847b",
+      "bytes": 12258
+    },
+    "SecurityLab/src/engine/geometry.ts": {
+      "sha256": "2ec54d958273fcf363e13811ded5c2388416653468c1f8c3e643b689754639bc",
+      "bytes": 1964
+    },
+    "SecurityLab/src/engine/integration.ts": {
+      "sha256": "bdb68cfb4462d2ec9ea0a9f7da08a95443dda7246e53e5a399dfa0b93389d4e3",
+      "bytes": 5797
+    },
+    "SecurityLab/src/engine/network.ts": {
+      "sha256": "2891c9b1567b4c6be7b7fc328960625c1458d5cf500a3f87cf6d1bc77d6b00a5",
+      "bytes": 2135
+    },
+    "SecurityLab/src/engine/networking.ts": {
+      "sha256": "bc26c9d5265533ae295918d0dc1a33270c4d5f6e30e663d5f6c126f39873a697",
+      "bytes": 16924
+    },
+    "SecurityLab/src/engine/power.ts": {
+      "sha256": "d9f07565aadfb06752180c48c9e0b94be7dab5f71fa9e43c7bda63caf97ba2d8",
+      "bytes": 17982
+    },
+    "SecurityLab/src/engine/reports.ts": {
+      "sha256": "f51b3ce4a53c9f2e5139914556b992e584f5ad98a4e5358e80240400667e5484",
+      "bytes": 5110
+    },
+    "SecurityLab/src/engine/simulator.ts": {
+      "sha256": "5030e5427a5ad5bfa40a6328d2e15e0c6b52ffb938cbd1c195c5081b0fe6f492",
+      "bytes": 25458
+    },
+    "SecurityLab/src/field/field-validation.ts": {
+      "sha256": "397c098a1e1100eb787bb92509f92f610e7d68fe8b24b63ab9813bde4ea81102",
+      "bytes": 7657
+    },
+    "SecurityLab/src/persistence/file-projects.ts": {
+      "sha256": "d1dc7c0fedca4d285e2e2e779ade0884edc7113abd3556434ab299100a738c9c",
+      "bytes": 11681
+    },
+    "SecurityLab/src/persistence/safe-images.ts": {
+      "sha256": "ed1a3e95d28e073acc31a65307fa434804a3f62235390e9e8c689e75bb1e8e0c",
+      "bytes": 2693
+    },
+    "SecurityLab/src/persistence/validation.ts": {
+      "sha256": "0641d24958ae722e859a2a29286c3121d4524d022e6dd4604fa12dc22449ceb7",
+      "bytes": 29156
+    },
+    "SecurityLab/src/property/editor.ts": {
+      "sha256": "4e1f05344f98dd8aabac709d8d426794556fa7290243d6c131b7b22077f902ef",
+      "bytes": 9582
+    },
+    "SecurityLab/src/scenarios/definitions.ts": {
+      "sha256": "e03179ecfa9ebcbe03f0057b6b99eba6f6a9c9c0f3b3d55472ac8d7ec0a26c32",
+      "bytes": 15321
+    },
+    "SecurityLab/src/scenarios/evaluation.ts": {
+      "sha256": "6cbb567adddae63c49fcb51dbc0a506e256223816e80290e4666c3544c06d53b",
+      "bytes": 10096
+    },
+    "SecurityLab/src/scenarios/index.ts": {
+      "sha256": "b22855ea96627010eb9d67e3a2d425b94a654b9417df5c0db738c8dc7f339736",
+      "bytes": 7773
+    },
+    "SecurityLab/src/state/history.ts": {
+      "sha256": "dbe1793840a70260587b1c0eedc592c7cf020d8b5626e48336f42d02cdab2183",
+      "bytes": 3128
+    }
+  },
+  "historical_stage15_files": 65,
+  "historical_stage1_to14_files": 729,
+  "source_not_production_accepted": true,
+  "parent_archive_sha256": "1bc0db11efbe5ce00ef851d9702d42ffb51f187045861b5880b3a269daa2e09c",
+  "productionAccepted": false
+}

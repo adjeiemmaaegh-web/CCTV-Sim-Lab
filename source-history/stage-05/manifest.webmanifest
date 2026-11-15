@@ -1,0 +1,19 @@
+{
+  "name": "SecurityLab Engineering Workstation",
+  "short_name": "SecurityLab",
+  "description": "Offline-capable electronic security engineering simulator (training models)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1425",
+  "theme_color": "#0b1425",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": "/",
+  "id": "/"
+}

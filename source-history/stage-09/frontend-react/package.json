@@ -1,0 +1,28 @@
+{
+  "name": "securitylab-react-workstation",
+  "version": "0.9.0",
+  "private": true,
+  "type": "module",
+  "description": "SecurityLab Stage 9 cumulative source-only engineering simulator: 2D property, CCTV, networking, alarms, access control, AC/DC/PV power, documented manufacturer models and offline project persistence (runtime acceptance pending)",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "build": "npm run check && vite build && node scripts-build-pwa.mjs",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.3.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "@types/node": "22.19.7"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

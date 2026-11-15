@@ -1,0 +1,14 @@
+{
+  "name": "securitylab-offline-engineering-simulator",
+  "version": "0.13.0-source",
+  "private": true,
+  "type": "module",
+  "description": "Cumulative Stages 1–13 source; offline file-based project work, no accounts or databases",
+  "scripts": {
+    "dev": "npm --prefix frontend-react run dev",
+    "check": "npm --prefix frontend-react run check",
+    "build": "npm --prefix frontend-react run build",
+    "preview": "npm --prefix frontend-react run preview"
+  },
+  "engines": {"node": ">=22.12.0"}
+}
