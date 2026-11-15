@@ -7,7 +7,7 @@ import {useLocale} from './Speak.js';
 import {Icon} from './icons.js';
 
 /** Top bar: logo, scenario, mode, live status chips and the Project menu (all file actions). */
-export function TopBar({w}:{w:Workbench}){
+export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void}){
  useLocale();
  const openFile=useRef<HTMLInputElement>(null),importFile=useRef<HTMLInputElement>(null),imageFile=useRef<HTMLInputElement>(null);
  const [menu,setMenu]=useState(false);const menuRef=useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ export function TopBar({w}:{w:Workbench}){
    <span className="chip"><Icon name="events" size={16}/>{clockLabel(w.project)}</span>
   </div>
   <span className="topbar-spacer"/>
-  <button className="primary assess-btn" onClick={w.runAssessment} disabled={w.blocked}><Icon name="assessment" size={16}/>{t('top.assess')}</button>
+  <button className="primary assess-btn" onClick={()=>{onRevealPanels();w.runAssessment();}} disabled={w.blocked}><Icon name="assessment" size={16}/>{t('top.assess')}</button>
   <div className="project-menu" ref={menuRef}>
    <button aria-haspopup="menu" aria-expanded={menu} onClick={()=>setMenu(m=>!m)}><Icon name="file" size={16}/>Project<Icon name="chevron" size={14}/></button>
    {menu&&<div className="menu" role="menu" aria-label="Project">
