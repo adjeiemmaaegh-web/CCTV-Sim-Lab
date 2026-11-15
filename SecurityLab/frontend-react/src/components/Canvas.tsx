@@ -1,6 +1,7 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {profile} from '../../../src/domain/catalog.js';
 import {coveragePolygon} from '../../../src/engine/geometry.js';
+import {adjustDevice} from '../../../src/engine/environment.js';
 import {signalOf,mediumOf} from '../../../src/engine/cctv.js';
 import {PLAN_WIDTH,PLAN_HEIGHT,snapped,bounded,distance,distanceMeters,scaleOf,clamp,transformRoomWalls} from '../../../src/property/editor.js';
 import type {Point,Wall,Device} from '../../../src/domain/types.js';
@@ -43,12 +44,12 @@ export function Canvas({w}:{w:Workbench}){
  // A device under active drag is computed separately for accurate live previews.
  const cameraPolygonCache=useMemo(()=>new Map(w.project.devices
   .filter(d=>profile(d.profileId).kind==='camera')
-  .map(d=>[d.id,coveragePolygon(d,w.project.walls,w.project.night,45)] as const)),
-  [w.project.devices,w.project.walls,w.project.night]);
+  .map(d=>[d.id,coveragePolygon(adjustDevice(w.project,d),w.project.walls,w.project.night,45)] as const)),
+  [w.project.devices,w.project.walls,w.project.night,w.project.environment]);
  const alarmPolygonCache=useMemo(()=>new Map(w.project.devices
   .filter(d=>profile(d.profileId).kind==='alarm-sensor'&&profile(d.profileId).alarmSensorType==='pir')
-  .map(d=>[d.id,coveragePolygon(d,w.project.walls,false,36)] as const)),
-  [w.project.devices,w.project.walls]);
+  .map(d=>[d.id,coveragePolygon(adjustDevice(w.project,d),w.project.walls,false,36)] as const)),
+  [w.project.devices,w.project.walls,w.project.environment]);
  const toggle=(layer:LayerName)=>setLayers(l=>({...l,[layer]:!l[layer]}));
  const viewWidth=PLAN_WIDTH/zoom,viewHeight=PLAN_HEIGHT/zoom;
  const viewBox=`${center.x-viewWidth/2} ${center.y-viewHeight/2} ${viewWidth} ${viewHeight}`;

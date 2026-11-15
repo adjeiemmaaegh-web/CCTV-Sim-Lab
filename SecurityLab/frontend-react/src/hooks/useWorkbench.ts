@@ -45,7 +45,7 @@ export function useWorkbench(){
  const [mode,setMode]=useState<Mode>('select');
  const [placing,setPlacing]=useState<string|null>(null);
  const [cableStart,setCableStart]=useState<string|null>(null);
- const [tab,setTab]=useState<'systems'|'diagnostics'|'network'|'events'|'recordings'|'alarm'|'access'|'power'|'scenario'|'assessment'|'field-review'>('systems');
+ const [tab,setTab]=useState<'systems'|'diagnostics'|'network'|'events'|'recordings'|'alarm'|'access'|'power'|'scenario'|'assessment'|'field-review'|'tools'>('systems');
  const [listOpen,setListOpen]=useState(false);
  const [backups,setBackups]=useState<Checkpoint[]>([]);
  const [autosave,setAutosave]=useState(false);

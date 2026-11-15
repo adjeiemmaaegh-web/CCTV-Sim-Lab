@@ -1,3 +1,4 @@
+import {applyEnvironment,adjustDevice} from './environment.js';
 import type {Cable,Device,DeviceStatus,PoEStatus,Project,SimResult,LabEvent,Point,RecorderStatus,RecordingClip} from '../domain/types.js';
 import {profile} from '../domain/catalog.js';
 import {manufacturerVideoCompatible} from '../domain/manufacturers/index.js';
@@ -19,7 +20,8 @@ const compare=(a:Device,b:Device)=>a.id.localeCompare(b.id);
 const incident=(project:Project,at:string,kind:LabEvent['kind'],message:string,point?:Point,cameraId?:string,recorded=false):LabEvent=>({id:`evt-${crypto.randomUUID()}`,at,kind,message,recorded,...(point?{x:point.x,y:point.y}:{}),...(cameraId?{deviceId:cameraId}:{})});
 
 /** Stateless source-of-truth derivation: project inputs alone determine the technical state. */
-export function simulate(project:Project):SimResult {
+export function simulate(projectInput:Project):SimResult {
+ const project=applyEnvironment(projectInput);
  const devices=project.devices,byId=new Map(devices.map(d=>[d.id,d]));
  const power=evaluatePower(project),strictPower=power.mode==='wired';
  const statuses:Record<string,DeviceStatus>={},cableStatuses:SimResult['cables']={},poe:Record<string,PoEStatus>={},recorders:Record<string,RecorderStatus>={};
@@ -236,7 +238,7 @@ export function triggerMotion(project:Project,point:Point,at:string=new Date().t
  const result=simulate(project),events:LabEvent[]=[],clips:RecordingClip[]=[];
  let recorded=0;const clock=clockOf(project),storageIncrement=new Map<string,number>();
  const triggered=project.devices.filter(d=>isCamera(d)&&d.motionEnabled&&result.devices[d.id].powered&&result.devices[d.id].networkOk&&
-  visible(d,point,project.walls,project.night)&&insideMotionZone(d,point)&&motionThresholdMet(d,intensity));
+  visible(adjustDevice(project,d),point,project.walls,project.night)&&insideMotionZone(d,point)&&motionThresholdMet(d,intensity));
  if(!triggered.length)events.push(incident(project,at,'warning','Movement not detected by any operational camera/active detection zone',point));
  for(const d of triggered){
   const status=result.devices[d.id],ready=status.recordingReady&&!!status.recorderId;

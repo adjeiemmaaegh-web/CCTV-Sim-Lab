@@ -252,6 +252,9 @@ export function validateProject(input:unknown):Project{
    }
   }
  }
+ if(p.environment!==undefined){const e=p.environment as any;
+  if(!e||!['clear','rain','fog','dust'].includes(e.weather)||!finite(e.ambientC)||e.ambientC<-40||e.ambientC>70||typeof e.glare!=='boolean')throw new Error('Invalid environment settings');
+ }
  if(p.fieldReview!==undefined){
   // The import payload is untrusted until each field below is validated.
   const fr=p.fieldReview as any;

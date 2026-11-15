@@ -270,3 +270,19 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 /* Stage 16: on short desktop viewports (e.g. 1280x720) the canvas was squeezed to ~65px.
    Guarantee a usable editing area and let the workstation scroll vertically instead. */
 @media(min-width:871px){.workstation{overflow-y:auto}.main-grid{min-height:480px;flex:1 0 480px}.canvas-body{min-height:300px}}
+
+/* Stage 17: engineering tools console */
+.console.console-expanded .tools-console{flex:1;min-height:0;display:flex;flex-direction:column}
+.tool-tabs{display:flex;gap:4px;flex-wrap:wrap;padding:6px 12px;border-bottom:1px solid #23465d}
+.tool-tabs button{padding:4px 10px;font-size:12px}.tool-tabs button.active{background:#1d5560;border-color:#51d3d0}
+.tool-body{flex:1;min-height:0;overflow:auto;padding:10px 14px}
+.tool-panel{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.tool-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.tool-row label{display:flex;flex-direction:column;gap:2px;font-size:11px;color:#9bbed0}
+.tool-row input,.tool-row select{min-width:90px}
+.tool-table{border-collapse:collapse;width:100%;font-size:12px}.tool-table th,.tool-table td{border-bottom:1px solid #23465d;padding:4px 6px;text-align:left}
+.cli-screen{background:#050d18;border:1px solid #23465d;border-radius:6px;padding:8px;height:210px;overflow:auto;font-family:Consolas,"Courier New",monospace;font-size:12px;white-space:pre-wrap}
+.cli-input{display:flex;gap:8px}.cli-input label{flex:1;display:flex;gap:6px;align-items:center;font-family:Consolas,monospace}.cli-input input{flex:1;background:#050d18;color:#d9e8f2;border:1px solid #23465d;padding:5px}
+.cli-prompt{color:#51d3d0;white-space:nowrap}
+.trace-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+.camera-strip{width:100%;max-width:760px;border:1px solid #23465d;border-radius:6px}
+.target-list{margin:0;padding-left:18px}

@@ -4,6 +4,7 @@
  * an intrusion detection service, or a substitute for manufacturer's installation manuals.
  * State transitions require explicit commands and are saved as part of the project.
  */
+import {adjustDevice} from './environment.js';
 import type {AlarmArmMode,AlarmPanelConfig,AlarmPanelStatus,AlarmResult,AlarmRuntime,AlarmSensorType,AlarmZone,Device,LabEvent,Point,Project} from '../domain/types.js';
 import {profile} from '../domain/catalog.js';
 import {evaluatePower} from './power.js';
@@ -153,7 +154,7 @@ export function triggerAlarmStimulus(p:Project,type:AlarmStimulus,point:Point,in
  const sim=evaluateAlarms(p);let next=p,detected=0,alerts=0;
  for(const sensor of [...p.devices].filter(sensorKind).sort((a,b)=>a.id.localeCompare(b.id))){
   const status=sim.devices[sensor.id];if(!status?.powered||!status.panelId||sensor.alarmDevice?.bypassed||sensor.alarmDevice?.fault&&sensor.alarmDevice.fault!=='none')continue;
-  if(!detects(sensor,type,point,p,intensity))continue;
+  if(!detects(adjustDevice(p,sensor),type,point,p,intensity))continue;
   const panelId=status.panelId,zone=sim.panels[panelId]?.zones.find(z=>z.number===status.zone);
   if(!zone||!zone.ready)continue;
   detected++;
