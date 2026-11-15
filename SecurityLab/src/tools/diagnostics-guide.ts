@@ -12,9 +12,9 @@ const format=(s:string)=>s.length>220?s.slice(0,217)+'...':s;
 const remedy=(reason:string):{area:DiagnosticArea;next:string;route:GuidedFinding['route'];critical:boolean}=>{
  if(/disconnected|no usable ethernet cable|no usable coax/i.test(reason))return {area:'cable',next:'Open the affected virtual cable. Check both endpoints, set Connected, and confirm the simulated cable is within its modeled length limit.',route:'diagnostics',critical:true};
  if(/port|assigned to multiple|unavailable interface/i.test(reason))return {area:'cable',next:'Select an unused port at each end of the Ethernet connection. For cameras, check whether the chosen switch port supplies modeled PoE.',route:'diagnostics',critical:true};
+ if(/duplicate|IPv4 address|DHCP|subnet|gateway|routing|no forwarding path|lease/i.test(reason))return {area:'ip',next:'Check unique IP addresses, subnet masks, VLANs, DHCP pool and return path using the simulated network settings.',route:'network',critical:true};
  if(/VLAN|trunk|access mismatch/i.test(reason))return {area:'ip',next:'Inspect both switch port VLAN settings. Access ports must agree; trunk/native VLANs must carry the modeled traffic.',route:'network',critical:true};
  if(/PoE|power|unpowered|battery|voltage|breaker|solar/i.test(reason))return {area:'power',next:'Inspect the power source, modeled output rating, selected PoE socket, shared power budget and device enabled state.',route:'power',critical:true};
- if(/duplicate|IPv4 address|DHCP|subnet|gateway|routing|no forwarding path|lease/i.test(reason))return {area:'ip',next:'Check unique IP addresses, subnet masks, VLANs, DHCP pool and return path using the simulated network settings.',route:'network',critical:true};
  if(/NVR|DVR|recorder|recording|storage|channels|bandwidth|disk/i.test(reason))return {area:'recording',next:'Check recorder availability, channel capacity, storage health and the simulated camera-to-recorder network path.',route:'recordings',critical:true};
  if(/alarm|zone|siren|tamper|panel|detector/i.test(reason))return {area:'alarm',next:'Inspect the virtual panel, zone assignment, device circuit and source power in the alarm console.',route:'alarm',critical:false};
  if(/access|reader|lock|door|credential/i.test(reason))return {area:'access',next:'Inspect controller wiring, authorization rules, reader state and the virtual door in Access.',route:'access',critical:false};
@@ -28,6 +28,8 @@ const remedy=(reason:string):{area:DiagnosticArea;next:string;route:GuidedFindin
  * diagnoses are generated. Updates are recalculated as the project changes.
  */
 export function guidedDiagnostics(project:Project,result:SimResult):GuidedFinding[]{
+ if(project.devices.length===0)return [{id:'start',area:'other',severity:'info',title:'No equipment installed',evidence:'The project has no placed virtual devices.',
+  nextStep:'Start by choosing equipment from the library and placing it on the floor plan.',route:'scenario'}];
  const findings:GuidedFinding[]=[],seen=new Set<string>();
  const add=(item:GuidedFinding)=>{if(!seen.has(item.id)){seen.add(item.id);findings.push(item);}};
  for(const cable of project.cables){
