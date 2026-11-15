@@ -170,3 +170,60 @@ button{color:var(--text)}
 @media(max-height:800px){.realtime{padding:8px 14px;gap:12px}.stat{padding:8px 12px;gap:10px}.stat .ico{width:26px;height:26px}.run-btn{width:48px;height:48px}.rt-run strong{font-size:16px}}
 
 @media(max-height:800px) and (min-width:901px){.shell .console{height:172px}.shell .console.console-expanded{height:min(52vh,420px)}.dock-tabs>button,.dock-more>button{height:36px}.view-tabs button span{display:none}}
+
+
+/* Post-Stage-18 canvas-first usability hardening.
+   Do not let editing tools wrap into three-four rows on smaller laptops:
+   the complete toolbar remains keyboard/scroll accessible in one row. */
+.shell .canvas-toolbar{
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:var(--line2) transparent;
+  min-height:56px;
+}
+.shell .canvas-toolbar .view-tabs,
+.shell .canvas-toolbar .toolgroup{flex:0 0 auto;flex-wrap:nowrap}
+.shell .canvas-toolbar .focus-toggle{flex:none;padding:0 9px}
+.shell .canvas-toolbar .focus-toggle .focus-label{display:none}
+.shell .canvas-toolbar .toolbar-spacer{flex:1 0 4px}
+.shell .canvas-toolbar .tb-sep{flex:0 0 1px}
+
+/* Explicit focus is safer than automatically hiding panes when selection changes:
+   no device edits or console state are lost, and a second click restores everything. */
+.shell-body.canvas-focus-mode{grid-template-rows:minmax(0,1fr)}
+.shell-body.canvas-focus-mode .main-grid{grid-template-columns:minmax(0,1fr)}
+.shell-body.canvas-focus-mode .catalog,
+.shell-body.canvas-focus-mode .inspector,
+.shell-body.canvas-focus-mode > .console{display:none}
+.shell-body.canvas-focus-mode .canvas-panel{grid-column:1;min-width:0}
+.shell-body.canvas-focus-mode .canvas-body{min-height:320px}
+
+/* On small screens put the *workspace*, not the 270px catalog, first.
+   Collapse the top bar into three predictable rows rather than a long stack. */
+@media(max-width:900px){
+ .shell .topbar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:7px;
+  align-items:center;
+  padding:8px;
+  min-height:0;
+  height:auto;
+ }
+ .shell .topbar .brand{grid-column:1;grid-row:1;min-width:0}
+ .shell .topbar .brand strong{font-size:19px}
+ .shell .topbar .project-menu{grid-column:2;grid-row:1;justify-self:end}
+ .shell .topbar .scenario-pill{grid-column:1 / -1;grid-row:2;min-width:0;max-width:none;width:100%}
+ .shell .topbar .mode-pill-select{grid-column:1;grid-row:3;min-width:0;width:100%;max-width:none}
+ .shell .topbar .assess-btn{grid-column:2;grid-row:3;justify-content:center;min-width:0;padding:0 7px}
+ .shell .topbar .topbar-spacer,.shell .topbar .status-chips,.shell .topbar .brand-sub{display:none}
+ .shell .topbar .pill select{width:100%;max-width:none}
+ .shell .main-grid{display:flex;flex-direction:column}
+ .shell .canvas-panel{order:-1;min-height:max(530px,calc(100dvh - 270px))}
+ .shell .canvas-body{min-height:430px}
+ .shell .catalog{max-height:280px}
+ .shell .inspector{max-height:480px}
+ .shell-body.canvas-focus-mode .canvas-panel{min-height:max(530px,calc(100dvh - 240px))}
+}
