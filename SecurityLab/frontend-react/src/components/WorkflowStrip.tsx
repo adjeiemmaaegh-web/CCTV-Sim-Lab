@@ -16,7 +16,7 @@ const STEPS:{id:WorkflowStep;label:string;tip:string}[]=[
  */
 export function WorkflowStrip({w,onChoose}:{w:Workbench;onChoose:(step:WorkflowStep)=>void}){
  const hasLink=w.project.cables.some(c=>c.connected);
- const ready=w.project.devices.some(d=>Boolean(w.result.devices[d.id]?.networkOk)&&w.project.cables.some(c=>c.a===d.id||c.b===d.id));
+ const ready=(w.project.audit||[]).some(entry=>/\bconfigured \d+ device\(s\)/.test(entry.summary));
  const hasTest=(w.project.events||[]).some(e=>e.kind==='fault'||e.kind==='motion'||e.kind==='warning'||e.kind==='recorded'||/diagnostic probe/i.test(e.message))||(w.project.assessments||[]).length>0;
  const done:Record<WorkflowStep,boolean>={place:w.project.devices.length>0,connect:hasLink,configure:ready,test:hasTest,save:w.saveState==='saved'&&!w.hasUnsavedWork()};
  const complete=STEPS.filter(s=>done[s.id]).length;
