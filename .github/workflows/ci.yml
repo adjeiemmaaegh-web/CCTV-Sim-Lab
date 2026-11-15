@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: SecurityLab/frontend-react
@@ -22,7 +22,7 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
-      - run: npx playwright install chromium
+      - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - if: failure()
         uses: actions/upload-artifact@v4
