@@ -227,3 +227,18 @@ button{color:var(--text)}
  .shell .inspector{max-height:480px}
  .shell-body.canvas-focus-mode .canvas-panel{min-height:max(530px,calc(100dvh - 240px))}
 }
+
+
+/* Stage 20 installation: compact port-aware connection inspector. */
+.connection-guide{border:1px solid var(--line2);border-radius:9px;padding:12px;background:#0b2235;margin:8px 0;display:flex;flex-direction:column;gap:9px}
+.connection-guide .section-heading{margin:0;font-size:11px;letter-spacing:.08em;color:#73cbbd}
+.connection-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;line-height:1.5}
+.connection-route strong{overflow-wrap:anywhere}
+.connection-route span{color:var(--accent);font-size:20px}
+.connection-ok,.connection-warning{padding:8px;border:1px solid;border-radius:7px;margin:0;font-size:12.5px;line-height:1.5}
+.connection-ok{background:#10382f;border-color:#216c58;color:#9af0d6}
+.connection-warning{background:#3b2a25;border-color:#705141;color:#ffd0a5}
+.connection-tip{background:#142e47;border-radius:7px;padding:9px;margin:0;font-size:13px;line-height:1.5}
+.connection-guide .fields{gap:8px;min-width:0}
+.connection-guide .prop-field select{width:100%;min-width:0}
+.connection-guide .editor-muted{line-height:1.6;margin:2px 0;font-size:12px}
