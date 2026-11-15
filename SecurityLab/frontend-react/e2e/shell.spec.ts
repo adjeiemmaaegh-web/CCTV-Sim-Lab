@@ -130,3 +130,69 @@ test('shell: layout holds at common desktop sizes (no horizontal overflow, canva
   expect(m.footBottom,`${w}x${h} footer visible`).toBeLessThanOrEqual(m.vh+1);
  }
 });
+
+
+test('canvas-first: narrow laptops keep editing toolbar to one row and focus restores panels',async({page})=>{
+ await page.setViewportSize({width:1024,height:768});
+ const errors=watch(page);await page.goto('/');
+ const toolbar=await page.locator('.canvas-toolbar').boundingBox();
+ const original=await page.locator('.canvas-body').boundingBox();
+ expect(toolbar!.height).toBeLessThanOrEqual(80);
+ expect(original!.height).toBeGreaterThan(350);
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:/IP Bullet/i}).first().click();
+ const focus=page.getByRole('button',{name:'Focus canvas'});
+ await focus.click();
+ await expect(page.getByRole('button',{name:'Restore workstation panels'})).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('.catalog')).toBeHidden();
+ await expect(page.locator('.inspector')).toBeHidden();
+ await expect(page.locator('.console')).toBeHidden();
+ const expanded=await page.locator('.canvas-body').boundingBox();
+ expect(expanded!.width).toBeGreaterThan(800);
+ expect(expanded!.height).toBeGreaterThan(500);
+ await page.locator('svg[role=application]').click({position:{x:400,y:220}});
+ await expect(page.locator('svg[role=application] g[data-device]')).toHaveCount(1);
+ await page.getByRole('button',{name:'Restore workstation panels'}).click();
+ await expect(page.locator('.catalog')).toBeVisible();
+ await expect(page.locator('.inspector')).toBeVisible();
+ await expect(page.locator('.console')).toBeVisible();
+ await expect(page.locator('.device-summary')).toBeVisible();
+ expect(errors).toEqual([]);
+});
+
+test('canvas-first: phone shows plan before equipment catalog without a 250px top toolbar',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/');
+ const m=await page.evaluate(()=>{
+  const rect=(s:string)=>document.querySelector(s)!.getBoundingClientRect();
+  return {top:rect('.topbar').height,canvasY:rect('.canvas-panel').top,catalogY:rect('.catalog').top,toolbarH:rect('.canvas-toolbar').height,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth};
+ });
+ expect(m.top).toBeLessThan(180);
+ expect(m.toolbarH).toBeLessThanOrEqual(80);
+ expect(m.canvasY).toBeLessThan(340);
+ expect(m.catalogY).toBeGreaterThan(m.canvasY);
+ expect(m.overflow).toBeLessThanOrEqual(1);
+});
+
+
+test('navigation highlights reflect actual dock selection rather than stale rail clicks',async({page})=>{
+ await page.goto('/');
+ const nav=page.getByRole('navigation',{name:'Sections'});
+ const network=nav.getByRole('button',{name:'Network'});
+ const equipment=nav.getByRole('button',{name:'Equipment'});
+ await network.click();
+ await expect(network).toHaveAttribute('aria-current','page');
+ await dock(page,'Tools');
+ await expect(network).not.toHaveAttribute('aria-current','page');
+ await dock(page,'Realtime');
+ await expect(equipment).toHaveAttribute('aria-current','page');
+ await expect(network).not.toHaveAttribute('aria-current','page');
+});
+
+test('empty simulation does not claim a configured network is online',async({page})=>{
+ await page.goto('/');
+ const rt=page.getByRole('region',{name:'Realtime status'});
+ await expect(rt.locator('.stat').filter({hasText:'Network'})).toContainText('Not configured');
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:/IP Bullet/i}).first().click();
+ await page.locator('svg[role=application]').click({position:{x:330,y:180}});
+ await expect(rt.locator('.stat').filter({hasText:'Network'})).not.toContainText('Online');
+});

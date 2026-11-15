@@ -1,6 +1,19 @@
-# SecurityLab — Stage 15 Integrated Source
+> **Current (November 2026):** Stage 18's canvas-first React workstation is publicly
+> available as a free static educational preview at https://securitylab-theta.vercel.app/.
+> The active code is in `frontend-react/`; its source remains local-file-based with no
+> backend, accounts or telemetry. To maximize drawing area choose **Focus canvas** in
+> the floor-plan toolbar and choose **Restore workstation panels** to return.
+> See `../ACCEPTANCE_STAGE18.md` for verified engineering checks and
+> `../docs/MANUAL_ACCEPTANCE.md` for still-unverified Windows, devices, accessibility
+> and professional reviewer gates. Live availability does **not** constitute real-world
+> installation validation, certification, or professional training acceptance.
+>
+> The older Stage 15 source notes below are preserved for historical provenance,
+> not as the current verification status.
 
-**Development source consolidated through stages 1–15. This is not a validated production release.**
+# SecurityLab â€” Stage 15 Integrated Source
+
+**Development source consolidated through stages 1â€“15. This is not a validated production release.**
 
 SecurityLab is a browser-based virtual electronic-security engineering workstation for property layout, CCTV/recorders, IP networking, intrusion alarms, access control, electrical/solar backup, manufacturer-informed virtual profiles, scenarios, and evidence-based practical assessment. This archive includes one **active** application plus exact earlier stage-source snapshots so prior work is not silently removed.
 
@@ -17,12 +30,12 @@ SecurityLab is a browser-based virtual electronic-security engineering workstati
 | `SecurityLab/src/state/` | Reversible project change history |
 | `SecurityLab/src/field/` | Offline/manual anonymous field-review records (not actual verification) |
 | `source-history/stage-01/` through `stage-14/` | Byte-preserved inactive historical source snapshots; **not part of the application build** |
-| `SOURCE_LINEAGE.json` | Audit record of the originally archived Stage 1–14 sources |
+| `SOURCE_LINEAGE.json` | Audit record of the originally archived Stage 1â€“14 sources |
 | `SOURCE_STAGE15_MANIFEST.json` | Hash/size inventory of current Stage 15 source |
 
 ## Core product decisions
 
-- **No sign-in, accounts, hosted API, cloud sync, PostgreSQL, Supabase or IndexedDB project database.** No module of the active application writes learner data to a service. Historical Stage 1–11 sources may contain withdrawn database implementations: they are inert and deliberately excluded from build paths.
+- **No sign-in, accounts, hosted API, cloud sync, PostgreSQL, Supabase or IndexedDB project database.** No module of the active application writes learner data to a service. Historical Stage 1â€“11 sources may contain withdrawn database implementations: they are inert and deliberately excluded from build paths.
 - Learners save/open portable `.securitylab.json` files. In compatible Chromium-derived browsers, the File System Access API can write a chosen file and verify readback; other browsers initiate JSON downloads without pretending the data was durably saved. The user must retain each downloaded file.
 - The service worker, when built and run on an eligible secure origin, caches **application shell assets only**. It does not store projects. `file://` does not provide a fully working installable PWA.
 - Simulated camera views, events, manufacturers and credentials are educational representations, not real firmware, playable CCTV footage, electrical safety certification or professional licensing.
@@ -35,7 +48,7 @@ SecurityLab is a browser-based virtual electronic-security engineering workstati
 3. **Safe reload**: File read and validation finish before changing active file tracking, and edits made during a reload are preserved.
 4. **Explicit save semantics**: An imported JSON with no writable handle cannot claim a new verified save simply because its content matches the opened file. The browser fallback initiates a new JSON download and warns the learner.
 5. **Integrated system overview**: A new `Systems` console tab derives live diagnostic summaries from the existing CCTV, network, alarm, access, power, and scenario engines. Counts and warnings are computed from project state, not separate UI-only animation flags.
-6. **Cumulative source-preservation**: The Stage 1–14 historical snapshots and their original SHA inventory are retained unchanged, while the Stage 15 active project is a clearly identified single source tree.
+6. **Cumulative source-preservation**: The Stage 1â€“14 historical snapshots and their original SHA inventory are retained unchanged, while the Stage 15 active project is a clearly identified single source tree.
 
 ## Development build instructions (not yet executed/accepted)
 
@@ -98,7 +111,7 @@ run `cd SecurityLab/frontend-react`, `npm install`, then `npm run build` and ver
 its live browser behaviour; no cloud, sign-in, browser database or backend is needed.
 
 
-## Stage 16 � verified build and tests
+## Stage 16 — verified build and tests
 
 ```bash
 cd SecurityLab/frontend-react

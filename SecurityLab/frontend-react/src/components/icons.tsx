@@ -46,6 +46,8 @@ const P:Record<string,React.ReactNode>={
  tools:<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/>,
  more:<path d="M5 12h.01M12 12h.01M19 12h.01"/>,
  floorplan:<><path d="M4 4h16v16H4z"/><path d="M4 11h7v9M14 4v7h6"/></>,
+ focus:<path d="M9 3H3v6M15 3h6v6M3 15v6h6M21 15v6h-6"/>,
+ restore:<><path d="M3 10h7V3M21 10h-7V3M3 14h7v7M21 14h-7v7"/></>,
  topology:<><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></>,
  shield:<path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6z"/>,
  info:<><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></>,

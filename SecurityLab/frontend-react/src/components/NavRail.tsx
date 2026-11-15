@@ -13,9 +13,9 @@ const ITEMS:{id:string;label:string;icon:string;tab:Workbench['tab']}[]=[
  {id:'scenarios',label:'Scenarios',icon:'scenarios',tab:'scenario'},
  {id:'assessment',label:'Assessment',icon:'assessment',tab:'assessment'},
 ];
-export function NavRail({w,section,setSection,openPanel,onView}:{w:Workbench;section:string;setSection:(s:string)=>void;openPanel:(p:Panel)=>void;onView:(v:'floor'|'topology')=>void}){
+export function NavRail({w,openPanel,onView}:{w:Workbench;openPanel:(p:Panel)=>void;onView:(v:'floor'|'topology')=>void}){
  return <nav className="nav-rail" aria-label="Sections">
-  {ITEMS.map(i=><button key={i.id} className={section===i.id?'active':''} aria-current={section===i.id?'page':undefined} onClick={()=>{setSection(i.id);w.setTab(i.tab);onView(i.id==='network'?'topology':'floor');}}>
+  {ITEMS.map(i=><button key={i.id} className={w.tab===i.tab?'active':''} aria-current={w.tab===i.tab?'page':undefined} onClick={()=>{w.setTab(i.tab);onView(i.id==='network'?'topology':'floor');}}>
    <Icon name={i.icon} size={22}/><span>{i.label}</span></button>)}
   <span className="nav-spacer"/>
   <button onClick={()=>openPanel('settings')}><Icon name="settings" size={22}/><span>Settings</span></button>
