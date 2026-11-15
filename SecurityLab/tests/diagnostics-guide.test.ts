@@ -2,6 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {newProject,exampleProject} from '../src/scenarios/index.js';
 import {simulate,injectFault} from '../src/engine/simulator.js';
 import {guidedDiagnostics} from '../src/tools/diagnostics-guide.js';
+import {createDevice} from '../src/domain/catalog.js';
 
 describe('evidence-backed troubleshooting',()=>{
  const rig=()=>exampleProject(newProject('home4'));
@@ -36,4 +37,14 @@ describe('evidence-backed troubleshooting',()=>{
   expect(JSON.stringify(p)).toBe(original);
   expect(first.every(x=>x.nextStep.length>20&&x.evidence.length>0)).toBe(true);
  });
+
+ it('distinguishes a non-PoE uplink from a generic port collision',()=>{
+  const base=newProject('home4'),sw=createDevice('switch-4',420,360,[]),camera=createDevice('cam-bullet',200,200,[sw]);
+  const p={...base,devices:[sw,camera],cables:[{id:'nonpoe',a:camera.id,b:sw.id,aPort:1,bPort:5,connected:true,medium:'ethernet' as const,lengthMeters:20}]};
+  const findings=guidedDiagnostics(p,simulate(p));
+  const cam=findings.find(f=>f.entity?.kind==='device'&&f.entity.id===camera.id);
+  expect(cam?.area).toBe('power');
+  expect(cam?.nextStep).toMatch(/PoE|power/i);
+ });
+
 });
