@@ -1,6 +1,6 @@
 # Stage 18 acceptance record: workstation redesign (2026-11-15)
 
-Status: **development-verified, NO-GO for production.** Branch `stage18-ui-redesign` (built on `stage17-features`).
+Status: **public educational preview deployed; professional training, certification and real-installation acceptance remain NO-GO.** Stage 18 was merged into `main` after CI and browser preview checks. This document records engineering verification, not field certification.
 
 ## What changed
 New shell matching the supplied design: left navigation rail (Equipment, Network, Alarms, Access, Power, Scenarios, Assessment, Settings, Help),
@@ -35,3 +35,34 @@ All engines and file handling are unchanged; every action that existed before is
 
 ## Still open
 Same as Stage 17 plus: manual look-and-feel review against the mock-up by the owner, and the unverified items in `docs/MANUAL_ACCEPTANCE.md`.
+
+## Post-Stage-18 UX and dependency continuation (15 November 2026)
+
+A follow-on branch `stage18-ux-hardening` addresses reproducible issues found against the
+live Stage 18 preview. The prior screenshot matching is approximate rather than pixel-identical.
+
+- Desktop editing toolbar stays on one horizontal row. Previously at 1024 × 768 it occupied
+  about 231 px of height, leaving approximately 239 px for the canvas; the revised 1024 px
+  preview shows approximately 67 px for the toolbar and 403 px for the canvas.
+- A keyboard-accessible **Focus canvas / Restore workstation panels** control maximizes
+  the drawing workspace without deleting the project, changing tools, or discarding selections.
+  In the 1024 × 768 preview, focus expands the canvas to approximately 916 × 575 px.
+- Mobile layouts present the floor-plan workspace before the equipment catalog, and the header
+  uses a compact three-row arrangement instead of a long stack of controls.
+- Rail selection follows the actual active dock tab, rather than showing a stale highlight.
+- Unconfigured or unlinked networks are no longer incorrectly described as "Online".
+- Dependency audit repair: Vitest is upgraded to 5.1.0, fflate is locked at 0.8.3,
+  and CI runs `npm audit --audit-level=moderate` across all dependencies.
+  The audited candidate passed TypeScript, unit tests and build before its manifests
+  were committed; normal branch CI must also pass on the final committed lockfile.
+- New browser regression tests cover toolbar height, focused canvas placement and restoration,
+  mobile first-screen canvas visibility, navigation state and empty-network indicators.
+
+**No authorization or evidence of field certification:** The static site remains a
+training simulator with no accounts, browser project database, backend or remote telemetry.
+The project must not be used to certify real installation compliance, manufacturer
+interoperability, or an installer’s professional competence. The human checklist in
+`docs/MANUAL_ACCEPTANCE.md` remains mandatory. Native Windows file pickers, installed-PWA
+restart with Wi-Fi disabled, physical-device/8GB performance, Firefox/Safari real-browser
+acceptance, touchscreen hardware, screen-reader assessment, French review, and qualified
+Ghanaian installer review are all still OPEN.
