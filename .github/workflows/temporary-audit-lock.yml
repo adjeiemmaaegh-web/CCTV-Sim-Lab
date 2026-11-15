@@ -18,13 +18,17 @@ jobs:
           cache: npm
           cache-dependency-path: SecurityLab/frontend-react/package-lock.json
       - run: npm ci
-      - name: Repair lockfile within allowed semver ranges
-        run: npm audit fix --package-lock-only --ignore-scripts
-      - name: Verify every audited dependency meets moderate threshold
-        run: npm audit --audit-level=moderate
+      - name: Upgrade test runner to patched release
+        run: npm install --save-dev vitest@5.1.0 --ignore-scripts
+      - name: Repair remaining lockfile advisories
+        run: npm audit fix --ignore-scripts
+      - name: Verify dependencies and code with upgraded test runner
+        run: npm audit --audit-level=moderate && npm run check && npm test && npm run build
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: audited-dependency-lock
-          path: SecurityLab/frontend-react/package-lock.json
+          path: |
+            SecurityLab/frontend-react/package.json
+            SecurityLab/frontend-react/package-lock.json
           if-no-files-found: error
