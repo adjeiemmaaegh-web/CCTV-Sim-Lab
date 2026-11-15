@@ -42,6 +42,9 @@ export function RealtimePanel({w}:{w:Workbench}){
  const r=w.result;
  const cameras=w.project.devices.filter(d=>profile(d.profileId).kind==='camera').length;
  const netIssues=r.network?.diagnostics.length??0;
+ const networkDevices=w.project.devices.filter(d=>['camera','switch','router','ap','server','nvr','dvr'].includes(profile(d.profileId).kind)).length;
+ const networkLinks=Object.keys(r.network?.links||{}).length;
+ const networkLabel=networkDevices===0?'Not configured':netIssues?(`${netIssues} issue${netIssues>1?'s':''}`):networkLinks===0?'No links configured':'No diagnosed faults';
  const alarmsActive=Object.values(r.alarm?.panels||{}).filter(p=>p.phase==='triggered').length;
  const accessEvents=(w.project.accessLog||[]).length;
  const load=r.power?.totalLoadW??0;
@@ -52,7 +55,7 @@ export function RealtimePanel({w}:{w:Workbench}){
   </div>
   <div className="rt-cards">
    <article className="stat"><Icon name="camera" size={34}/><div><strong>Cameras</strong><span>{r.recordingCameras} / {cameras} Recording</span></div></article>
-   <article className="stat"><Icon name="network" size={34}/><div><strong>Network</strong><span className={netIssues?'warning-line':'good'}>{netIssues?`${netIssues} issue${netIssues>1?'s':''}`:'Online'}</span></div></article>
+   <article className="stat"><Icon name="network" size={34}/><div><strong>Network</strong><span className={netIssues?'warning-line':networkDevices&&networkLinks?'good':'editor-muted'}>{networkLabel}</span></div></article>
    <article className="stat"><Icon name="power" size={34}/><div><strong>Power</strong><span>{load.toFixed(load<10?1:0)} W</span></div></article>
    <article className="stat"><Icon name="shield" size={34}/><div><strong>Alarms</strong><span className={alarmsActive?'warning-line':''}>{alarmsActive} Active</span></div></article>
    <article className="stat"><Icon name="access" size={34}/><div><strong>Access</strong><span>{accessEvents} Events</span></div></article>
