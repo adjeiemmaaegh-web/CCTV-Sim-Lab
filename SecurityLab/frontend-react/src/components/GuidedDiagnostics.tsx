@@ -33,7 +33,7 @@ export function GuidedDiagnostics({w}:{w:Workbench}){
     <p><b>Next investigation:</b> {f.nextStep}</p>
     <div className="guided-actions">
      {f.entity&&<button disabled={w.blocked} onClick={()=>{w.setSelected(f.entity!);w.setMode('select');}}>{f.entity.kind==='cable'?'Inspect connection':'Inspect device'}</button>}
-     {f.route!=='diagnostics'&&<button onClick={()=>w.setTab(f.route)}>Open {f.route==='ip'?'network':f.route} view</button>}
+     {f.route!=='diagnostics'&&<button onClick={()=>w.setTab(f.route)}>Open {f.route} view</button>}
     </div>
    </article>)}</div>}
  </section>;
