@@ -25,7 +25,7 @@ const DEFAULT_LAYERS:Record<LayerName,boolean>={rooms:true,walls:true,targets:tr
 const pointEqual=(a:Point,b:Point)=>Math.abs(a.x-b.x)<1&&Math.abs(a.y-b.y)<1;
 const kinds:PropertyTemplate[]=['residential','apartment','retail','office','warehouse'];
 
-export function Canvas({w:wb}:{w:Workbench}){
+export function Canvas({w:wb,focusMode,onToggleFocus}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void}){
  const viewProject=useMemo(()=>floorView(wb.project,wb.floor),[wb.project,wb.floor]);
  const w:Workbench=viewProject===wb.project?wb:{...wb,project:viewProject};
  const svg=useRef<SVGSVGElement>(null),gesture=useRef<Gesture|null>(null);
@@ -197,6 +197,7 @@ export function Canvas({w:wb}:{w:Workbench}){
     <button className={view==='floor'?'active':''} aria-label="Floor Plan" aria-pressed={view==='floor'} onClick={()=>switchView('floor')}><Icon name="floorplan" size={18}/><span>Floor Plan</span></button>
     <button className={view==='topology'?'active':''} aria-label="Network Topology" aria-pressed={view==='topology'} onClick={()=>switchView('topology')}><Icon name="topology" size={18}/><span>Network Topology</span></button>
    </div>
+   <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name="floorplan" size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
    <span className="tb-sep"/>
    <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
    <span className="tb-sep"/>
