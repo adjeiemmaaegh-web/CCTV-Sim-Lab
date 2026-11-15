@@ -6,7 +6,7 @@ import {simulate} from '../src/engine/simulator.js';
 import {assess} from '../src/engine/assessment.js';
 import {evaluateScenario} from '../src/scenarios/evaluation.js';
 
-const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter'];
+const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter','school-block','hospital-ward','market-kiosk-gh','church-compound-gh','office-fire'];
 
 describe('sha256',()=>{
  it('matches published vectors',()=>{
@@ -16,7 +16,7 @@ describe('sha256',()=>{
 });
 
 describe('scenarios',()=>{
- it('defines the ten documented scenarios',()=>{
+ it('defines the fifteen documented scenarios',()=>{
   expect(SCENARIOS.map(s=>s.id).sort()).toEqual([...IDS].sort());
  });
  for(const id of IDS){

@@ -3,7 +3,7 @@ import type {Workbench} from '../../hooks/useWorkbench.js';
 import type {Environment,Weather} from '../../../../src/domain/types.js';
 import {profile} from '../../../../src/domain/catalog.js';
 import {cameraView} from '../../../../src/tools/cameraView.js';
-import {analyseCamera,camerasForWidth,PPM_BANDS,HORIZONTAL_PIXELS,focalLengthMm,pixelsPerMetre} from '../../../../src/tools/lens.js';
+import {analyseCamera,anprCheck,camerasForWidth,PPM_BANDS,HORIZONTAL_PIXELS,focalLengthMm,pixelsPerMetre} from '../../../../src/tools/lens.js';
 import {analyseCables,dcDrop,minimumAwg,poeDelivery,OHM_PER_M} from '../../../../src/tools/cableEng.js';
 import {DUTY,diskFailureOutcome,planFromProject,type Raid} from '../../../../src/tools/storage.js';
 import {DEFAULT_ENVIRONMENT,describeEnvironment} from '../../../../src/engine/environment.js';
@@ -102,5 +102,23 @@ export function EnvironmentPanel({w}:{w:Workbench}){
    <label><input type="checkbox" checked={env.glare} disabled={w.blocked} onChange={e=>set({glare:e.currentTarget.checked})}/> Sun glare (daytime)</label></div>
   <ul>{describeEnvironment(env,w.project.night).map((l,i)=><li key={i}>{l}</li>)}</ul>
   <p className="editor-muted">Simplified training heuristics: they change simulated camera range, PIR range and battery capacity. They do not model real optics or chemistry.</p>
+ </section>;
+}
+
+/** Feature 13 (ANPR): plate-read feasibility. */
+export function AnprPanel({w}:{w:Workbench}){
+ const cams=cameras(w);const [id,setId]=useState('');const cam=cams.find(c=>c.id===id)||cams[0];
+ const [dist,setDist]=useState('10');const [speed,setSpeed]=useState('15');const [angle,setAngle]=useState('10');const [shutter,setShutter]=useState('1000');
+ const px=cam?(HORIZONTAL_PIXELS[cam.resolution||'1080p']??1920):2560,fov=cam?.fov??28;
+ let r:ReturnType<typeof anprCheck>|null=null,err='';
+ try{r=anprCheck(px,fov,Math.max(0.5,num(dist,10)),Math.max(0,num(speed,15)),Math.min(89,Math.max(0,num(angle,10))),1/Math.max(1,num(shutter,1000)));}catch(e){err=(e as Error).message;}
+ return <section className="tool-panel" aria-label="ANPR check">
+  {cams.length>0&&<div className="tool-row"><label>Camera <select aria-label="ANPR camera" value={cam?.id} onChange={e=>setId(e.currentTarget.value)}>{cams.map(c=><option key={c.id} value={c.id}>{c.name} ({c.fov}°)</option>)}</select></label></div>}
+  <div className="tool-row"><label>Distance (m) <input aria-label="ANPR distance" value={dist} onChange={e=>setDist(e.currentTarget.value)}/></label><label>Vehicle speed (km/h) <input aria-label="ANPR speed" value={speed} onChange={e=>setSpeed(e.currentTarget.value)}/></label>
+   <label>Angle to plate (°) <input aria-label="ANPR angle" value={angle} onChange={e=>setAngle(e.currentTarget.value)}/></label><label>Shutter 1/<input aria-label="ANPR shutter" value={shutter} onChange={e=>setShutter(e.currentTarget.value)}/></label></div>
+  {err&&<p className="warning-line">{err}</p>}
+  {r&&<><p className={r.ok?'good':'warning-line'}><b>{r.ok?'Plate read feasible':'Plate read NOT reliable'}</b> — {r.platePixels.toFixed(0)} px across the plate, blur ≈ {r.blurPx.toFixed(1)} px, maximum distance at this angle {r.maxDistanceM.toFixed(1)} m</p>
+   {r.reasons.map((x,i)=><p key={i} className="warning-line">• {x}</p>)}</>}
+  <p className="editor-muted">Training guidance: a plate is about 0.52 m wide and readers usually need about 130 px across it. Use the ANPR camera profile (narrow field of view) from the Equipment Library.</p>
  </section>;
 }

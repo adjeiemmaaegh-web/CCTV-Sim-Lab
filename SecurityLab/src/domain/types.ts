@@ -14,7 +14,7 @@ export type WirelessAssociation = {clientId:string; apId?:string; ssid:string; c
 export type NetworkTrace = {ok:boolean; reason:string; devices:string[]; links:string[]; viaRouter?:string};
 export type NetworkSnapshot = {addresses:Record<string,NetworkAddress>; links:Record<string,NetworkLinkStatus>; wireless:Record<string,WirelessAssociation>; dhcpLeases:Record<string,string>; diagnostics:string[]; traces:Record<string,NetworkTrace>};
 // Stage 6 alarm models. The structured state is saved with each project; no live hardware or firmware is accessed.
-export type AlarmSensorType='pir'|'door'|'window'|'glass'|'vibration'|'beam'|'panic';
+export type AlarmSensorType='pir'|'door'|'window'|'glass'|'vibration'|'beam'|'panic'|'smoke'|'heat'|'callpoint'|'fence';
 export type AlarmZoneType='instant'|'entry'|'interior'|'24h';
 export type AlarmArmMode='disarmed'|'stay'|'away';
 export type AlarmPhase='idle'|'exit'|'armed'|'entry'|'triggered';
@@ -104,7 +104,7 @@ export type Device = {
 export type Cable = {id:string; a:string; b:string; connected:boolean; lengthMeters:number; medium?:CableMedia; aPort?:number; bPort?:number; speedMbps?:number;powerMaxAmps?:number};
 export type LabEvent = {id:string; at:string; kind:'info'|'motion'|'recorded'|'fault'|'warning'; message:string; x?:number; y?:number; deviceId?:string; recorded:boolean};
 export type ScenarioFocus='cctv'|'network'|'alarm'|'access'|'power'|'mixed';
-export type ScenarioMetric='camera-count'|'camera-powered'|'camera-online'|'camera-recording'|'target-coverage'|'night-coverage'|'recorded-event'|'technical-health'|'within-budget'|'resolved-challenges'|'alarm-panel'|'alarm-sensors'|'alarm-keypad'|'alarm-armed'|'alarm-triggered'|'alarm-output'|'alarm-beam'|'router-ready'|'dhcp-lease'|'intervlan-route'|'access-controller'|'access-readers'|'access-lock'|'access-door'|'access-granted'|'access-denied'|'access-exit'|'power-wired'|'solar-generation'|'battery-ready'|'backup-outage';
+export type ScenarioMetric='camera-count'|'camera-powered'|'camera-online'|'camera-recording'|'target-coverage'|'night-coverage'|'recorded-event'|'technical-health'|'within-budget'|'resolved-challenges'|'alarm-panel'|'alarm-sensors'|'alarm-keypad'|'alarm-armed'|'alarm-triggered'|'alarm-output'|'alarm-beam'|'router-ready'|'dhcp-lease'|'intervlan-route'|'access-controller'|'access-readers'|'access-lock'|'access-door'|'access-granted'|'access-denied'|'access-exit'|'power-wired'|'solar-generation'|'battery-ready'|'backup-outage'|'fire-detectors'|'fire-callpoint'|'fire-sounder'|'fire-24h'|'fire-alarm';
 export type ScenarioObjective={id:string;title:string;metric:ScenarioMetric;minimum:number;weight:number;critical:boolean;deviceKind?:DeviceKind};
 export type ScenarioChallenge={id:string;kind:'cable-repair'|'ip-conflict'|'alarm-wire-repair';cableId?:string;deviceId?:string;label:string;hint:string};
 export type ScenarioState={definitionVersion:number;startedAt:string;challenges:ScenarioChallenge[]};

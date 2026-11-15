@@ -9,7 +9,7 @@ import {SCENARIOS} from '../scenarios/definitions.js';
 
 export const PACK_FORMAT='securitylab.scenario-pack';
 export const MAX_CUSTOM=20;
-export const METRICS:ScenarioMetric[]=['camera-count','camera-powered','camera-online','camera-recording','target-coverage','night-coverage','recorded-event','technical-health','within-budget','resolved-challenges','alarm-panel','alarm-sensors','alarm-keypad','alarm-armed','alarm-triggered','alarm-output','alarm-beam','router-ready','dhcp-lease','intervlan-route','access-controller','access-readers','access-lock','access-door','access-granted','access-denied','access-exit','power-wired','solar-generation','battery-ready','backup-outage'];
+export const METRICS:ScenarioMetric[]=['camera-count','camera-powered','camera-online','camera-recording','target-coverage','night-coverage','recorded-event','technical-health','within-budget','resolved-challenges','alarm-panel','alarm-sensors','alarm-keypad','alarm-armed','alarm-triggered','alarm-output','alarm-beam','router-ready','dhcp-lease','intervlan-route','access-controller','access-readers','access-lock','access-door','access-granted','access-denied','access-exit','power-wired','solar-generation','battery-ready','backup-outage','fire-detectors','fire-callpoint','fire-sounder','fire-24h','fire-alarm'];
 const KINDS=new Set<string>(PROFILES.map(p=>p.kind));
 const FOCUS=['cctv','network','alarm','access','power','mixed'];
 const txt=(v:unknown,max:number)=>typeof v==='string'&&v.trim().length>0&&v.length<=max;

@@ -5,7 +5,7 @@ const openTool=async(page:Page,name:string)=>{await page.getByRole('button',{nam
 test('every tool opens without errors on a worked example',async({page})=>{
  const errs=watch(page);await page.goto('/');
  await page.getByRole('button',{name:/Load Worked Example/i}).click();
- for(const t of ['Network CLI','Packet trace','Camera view','Lens calculator','Cabling','Storage','Environment','Lessons','Fault exercise','Quotation','Audit trail','Instructor'])await openTool(page,t);
+ for(const t of ['Network CLI','Packet trace','Camera view','Lens calculator','ANPR','Cabling','Storage','Environment','Good practice','Lessons','Fault exercise','Quotation','Audit trail','Instructor'])await openTool(page,t);
  expect(errs).toEqual([]);
 });
 
@@ -74,5 +74,21 @@ test('teaching tools: lesson progress, fault exercise, quote, audit, instructor 
  // a bad pack is rejected and does not register anything
  await page.locator('input[type=file]').nth(2).setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"format":"nope"}')});
  await expect(page.getByText(/Pack rejected/)).toBeVisible();
+ expect(errs).toEqual([]);
+});
+
+test('good-practice review and ANPR tool respond to inputs',async({page})=>{
+ const errs=watch(page);await page.goto('/');
+ await page.getByRole('button',{name:/Load Worked Example/i}).click();
+ await openTool(page,'Good practice');
+ await expect(page.getByLabel('Review results')).toContainText('UPS');
+ await page.getByRole('group',{name:'Rule sets'}).getByLabel(/CCTV good practice/).uncheck();
+ await expect(page.getByLabel('Review results')).not.toContainText('recognition density');
+ await expect(page.getByText(/not a compliance certificate/i)).toBeVisible();
+ await openTool(page,'ANPR');
+ await page.getByLabel('ANPR speed').fill('120');
+ await expect(page.getByText('Plate read NOT reliable')).toBeVisible();
+ await page.getByLabel('ANPR speed').fill('5');await page.getByLabel('ANPR distance').fill('2');
+ await expect(page.getByText('Plate read feasible')).toBeVisible();
  expect(errs).toEqual([]);
 });

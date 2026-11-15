@@ -128,15 +128,18 @@ export function commandAlarm(p:Project,panelId:string,command:'stay'|'away'|'dis
  const state:AlarmRuntime={mode:command,phase:conf.exitDelaySec>0?'exit':'armed',remainingSeconds:conf.exitDelaySec,triggeredZones:[],sirenSeconds:0};
  return append(setRuntime(p,panelId,state),message(p,'info',`${panel.name}: armed ${command}; ${conf.exitDelaySec}s exit delay`,panelId));
 }
-export type AlarmStimulus='motion'|'door'|'window'|'glass'|'vibration'|'beam'|'panic';
+export type AlarmStimulus='motion'|'door'|'window'|'glass'|'vibration'|'beam'|'panic'|'smoke'|'heat'|'callpoint'|'fence';
 const distance=(a:Point,b:Point)=>Math.hypot(a.x-b.x,a.y-b.y);
 function detects(d:Device,type:AlarmStimulus,point:Point,p:Project,intensity:number){
  const sensor=profile(d.profileId).alarmSensorType;
- if(sensor===undefined||sensor==='panic')return type==='panic'&&sensor==='panic'&&distance(d,point)<=20;
+ if(sensor===undefined)return false;
+ if(sensor==='panic'||sensor==='callpoint')return type===sensor&&distance(d,point)<=20; // manual devices: operated at the device
  if(sensor!==type&&!(sensor==='pir'&&type==='motion'))return false;
  if(intensity<100-(d.alarmDevice?.sensitivity??50))return false;
  if(sensor==='door'||sensor==='window')return distance(d,point)<=24;
- if(sensor==='vibration')return distance(d,point)<=Math.max(10,d.range||28);
+ if(sensor==='vibration'||sensor==='fence')return distance(d,point)<=Math.max(10,d.range||28);
+ // Fire: point detectors respond within their coverage radius (training model; ignores airflow/ceiling height).
+ if(sensor==='smoke'||sensor==='heat')return distance(d,point)<=Math.max(10,d.range||(sensor==='smoke'?75:53));
  if(sensor==='glass')return distance(d,point)<=Math.max(10,d.range||90);
  if(sensor==='beam'){
   const r=(d.heading||0)*Math.PI/180,dx=point.x-d.x,dy=point.y-d.y;
@@ -237,4 +240,4 @@ export function injectAlarmFault(p:Project,kind:'open'|'short'|'tamper'|'battery
  }
  return append(next,message(next,'fault',description));
 }
-export const ALARM_STIMULI:readonly {type:AlarmStimulus;label:string}[]=[{type:'motion',label:'PIR movement'},{type:'door',label:'Door opened'},{type:'window',label:'Window opened'},{type:'glass',label:'Glass broken'},{type:'vibration',label:'Vibration'},{type:'beam',label:'Perimeter crossed'},{type:'panic',label:'Panic pressed'}];
+export const ALARM_STIMULI:readonly {type:AlarmStimulus;label:string}[]=[{type:'motion',label:'PIR movement'},{type:'door',label:'Door opened'},{type:'window',label:'Window opened'},{type:'glass',label:'Glass broken'},{type:'vibration',label:'Vibration'},{type:'beam',label:'Perimeter crossed'},{type:'panic',label:'Panic pressed'},{type:'smoke',label:'Smoke present'},{type:'heat',label:'Heat rise'},{type:'callpoint',label:'Call point pressed'},{type:'fence',label:'Fence disturbed'}];

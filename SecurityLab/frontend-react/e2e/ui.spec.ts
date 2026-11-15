@@ -6,7 +6,7 @@ const watch=(page:Page)=>{const errs:string[]=[];page.on('dialog',d=>{void d.acc
 test('every console tab renders for every scenario without errors',async({page})=>{
  const errs=watch(page);await page.goto('/');
  const ids=await page.getByLabel('Scenario',{exact:true}).locator('option').evaluateAll(o=>o.map(x=>(x as HTMLOptionElement).value));
- expect(ids.length).toBe(10);
+ expect(ids.length).toBe(15);
  for(const id of ids){
   await page.getByLabel('Scenario',{exact:true}).selectOption(id);
   for(const t of TABS){await page.getByRole('button',{name:t,exact:true}).first().click();}

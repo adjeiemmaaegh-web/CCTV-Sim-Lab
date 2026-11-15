@@ -57,3 +57,20 @@ export function analyseCamera(cam:Device,distanceM:number){
  return {horizontalPixels:px,ppm:pixelsPerMetre(px,cam.fov,distanceM),band:bandAt(px,cam.fov,distanceM),
   zones:PPM_BANDS.map(b=>({...b,maxDistanceM:maxDistanceForBand(px,cam.fov,b.id)}))};
 }
+
+/**
+ * ANPR (plate-read) feasibility check. A plate is about 0.52 m wide and readers commonly need about 130 pixels
+ * across it, i.e. roughly 250 px/m on the plate plane, with limited blur and viewing angle. Training guidance only.
+ */
+export const PLATE_WIDTH_M=0.52,PLATE_MIN_PIXELS=130;
+export function anprCheck(horizontalPixels:number,hfovDeg:number,distanceM:number,speedKph:number,angleDeg:number,shutterS=1/1000){
+ if(speedKph<0||angleDeg<0||angleDeg>=90||!(shutterS>0))throw new Error('Speed must be >= 0, angle 0-89 degrees and shutter positive');
+ const ppm=pixelsPerMetre(horizontalPixels,hfovDeg,distanceM),effective=ppm*Math.cos(angleDeg*Math.PI/180);
+ const platePixels=effective*PLATE_WIDTH_M,blurPx=(speedKph/3.6)*shutterS*effective;
+ const reasons:string[]=[];
+ if(platePixels<PLATE_MIN_PIXELS)reasons.push(`Only ${platePixels.toFixed(0)} px across the plate (need ${PLATE_MIN_PIXELS})`);
+ if(blurPx>2)reasons.push(`Motion blur about ${blurPx.toFixed(1)} px: use a faster shutter or lower speed`);
+ if(angleDeg>30)reasons.push(`Viewing angle ${angleDeg}° is above 30°`);
+ const maxDistance=horizontalPixels*Math.cos(angleDeg*Math.PI/180)*PLATE_WIDTH_M/(2*PLATE_MIN_PIXELS*Math.tan(hfovDeg*Math.PI/360));
+ return {ok:reasons.length===0,platePixels,blurPx,maxDistanceM:maxDistance,reasons};
+}

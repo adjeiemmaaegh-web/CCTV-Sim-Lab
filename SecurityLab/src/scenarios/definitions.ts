@@ -105,6 +105,43 @@ export const SCENARIOS:Scenario[]=[
   minCameras:1,budgetGhs:8500,baseline:'starter',allowedKinds:[...new Set<DeviceKind>([...cctvKinds,...alarmKinds])],starterProfiles:['alarm-panel-8','alarm-beam','alarm-keypad','alarm-siren','cam-bullet','switch-4','nvr-4'],
   objectives:[objective('alarm','Powered intrusion panel','alarm-panel',10),objective('wire','Repair initial perimeter fault','resolved-challenges',15),objective('sensor','Active perimeter beam detector','alarm-beam',15),objective('arm','Arm the perimeter','alarm-armed',10),objective('trip','Detect a real simulated intrusion','alarm-triggered',15),objective('output','Sound a siren','alarm-output',10),objective('camera','Camera covers relevant target','target-coverage',10),objective('evidence','Capture camera recording evidence','recorded-event',10),objective('budget','Stay within budget','within-budget',5)],
   targets:[point('north','Northern boundary',465,120)],rooms:[room('security','Security control room',380,365,250,160)],walls:[...box('perimeter',75,65,800,525)]
+ },
+ {
+  id:'school-block',version:1,focus:'cctv',difficulty:'intermediate',title:'11 · School block surveillance',description:'Cover the gate, corridors and playground edge of a small school block with six recorded cameras.',
+  instructions:['Install PoE switch capacity for six cameras and an NVR.','Cover the gate, both corridor ends, the playground edge, the office door and the store.','Prove recording with a stored motion event and keep within budget.'],
+  minCameras:6,budgetGhs:16000,baseline:'empty',allowedKinds:cctvKinds,starterProfiles:['cam-bullet','cam-dome','switch-8','nvr-8'],
+  objectives:fourCctv(6),
+  targets:[point('gate','School gate',150,130),point('corr-w','West corridor end',210,330),point('corr-e','East corridor end',720,330),point('play','Playground edge',470,545),point('office','Office door',470,175),point('store','Store room',760,520)],
+  rooms:[room('block','Classroom block',240,200,470,250),room('office-r','Office',390,150,160,60)],walls:[...box('school',90,80,790,520)]
+ },
+ {
+  id:'hospital-ward',version:1,focus:'mixed',difficulty:'advanced',title:'12 · Hospital ward security',description:'Secure a ward: cameras on the corridor and entrance plus a controlled staff door.',
+  instructions:['Install three recorded cameras covering the ward entrance, corridor and nurses station.','Install an access controller, reader and lock on the staff door and test a valid and an invalid credential.','Keep the installation within budget; patient safety means locks must fail safe.'],
+  minCameras:3,budgetGhs:32000,baseline:'empty',allowedKinds:[...new Set<DeviceKind>([...cctvKinds,...accessKinds])],starterProfiles:['cam-dome','switch-8','nvr-4','access-controller-1','access-reader-card','access-maglock','access-exit-button'],
+  objectives:[objective('cams','Three cameras installed','camera-count',8,3),objective('power','Cameras powered','camera-powered',8,3),objective('online','Cameras online','camera-online',10,3),objective('cover','Entrance, corridor and station covered','target-coverage',14),objective('rec','Recording active','camera-recording',10,3),objective('ctrl','Access controller operational','access-controller',8),objective('door','Controlled door fully wired','access-door',10),objective('grant','Valid credential admitted','access-granted',10),objective('deny','Invalid credential refused','access-denied',10),objective('budget','Within budget','within-budget',2)],
+  targets:[point('entrance','Ward entrance',160,320),point('corridor','Ward corridor',470,330),point('station','Nurses station',760,320)],
+  rooms:[room('ward','Ward corridor',200,280,570,110),room('staff','Staff room',420,150,200,100)],walls:[...box('ward',90,90,790,500),{id:'staff-door',kind:'door',x1:470,y1:250,x2:530,y2:250}]
+ },
+ {
+  id:'market-kiosk-gh',version:1,focus:'mixed',difficulty:'advanced',title:'13 · Market kiosk with power cuts (Ghana context)',description:'Protect a market kiosk with cameras and an alarm that must keep working through grid outages using solar and battery.',
+  instructions:['Install two recorded cameras and a wired alarm with a siren.','Build a solar, battery and inverter supply feeding the equipment.','Prove it keeps recording on battery when the grid is off. Prices are training placeholders, not supplier quotes; exercise content has not been reviewed by local technicians.'],
+  minCameras:2,budgetGhs:20000,baseline:'empty',allowedKinds:[...new Set<DeviceKind>([...cctvKinds,...alarmKinds,...powerKinds])],starterProfiles:['cam-bullet','switch-4','nvr-4','alarm-panel-8','alarm-pir','alarm-keypad','alarm-siren','power-solar','power-controller','power-battery','power-inverter'],
+  objectives:[objective('cams','Two cameras installed','camera-count',8,2),objective('power','Cameras powered','camera-powered',8,2),objective('rec','Recording ready','camera-recording',10,2),objective('panel','Alarm panel powered','alarm-panel',8),objective('sens','Two working detectors','alarm-sensors',8,2),objective('siren','Siren output','alarm-output',6),objective('wired','Explicit wired power model','power-wired',10),objective('solar','Solar generation','solar-generation',10),objective('batt','Battery ready','battery-ready',10),objective('outage','Runs on battery in an outage','backup-outage',17),objective('budget','Within budget','within-budget',5)],
+  targets:[point('counter','Counter',300,300),point('shutter','Shutter door',620,200)],rooms:[room('kiosk','Kiosk',250,220,460,200)],walls:[...box('kiosk',120,100,700,420)]
+ },
+ {
+  id:'church-compound-gh',version:1,focus:'mixed',difficulty:'advanced',title:'14 · Church compound perimeter (Ghana context)',description:'Secure a compound perimeter with a beam, a siren and three cameras at the gate and boundary.',
+  instructions:['Install a panel, keypad, perimeter beam and siren; arm the system and prove a beam crossing raises the alarm.','Install three recorded cameras covering the gate, the north boundary and the main door.','Stay within budget. Content is for training and has not been reviewed by local technicians.'],
+  minCameras:3,budgetGhs:26000,baseline:'empty',allowedKinds:[...new Set<DeviceKind>([...cctvKinds,...alarmKinds])],starterProfiles:['alarm-panel-8','alarm-beam','alarm-keypad','alarm-siren','alarm-fence','cam-bullet','switch-4','nvr-4'],
+  objectives:[objective('cams','Three cameras installed','camera-count',8,3),objective('online','Cameras online','camera-online',10,3),objective('cover','Gate, boundary and door covered','target-coverage',14),objective('rec','Recording active','camera-recording',8,3),objective('panel','Alarm panel powered','alarm-panel',8),objective('beam','Perimeter beam active','alarm-beam',10),objective('key','Keypad installed','alarm-keypad',6),objective('arm','System armed','alarm-armed',10),objective('trip','Beam crossing raised an alarm','alarm-triggered',14),objective('siren','Siren activated','alarm-output',8),objective('budget','Within budget','within-budget',4)],
+  targets:[point('gate','Main gate',160,310),point('north','North boundary',470,120),point('door','Church main door',760,330)],rooms:[room('hall','Church hall',560,250,230,180)],walls:[...box('compound',90,80,790,510)]
+ },
+ {
+  id:'office-fire',version:1,focus:'alarm',difficulty:'intermediate',title:'15 · Office fire detection',description:'Install and commission a training fire-detection loop: detectors, call point and sounder on a 24-hour zone.',
+  instructions:['Install a panel, keypad, three smoke or heat detectors, one manual call point and a sounder.','Set every fire device to a 24-hour zone so it works while the building is unarmed.','Trigger smoke at a detector and prove the sounder activates. Training model only: not EN 54 or any code-compliance certification.'],
+  minCameras:0,budgetGhs:7000,baseline:'empty',allowedKinds:alarmKinds,starterProfiles:['alarm-panel-8','alarm-keypad','alarm-smoke','alarm-heat','alarm-callpoint','alarm-sounder'],
+  objectives:[objective('panel','Panel operational','alarm-panel',12),objective('key','Keypad installed','alarm-keypad',6),objective('det','Three wired detectors','fire-detectors',18,3),objective('cp','Manual call point','fire-callpoint',10),objective('snd','Sounder installed','fire-sounder',10),objective('z24','All fire devices on 24-hour zones','fire-24h',14),objective('fire','Fire alarm raised on a 24-hour zone','fire-alarm',20),objective('budget','Within budget','within-budget',10)],
+  targets:[point('open','Open-plan office',330,260),point('server','Server cupboard',720,220),point('exit','Fire exit',470,520)],rooms:[room('office','Open office',200,200,420,260),room('serverroom','Server cupboard',650,170,140,100)],walls:[...box('office',90,80,790,500)]
  }
 ];
 

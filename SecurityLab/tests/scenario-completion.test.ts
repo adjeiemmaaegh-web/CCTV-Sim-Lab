@@ -112,3 +112,65 @@ describe('solar-backup scenario',()=>{
   expect(solo.passed).toBe(true);
  });
 });
+
+// ---- Stage 17 scenarios -------------------------------------------------------------------------------------
+import {cameraPreset,alarmPreset,accessPreset,solarPreset,firePreset} from '../src/scenarios/index.js';
+
+const armAndTripBeam=(p:Project)=>{
+ const panel=kind(p,'alarm-panel')[0],beam=p.devices.find(d=>d.profileId==='alarm-beam')!;
+ p=advanceAlarmTime(commandAlarm(p,panel.id,'away','1234'),60);
+ return advanceAlarmTime(triggerAlarmStimulus(p,'beam',{x:beam.x,y:beam.y-60}).project,5);
+};
+describe('Stage 17 scenarios are completable but never free',()=>{
+ it('school-block: six cameras, coverage, recording',()=>{
+  expect(status(cctv('school-block')).missing).toEqual([]);
+  expect(status(newProject('school-block')).e.completed).toBe(0);
+ });
+ it('hospital-ward: cameras + staff door + valid/invalid credentials',()=>{
+  let p=cameraPreset(accessPreset(newProject('hospital-ward')));
+  const ctrl=kind(p,'access-controller')[0],reader=kind(p,'access-reader')[0];
+  expect(status(p).missing).toEqual(['grant:0/1','deny:0/1']);
+  p={...p,night:true,accessIdentities:[{id:'n1',name:'Nurse',enabled:true,cardToken:'NURSE',pinToken:'',biometricToken:'',grants:[{controllerId:ctrl.id,days:[0,1,2,3,4,5,6],startMinute:0,endMinute:1440}]}]};
+  p=presentAccessToken(presentAccessToken(p,ctrl.id,reader.id,'card','NURSE'),ctrl.id,reader.id,'card','VISITOR');
+  expect(status(p).missing).toEqual([]);
+ });
+ it('church-compound-gh: cameras + armed beam alarm',()=>{
+  let p=cameraPreset(alarmPreset(newProject('church-compound-gh')));
+  expect(status(p).missing).toEqual(['arm:0/1','trip:0/1','siren:0/1']);
+  expect(status(armAndTripBeam(p)).missing).toEqual([]);
+ });
+ it('market-kiosk-gh: solar/battery backup keeps cameras and alarm running through an outage',()=>{
+  let p=solarPreset(alarmPreset(newProject('market-kiosk-gh')));
+  const base=simulate(p);const sw=kind(p,'switch')[0],nvr=kind(p,'nvr')[0];
+  const cam=createDevice('cam-bullet',320,300,p.devices);cam.ip='192.168.10.60';cam.heading=0;cam.range=215;
+  p={...p,devices:[...p.devices,cam],cables:[...p.cables,{id:'k-cam2',a:sw.id,b:cam.id,medium:'ethernet' as const,connected:true,lengthMeters:5}]};
+  p={...p,mainsOn:false,powerSettings:{mode:'wired' as const,solarPercent:100,virtualMinutes:0}};
+  void base;void nvr;
+  p=armAndTripBeam(p);
+  expect(status(p).missing).toEqual([]);
+ });
+ it('office-fire: needs 24-hour zones; completes after wiring, zoning and a smoke event',()=>{
+  let p=firePreset(newProject('office-fire'));
+  expect(status(p).missing).toEqual(expect.arrayContaining(['cp:0/1','z24:0/1','fire:0/1']));
+  const panel=kind(p,'alarm-panel')[0];
+  const heat=createDevice('alarm-heat',500,300,p.devices),cp=createDevice('alarm-callpoint',470,500,p.devices);
+  p={...p,devices:[...p.devices,heat,cp],cables:[...p.cables,{id:'f-h',a:panel.id,b:heat.id,medium:'alarm' as const,connected:true,lengthMeters:8},{id:'f-c',a:panel.id,b:cp.id,medium:'alarm' as const,connected:true,lengthMeters:8}]};
+  expect(status(p).missing).toEqual(expect.arrayContaining(['z24:0/1','fire:0/1']));
+  // put every fire device on a 24-hour zone
+  const zoned=p.devices.map(d=>{const t=profile(d.profileId).alarmSensorType;return t&&['smoke','heat','callpoint'].includes(t)?{...d,alarmDevice:{...d.alarmDevice!,zone:3}}:d;});
+  const pz=zoned.map(d=>d.id===panel.id?{...d,alarmPanel:{...d.alarmPanel!,zones:d.alarmPanel!.zones.map(z=>z.number===3?{...z,type:'24h' as const}:z)}}:d);
+  p={...p,devices:pz};
+  const smoke=p.devices.find(d=>d.profileId==='alarm-smoke')!;
+  expect(status(p).missing).toEqual(['fire:0/1']);
+  const fired=triggerAlarmStimulus(p,'smoke',{x:smoke.x+10,y:smoke.y}).project;
+  expect(status(fired).missing).toEqual([]);
+ });
+ it('new sensors respond to the right stimuli and ranges only',()=>{
+  let p=firePreset(newProject('office-fire'));
+  const panel=kind(p,'alarm-panel')[0],smoke=p.devices.find(d=>d.profileId==='alarm-smoke')!;
+  const z=p.devices.map(d=>d.id===panel.id?{...d,alarmPanel:{...d.alarmPanel!,zones:d.alarmPanel!.zones.map(x=>x.number===1?{...x,type:'24h' as const}:x)}}:d);p={...p,devices:z};
+  expect(triggerAlarmStimulus(p,'heat',{x:smoke.x,y:smoke.y}).detected).toBe(0);          // wrong stimulus
+  expect(triggerAlarmStimulus(p,'smoke',{x:smoke.x-300,y:smoke.y+300}).detected).toBe(0);     // out of range
+  expect(triggerAlarmStimulus(p,'smoke',{x:smoke.x+20,y:smoke.y}).detected).toBeGreaterThan(0);
+ });
+});

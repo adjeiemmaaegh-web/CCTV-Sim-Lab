@@ -54,6 +54,16 @@ function alarmPreset(project:Project,brokenBeam=false):Project{
  }
  return rig.finish({scenarioState:stage(challenges)});
 }
+function firePreset(project:Project):Project{
+ const rig=installer(project),panel=rig.add('alarm-panel-8',420,435),keypad=rig.add('alarm-keypad',525,435),sounder=rig.add('alarm-sounder',700,140);
+ const s1=rig.add('alarm-smoke',330,260),s2=rig.add('alarm-smoke',720,220);
+ [keypad,sounder,s1,s2].forEach(d=>rig.connect(panel,d,'alarm'));
+ return rig.finish({scenarioState:stage([])});
+}
+function kioskPreset(project:Project):Project{
+ // Starting rig: cameras and recorder only; the learner still has to build the alarm and the solar/battery supply.
+ return cameraPreset(project);
+}
 function accessPreset(project:Project):Project{
  const rig=installer(project),controller=rig.add('access-controller-1',435,430),reader=rig.add('access-reader-card',485,290),lock=rig.add('access-maglock',525,335),exit=rig.add('access-exit-button',555,415);
  const door:Wall|undefined=project.walls.find(w=>w.kind==='door');
@@ -91,7 +101,7 @@ export function newProject(scenarioId='home4'):Project {
 export function exampleProject(project:Project,faulty=false):Project {
  const s=scenarioFor(project.scenarioId);if(!s)throw new Error('Unknown scenario');
  const empty={...project,devices:[],cables:[],events:[],clips:[],accessLog:[],assessments:[],scenarioState:stage()};
- const prepared=faulty?cameraPreset(empty,true):s.focus==='alarm'?alarmPreset(empty):s.focus==='access'?accessPreset(empty):s.focus==='power'?solarPreset(empty):s.id==='perimeter'?alarmPreset(empty,true):cameraPreset(empty,s.id==='diagnose4');
+ const prepared=faulty?cameraPreset(empty,true):s.id==='office-fire'?firePreset(empty):s.id==='market-kiosk-gh'?kioskPreset(empty):s.id==='church-compound-gh'?alarmPreset(empty):s.id==='hospital-ward'?accessPreset(empty):s.focus==='alarm'?alarmPreset(empty):s.focus==='access'?accessPreset(empty):s.focus==='power'?solarPreset(empty):s.id==='perimeter'?alarmPreset(empty,true):cameraPreset(empty,s.id==='diagnose4');
  if(!faulty&&['diagnose4','perimeter'].includes(s.id)){
   const repairedCables=prepared.cables.map(c=>prepared.scenarioState?.challenges.some(x=>x.cableId===c.id)?{...c,connected:true}:c);
   const repairTarget=prepared.scenarioState?.challenges.find(c=>c.kind==='ip-conflict')?.deviceId;
@@ -100,3 +110,5 @@ export function exampleProject(project:Project,faulty=false):Project {
  }
  return {...prepared,assisted:!faulty,updatedAt:now()};
 }
+/** Building blocks for worked examples and tests. */
+export {cameraPreset,alarmPreset,accessPreset,solarPreset,firePreset};

@@ -1,5 +1,5 @@
 import {test,expect,Page} from '@playwright/test';
-const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter'];
+const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter','school-block','hospital-ward','market-kiosk-gh','church-compound-gh','office-fire'];
 function watch(page:Page){const errs:string[]=[];page.on('dialog',d=>{void d.accept();});page.on('pageerror',e=>errs.push(String(e)));page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});return errs;}
 
 test('startup renders workstation without errors',async({page})=>{
@@ -22,7 +22,7 @@ test('service worker controls page and app reloads offline',async({page,context}
  await context.setOffline(false);
 });
 
-test('all ten scenarios load, simulate and show a briefing',async({page})=>{
+test('all fifteen scenarios load, simulate and show a briefing',async({page})=>{
  const errs=watch(page);await page.goto('/');
  const sel=page.getByLabel('Scenario',{exact:true});
  for(const id of IDS){
