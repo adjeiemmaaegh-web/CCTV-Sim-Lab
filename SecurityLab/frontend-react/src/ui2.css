@@ -292,7 +292,7 @@ button{color:var(--text)}
 
 /* Diagnosing faults must not collapse the plan into a thumbnail on 1024px laptops. */
 @media(min-width:901px){
- .shell .console.diagnostics-expanded{height:min(32vh,255px);max-height:36vh}
+ .shell .console.diagnostics-expanded{height:min(29vh,230px);max-height:32vh}
 }
 @media(min-width:1200px) and (min-height:850px){
  .shell .console.diagnostics-expanded{height:min(38vh,340px)}
