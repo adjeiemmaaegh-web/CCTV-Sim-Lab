@@ -1,4 +1,6 @@
 import React,{useMemo,useRef,useState} from 'react';
+import {t} from '../../../../src/i18n/index.js';
+import {SpeakButton,useLocale} from '../Speak.js';
 import type {Workbench} from '../../hooks/useWorkbench.js';
 import {LESSONS,lessonProgress} from '../../../../src/tools/lessons.js';
 import {FAULT_KINDS,FAULT_LABEL,generateFaults,reveal,submitGuess,type FaultKind} from '../../../../src/tools/faultGen.js';
@@ -7,19 +9,21 @@ import {DEFAULT_QUOTE_SETTINGS,buildQuote,quoteCsv,quoteHtml,type QuoteSettings}
 import {SAMPLE_PACK_SCENARIO,classSheetCsv,exportPack,loadPack,type SheetRow} from '../../../../src/tools/scenarioPack.js';
 import {parseProjectText,downloadText} from '../../../../src/persistence/file-projects.js';
 import {SCENARIOS} from '../../../../src/scenarios/index.js';
+import {planReportHtml} from '../../../../src/tools/report.js';
 
 /** Feature 8: guided lessons, progress derived from the real simulation. */
 export function LessonsPanel({w}:{w:Workbench}){
+ useLocale();
  const [id,setId]=useState(LESSONS[0].id);const lesson=LESSONS.find(l=>l.id===id)!;
  const prog=useMemo(()=>lessonProgress(w.project,lesson,w.result),[w.project,w.result,lesson]);
  return <section className="tool-panel" aria-label="Guided lessons">
   <div className="tool-row"><label>Lesson <select aria-label="Lesson" value={id} onChange={e=>setId(e.currentTarget.value)}>{LESSONS.map(l=><option key={l.id} value={l.id}>{l.title} ({l.level})</option>)}</select></label>
    {w.project.scenarioId!==lesson.scenarioId&&<button disabled={w.blocked} onClick={()=>w.switchScenario(lesson.scenarioId)}>Open scenario for this lesson</button>}
-   <b aria-live="polite">{prog.completed}/{lesson.steps.length} steps{prog.finished?' — lesson complete':''}</b></div>
+   <b aria-live="polite">{t('lesson.steps',{done:prog.completed,total:lesson.steps.length})}{prog.finished?` — ${t('lesson.complete')}`:''}</b></div>
   <p className="editor-muted">{lesson.summary} Steps tick only when the simulated installation really satisfies them.</p>
   <ol className="lesson-steps">{lesson.steps.map((s,i)=><li key={s.id} className={prog.done[i]?'good':i===prog.currentIndex?'current-step':'muted'} aria-current={i===prog.currentIndex?'step':undefined}>
    <b>{prog.done[i]?'✓':i===prog.currentIndex?'▶':'○'} {s.title}</b>
-   {i===prog.currentIndex&&<div className="lesson-detail"><p>{s.instruction}</p><p><i>Why:</i> {s.why}</p><details><summary>Hint</summary><p>{s.hint}</p></details></div>}</li>)}</ol>
+   {i===prog.currentIndex&&<div className="lesson-detail"><p>{s.instruction} <SpeakButton text={`${s.title}. ${s.instruction} ${t('lesson.why')}: ${s.why}`}/></p><p><i>{t('lesson.why')}:</i> {s.why}</p><details><summary>{t('lesson.hint')}</summary><p>{s.hint}</p></details></div>}</li>)}</ol>
  </section>;
 }
 
@@ -105,5 +109,19 @@ export function QuotePanel({w}:{w:Workbench}){
    {q.warnings.map((x,i)=><p key={i} className="warning-line">⚠ {x}</p>)}
    <div className="tool-row"><button onClick={()=>downloadText(quoteCsv(q!),'quotation.csv','text/csv;charset=utf-8')}>Export CSV</button><button onClick={()=>downloadText(quoteHtml(w.project,q!),'quotation.html','text/html;charset=utf-8')}>Export printable HTML</button></div></>}
   <p className="editor-muted">Training estimate. Catalogue prices are placeholders and manufacturer models need your own supplier quotation (set per device in the Inspector). Not a binding quote.</p>
+ </section>;
+}
+
+/** Feature 17: printable plan report (use the browser's Print -> Save as PDF). */
+export function ReportPanel({w}:{w:Workbench}){
+ const [note,setNote]=useState('');
+ const html=()=>planReportHtml(w.project,w.result);
+ const safeName=w.project.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,60)||'project';
+ const open=()=>{try{const url=URL.createObjectURL(new Blob([html()],{type:'text/html;charset=utf-8'}));const win=window.open(url,'_blank','noopener');if(!win)setNote('Pop-up blocked: use Download instead, then open the file and print it.');else{setNote('Report opened in a new tab. Use Print, then choose Save as PDF.');setTimeout(()=>URL.revokeObjectURL(url),60_000);}}catch(e){setNote(`Could not build the report: ${(e as Error).message}`);}};
+ return <section className="tool-panel" aria-label="Printable report">
+  <p>Creates a standalone report with the floor plan(s), equipment list, estimate, good-practice review and diagnostics.</p>
+  <div className="tool-row"><button onClick={open}>Open printable report</button><button onClick={()=>{try{downloadText(html(),`${safeName}-report.html`,'text/html;charset=utf-8');setNote('Report downloaded. Open it and use Print → Save as PDF.');}catch(e){setNote(`Could not build the report: ${(e as Error).message}`);}}}>Download report (HTML)</button></div>
+  {note&&<p role="status">{note}</p>}
+  <p className="editor-muted">Printing to PDF is done by your browser; SecurityLab does not upload anything.</p>
  </section>;
 }

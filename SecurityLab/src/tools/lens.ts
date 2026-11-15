@@ -74,3 +74,13 @@ export function anprCheck(horizontalPixels:number,hfovDeg:number,distanceM:numbe
  const maxDistance=horizontalPixels*Math.cos(angleDeg*Math.PI/180)*PLATE_WIDTH_M/(2*PLATE_MIN_PIXELS*Math.tan(hfovDeg*Math.PI/360));
  return {ok:reasons.length===0,platePixels,blurPx,maxDistanceM:maxDistance,reasons};
 }
+
+/** Plan-scale calibration from a known real-world reference distance between two plan points. */
+export function scaleFromReference(ax:number,ay:number,bx:number,by:number,realMetres:number):number{
+ const units=Math.hypot(bx-ax,by-ay);
+ if(!(units>0))throw new Error('Reference points must be different');
+ if(!(realMetres>0))throw new Error('Real distance must be positive');
+ const s=units/realMetres;
+ if(s<1||s>100)throw new Error(`Scale ${s.toFixed(2)} units/m is outside the supported 1-100 range`);
+ return s;
+}

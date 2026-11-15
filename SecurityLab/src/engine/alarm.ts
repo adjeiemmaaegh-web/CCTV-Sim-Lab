@@ -1,3 +1,4 @@
+import {wallsOnFloor} from '../tools/floors.js';
 /**
  * SecurityLab Stage 6: offline deterministic *teaching* model of wired alarm circuits.
  * It is not an EN50131-certified panel, a cryptographic keypad, a real bus protocol,
@@ -147,16 +148,17 @@ function detects(d:Device,type:AlarmStimulus,point:Point,p:Project,intensity:num
   return along>=0&&along<=(d.range||260)&&across<=8;
  }
  // IR motion detectors use wall occlusion and a simplified two-dimensional view cone.
- return visible(d,point,p.walls,false);
+ return visible(d,point,wallsOnFloor(p.walls,d.floor??0),false);
 }
 function startAlarm(run:AlarmRuntime,zone:number,duration:number):AlarmRuntime {
  return {...run,phase:'triggered',remainingSeconds:0,pendingZone:undefined,triggeredZones:[...new Set([...run.triggeredZones,zone])],sirenSeconds:duration};
 }
 /** Event detection changes physical alarm state; if disarmed, only 24h zones (e.g. panic) remain active. */
-export function triggerAlarmStimulus(p:Project,type:AlarmStimulus,point:Point,intensity=90):{project:Project;detected:number;alerts:number} {
+export function triggerAlarmStimulus(p:Project,type:AlarmStimulus,point:Point,intensity=90,floor?:number):{project:Project;detected:number;alerts:number} {
  const sim=evaluateAlarms(p);let next=p,detected=0,alerts=0;
  for(const sensor of [...p.devices].filter(sensorKind).sort((a,b)=>a.id.localeCompare(b.id))){
   const status=sim.devices[sensor.id];if(!status?.powered||!status.panelId||sensor.alarmDevice?.bypassed||sensor.alarmDevice?.fault&&sensor.alarmDevice.fault!=='none')continue;
+  if(floor!==undefined&&(sensor.floor??0)!==floor)continue;
   if(!detects(adjustDevice(p,sensor),type,point,p,intensity))continue;
   const panelId=status.panelId,zone=sim.panels[panelId]?.zones.find(z=>z.number===status.zone);
   if(!zone||!zone.ready)continue;

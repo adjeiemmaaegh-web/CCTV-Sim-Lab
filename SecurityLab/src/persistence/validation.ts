@@ -254,6 +254,13 @@ export function validateProject(input:unknown):Project{
    }
   }
  }
+
+ if(p.floors!==undefined){
+  const f=p.floors as any;
+  if(!Array.isArray(f)||f.length<2||f.length>9||f.some((x:any)=>!x||!Number.isInteger(x.id)||x.id<0||x.id>8||typeof x.name!=='string'||x.name.length<1||x.name.length>40)||new Set(f.map((x:any)=>x.id)).size!==f.length||!f.some((x:any)=>x.id===0))throw new Error('Invalid floor list');
+ }
+ const floorIds=new Set<number>(Array.isArray(p.floors)?(p.floors as any[]).map(x=>x.id):[0]);
+ for(const list of [p.devices,p.rooms,p.walls,p.targets,p.siteElements||[]] as any[][])for(const it of list)if(it&&it.floor!==undefined&&(!Number.isInteger(it.floor)||!floorIds.has(it.floor)))throw new Error('Item placed on an unknown floor');
  if(p.audit!==undefined){
   if(!Array.isArray(p.audit)||p.audit.length>400||p.audit.some((a:any)=>!a||typeof a.summary!=='string'||a.summary.length>400||typeof a.at!=='string'||!Number.isFinite(Date.parse(a.at))||!Number.isInteger(a.devices)||!Number.isInteger(a.cables)))throw new Error('Invalid audit trail');
  }

@@ -289,3 +289,9 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 .lesson-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.lesson-steps .current-step{color:#51d3d0}.lesson-detail{margin:4px 0 0 4px;padding:6px 10px;border-left:3px solid #51d3d0;color:#d9e8f2}
 .fault-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px}.fault-picks label{font-size:12px}
 .audit-list{margin:0;padding-left:18px;max-height:150px;overflow:auto;font-size:12px}
+
+.floor-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:4px 12px;border-bottom:1px solid #23465d;font-size:12px}.floor-bar button.active{background:#1d5560;border-color:#51d3d0}
+
+/* Stage 17: touch editing */
+.canvas-body svg[role=application]{touch-action:none;-webkit-user-select:none;user-select:none}
+@media(pointer:coarse){.toolgroup button,.top-actions button,.tool-tabs button,.floor-bar button{min-height:40px;min-width:40px}}

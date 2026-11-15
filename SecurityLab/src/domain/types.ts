@@ -51,12 +51,13 @@ export type MotionZone = {id:string; name:string; x:number; y:number; w:number; 
 export type RecordingSchedule = {days:number[]; startMinute:number; endMinute:number};
 export type PTZPreset = {id:string; name:string; heading:number; opticalZoom:number; tiltDegrees:number};
 export type RecordingClip = {id:string; cameraId:string; recorderId:string; at:string; simulatedDay:number; simulatedMinute:number; durationSeconds:number; sizeGB:number; kind:'motion'|'manual'; x?:number; y?:number};
-export type Room = {id:string; name:string; x:number; y:number; w:number; h:number};
-export type Wall = {id:string; kind:'wall'|'door'|'window'; x1:number; y1:number; x2:number; y2:number; roomId?:string};
+export type Floor = {id:number; name:string};
+export type Room = {id:string; name:string; x:number; y:number; w:number; h:number; floor?:number};
+export type Wall = {id:string; kind:'wall'|'door'|'window'; x1:number; y1:number; x2:number; y2:number; roomId?:string; floor?:number};
 export type Point = {x:number; y:number};
-export type SiteElement = Point & {id:string;kind:'entrance'|'gate'|'label';label:string};
+export type SiteElement = Point & {id:string;kind:'entrance'|'gate'|'label';label:string;floor?:number};
 export type FloorplanSettings = {x:number;y:number;width:number;height:number;opacity:number;locked:boolean};
-export type Target = Point & {id:string; name:string; required:true};
+export type Target = Point & {id:string; name:string; required:true; floor?:number};
 // Stage 9 manufacturer profiles: immutable profile IDs and documented/approximate facts.
 // Manufacturer names identify reference equipment only. No manufacturer sponsors SecurityLab.
 export type ManufacturerSpec = {
@@ -85,6 +86,7 @@ export type Profile = {
 
 };
 export type Device = {
+  floor?:number;
   id:string; profileId:string; name:string; x:number; y:number; heading:number; fov:number; range:number;
   ip:string; mask:string; gateway:string; enabled:boolean; motionEnabled:boolean; recordingEnabled:boolean;
   unitCostGhs?:number; poeBudgetW?:number; storageGB?:number; usedGB?:number; bitrateMbps?:number;
@@ -132,7 +134,7 @@ export type Project = {
   powerSettings?:PowerSettings;
   scenarioState?:ScenarioState;
   fieldReview?:FieldReview; // optional local project evidence, no personal identifiers
-  environment?:Environment;diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>; // Stage 17: simplified training weather/temperature effects
+  environment?:Environment;floors?:Floor[];diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>; // Stage 17: simplified training weather/temperature effects
 };
 export type DeviceStatus = {id:string; powered:boolean; connected:boolean; networkOk:boolean; recordingReady:boolean; recorderId?:string; faults:string[]; poeSourceId?:string; channel?:number; signal?:SignalType; streamMbps?:number; scheduleActive?:boolean};
 export type CableStatus = {id:string; up:boolean; reason:string};

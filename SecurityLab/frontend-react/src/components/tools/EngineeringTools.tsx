@@ -3,7 +3,7 @@ import type {Workbench} from '../../hooks/useWorkbench.js';
 import type {Environment,Weather} from '../../../../src/domain/types.js';
 import {profile} from '../../../../src/domain/catalog.js';
 import {cameraView} from '../../../../src/tools/cameraView.js';
-import {analyseCamera,anprCheck,camerasForWidth,PPM_BANDS,HORIZONTAL_PIXELS,focalLengthMm,pixelsPerMetre} from '../../../../src/tools/lens.js';
+import {analyseCamera,anprCheck,camerasForWidth,PPM_BANDS,HORIZONTAL_PIXELS,focalLengthMm,pixelsPerMetre,scaleFromReference} from '../../../../src/tools/lens.js';
 import {analyseCables,dcDrop,minimumAwg,poeDelivery,OHM_PER_M} from '../../../../src/tools/cableEng.js';
 import {DUTY,diskFailureOutcome,planFromProject,type Raid} from '../../../../src/tools/storage.js';
 import {DEFAULT_ENVIRONMENT,describeEnvironment} from '../../../../src/engine/environment.js';
@@ -120,5 +120,21 @@ export function AnprPanel({w}:{w:Workbench}){
   {r&&<><p className={r.ok?'good':'warning-line'}><b>{r.ok?'Plate read feasible':'Plate read NOT reliable'}</b> — {r.platePixels.toFixed(0)} px across the plate, blur ≈ {r.blurPx.toFixed(1)} px, maximum distance at this angle {r.maxDistanceM.toFixed(1)} m</p>
    {r.reasons.map((x,i)=><p key={i} className="warning-line">• {x}</p>)}</>}
   <p className="editor-muted">Training guidance: a plate is about 0.52 m wide and readers usually need about 130 px across it. Use the ANPR camera profile (narrow field of view) from the Equipment Library.</p>
+ </section>;
+}
+
+/** Feature 16: plan scale calibration from a known reference distance (manual; no automatic image measuring). */
+export function ScalePanel({w}:{w:Workbench}){
+ const [v,setV]=useState({ax:'0',ay:'0',bx:'300',by:'0',m:'30'});
+ const set=(k:keyof typeof v,x:string)=>setV(s=>({...s,[k]:x}));
+ let result:number|null=null,err='';try{result=scaleFromReference(num(v.ax,0),num(v.ay,0),num(v.bx,0),num(v.by,0),num(v.m,0));}catch(e){err=(e as Error).message;}
+ const current=w.project.unitsPerMeter??10;
+ return <section className="tool-panel" aria-label="Plan scale">
+  <p>Current scale: <b>{current} plan units per metre</b>. Measure two points on your floor plan (units shown in the Measure tool) whose real distance you know.</p>
+  <div className="tool-row">{(['ax','ay','bx','by'] as const).map(k=><label key={k}>{k.toUpperCase()} <input aria-label={`Scale ${k}`} value={v[k]} onChange={e=>set(k,e.currentTarget.value)}/></label>)}
+   <label>Real distance (m) <input aria-label="Scale real distance" value={v.m} onChange={e=>set('m',e.currentTarget.value)}/></label></div>
+  {err?<p className="warning-line">{err}</p>:<p>Result: <b>{result!.toFixed(2)} units/m</b></p>}
+  <button disabled={w.blocked||!!err} onClick={()=>w.setPropertyScale(Math.round(result!*100)/100)}>Apply scale</button>
+  <p className="editor-muted">The scale is entered manually; the app does not measure images automatically. Changing it recalculates cable lengths.</p>
  </section>;
 }

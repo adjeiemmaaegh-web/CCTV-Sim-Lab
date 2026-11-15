@@ -1,3 +1,4 @@
+import {stampNewItems} from '../../../src/tools/floors.js';
 import {recordAudit} from '../../../src/tools/audit.js';
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import type {Device,Project,Wall,Room,Point,SiteElement,FloorplanSettings,AccessMethod,AccessIdentity,AssessmentRecord,FieldTrial,FieldIssue} from '../../../src/domain/types.js';
@@ -33,6 +34,8 @@ export function useWorkbench(){
  const fileSession=useRef(new ProjectFileSession());
  const savePromise=useRef<Promise<boolean>|null>(null);
  const savedSignature=useRef<string|null>(null);
+ const [floor,setFloorState]=useState(0);const floorRef=useRef(0);
+ const setFloor=(f:number)=>{floorRef.current=f;setFloorState(f);};
  // Untouched new/starter projects hold nothing worth a leave-page or discard warning.
  const [pristineInit]=useState(()=>JSON.stringify(project));
  const pristine=useRef<string|null>(pristineInit);
@@ -76,7 +79,7 @@ export function useWorkbench(){
  const markDirty=()=>{setSaveState('unsaved');setSaveError('');setGeneration(x=>x+1);};
  const commit=useCallback((next:Project,message?:string)=>{
    if(blocked){setNotice('Editing paused after a file-save error. Use Save As or Export Backup before proceeding.');return false;}
-   const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,next)});currentRef.current=valid;setProject(valid);
+   const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,stampNewItems(currentRef.current,next,floorRef.current))});currentRef.current=valid;setProject(valid);
    markDirty();if(message)setNotice(message);return true;
  },[blocked]);
  const undo=()=>{if(blocked)return;const p=history.current.undo();if(p){setProject(p);currentRef.current=p;markDirty();}};
@@ -211,7 +214,7 @@ export function useWorkbench(){
    const cable={id:crypto.randomUUID(),a:powerLink?.a||a.id,b:powerLink?.b||b.id,connected:true,medium,lengthMeters:Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/scaleOf(old)))};
    if(commit({...old,cables:[...old.cables,cable]},`${medium==='coax'?'Coaxial video':medium==='alarm'?'Alarm terminal':medium==='access'?'Access control circuit':'Ethernet'} connection installed; simulation recalculated`))setSelected({kind:'cable',id:cable.id});
  };
- const doMotion=(p:Point,intensity=75)=>{const r=triggerMotion(currentRef.current,p,undefined,intensity);const alarm=triggerAlarmStimulus(r.project,'motion',p,intensity);commit(alarm.project,`${r.detected} camera(s) detected movement; ${alarm.detected} alarm PIR(s) reacted; ${alarm.alerts} alert(s)`);setTab(alarm.detected?'alarm':'events');};
+ const doMotion=(p:Point,intensity=75)=>{const r=triggerMotion(currentRef.current,p,undefined,intensity,floorRef.current);const alarm=triggerAlarmStimulus(r.project,'motion',p,intensity,floorRef.current);commit(alarm.project,`${r.detected} camera(s) detected movement; ${alarm.detected} alarm PIR(s) reacted; ${alarm.alerts} alert(s)`);setTab(alarm.detected?'alarm':'events');};
  const advanceTime=(minutes:number)=>{if(blocked)return;try{commit(advanceRecording(currentRef.current,minutes),`Virtual recording clock advanced ${minutes} minutes`);setTab('recordings');}catch(e){setNotice(`Cannot advance recording: ${String(e)}`);}};
  // Alarm laboratory: virtual keypad commands and sensor stimuli are engine operations, not UI animations.
  const alarmCommand=(panelId:string,command:'stay'|'away'|'disarm'|'silence',pin:string)=>{
@@ -221,7 +224,7 @@ export function useWorkbench(){
  };
  const alarmStimulus=(kind:AlarmStimulus,at:Point,intensity=90)=>{
   if(blocked)return;
-  const outcome=triggerAlarmStimulus(currentRef.current,kind,at,intensity);
+  const outcome=triggerAlarmStimulus(currentRef.current,kind,at,intensity,floorRef.current);
   commit(outcome.project,`${outcome.detected} alarm detector(s) responded; ${outcome.alerts} new alarm(s)`);setTab('alarm');
  };
  const alarmTime=(seconds:number)=>{
@@ -482,7 +485,7 @@ export function useWorkbench(){
  };
  const updateRoom=(id:string,fields:Partial<Room>)=>{const p=currentRef.current,old=p.rooms.find(r=>r.id===id);if(!old)return;const changed=normalizeRoom({...old,...fields,id});commit({...p,rooms:p.rooms.map(r=>r.id===id?changed:r),walls:transformRoomWalls(p.walls,old,changed)});};
  const updateWall=(id:string,fields:Partial<Wall>)=>{const p=currentRef.current,old=p.walls.find(w=>w.id===id),removeAccess=old?.kind==='door'&&fields.kind!==undefined&&fields.kind!=='door';const states={...p.accessDoorStates};if(removeAccess)delete states[id];commit({...p,walls:p.walls.map(w=>w.id===id?{...w,...fields,id,roomId:undefined}:w),accessDoorStates:states,devices:removeAccess?p.devices.map(d=>d.accessController?.doorWallId===id?{...d,accessController:{...d.accessController,doorWallId:''}}:d):p.devices});};
- return {hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
+ return {floor,setFloor,hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
   cableStart,setCableStart,tab,setTab,listOpen,setListOpen,backups,openList,restoreBackup,canUndo,canRedo,generation,
   undo,redo,flush,saveCurrent,openNative,openFile,newBlank,switchScenario,update,removeSelection,install,selectOrCable,doMotion,addWall,addRoom,
   runFault,runAssessment,downloadAssessment,advanceTime,alarmCommand,alarmStimulus,alarmTime,alarmFault,loadAlarmRig,accessPresent,accessExit,accessDoor,accessAcknowledge,accessTime,accessFault,addIdentity,updateIdentity,removeIdentity,loadAccessRig,setPowerSettings,powerTime,powerFault,loadPowerRig,workedExample,jsonExport,jsonImport,imageImport,retrySave,fork,reload,commit,updateRoom,updateWall,

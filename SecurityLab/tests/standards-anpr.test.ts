@@ -61,3 +61,12 @@ describe('ANPR check (feature 13)',()=>{
   expect(profile('cam-anpr').defaultFov).toBeLessThan(40);
  });
 });
+
+import {scaleFromReference} from '../src/tools/lens.js';
+describe('plan scale calibration (feature 16)',()=>{
+ it('computes units per metre from two points and a real distance',()=>{
+  expect(scaleFromReference(0,0,300,400,50)).toBeCloseTo(10,9);
+  expect(()=>scaleFromReference(1,1,1,1,5)).toThrow(/different/);expect(()=>scaleFromReference(0,0,10,0,0)).toThrow(/positive/);
+  expect(()=>scaleFromReference(0,0,1000,0,1)).toThrow(/range/);
+ });
+});

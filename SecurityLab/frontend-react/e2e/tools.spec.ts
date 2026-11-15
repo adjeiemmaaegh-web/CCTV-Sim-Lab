@@ -92,3 +92,45 @@ test('good-practice review and ANPR tool respond to inputs',async({page})=>{
  await expect(page.getByText('Plate read feasible')).toBeVisible();
  expect(errs).toEqual([]);
 });
+
+test('floors: items belong to the floor they were placed on',async({page})=>{
+ const errs=watch(page);await page.goto('/');
+ const devs=page.locator('svg[role=application] g[data-device]');
+ await page.getByRole('button',{name:'＋ Add floor'}).click();
+ const bar=page.getByRole('group',{name:'Floors'});
+ await expect(bar.getByRole('button',{name:'Floor 1'})).toHaveAttribute('aria-pressed','true');
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:/camera/i}).first().click();
+ await page.locator('svg[role=application]').click({position:{x:350,y:120}});
+ await expect(devs).toHaveCount(1);
+ await bar.getByRole('button',{name:'Ground floor'}).click();
+ await expect(devs).toHaveCount(0);
+ await bar.getByRole('button',{name:'Floor 1'}).click();
+ await expect(devs).toHaveCount(1);
+ expect(errs).toEqual([]);
+});
+
+test('language: switching to French translates the chrome, persists across reload, and read-aloud uses the locale',async({page})=>{
+ const errs=watch(page);
+ await page.addInitScript(()=>{
+  (window as any).__spoken=[];
+  (window as any).SpeechSynthesisUtterance=function(this:any,text:string){this.text=text;};
+  Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{speak(u:any){(window as any).__spoken.push({text:u.text,lang:u.lang});setTimeout(()=>u.onend&&u.onend(),10);},cancel(){}}});
+ });
+ await page.goto('/');
+ await expect(page.getByRole('button',{name:'Save As'})).toBeVisible();
+ await page.getByLabel('Language').selectOption('fr');
+ await expect(page.getByRole('button',{name:'Enregistrer sous'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Save As'})).toHaveCount(0);
+ await page.getByRole('button',{name:'Tools',exact:true}).first().click();
+ await expect(page.getByRole('tab',{name:'Console réseau'})).toBeVisible();
+ await page.getByRole('tab',{name:'Leçons'}).click();
+ await expect(page.getByText(/^0\/7 étapes/)).toBeVisible();
+ await page.getByRole('button',{name:'Lire à voix haute'}).first().click();
+ const spoken=await page.evaluate(()=>(window as any).__spoken);
+ expect(spoken[0].lang).toBe('fr-FR');expect(spoken[0].text.length).toBeGreaterThan(20);
+ await page.reload();
+ await expect(page.getByRole('button',{name:'Enregistrer sous'})).toBeVisible();
+ await page.getByLabel('Langue').selectOption('en');
+ await expect(page.getByRole('button',{name:'Save As'})).toBeVisible();
+ expect(errs).toEqual([]);
+});
