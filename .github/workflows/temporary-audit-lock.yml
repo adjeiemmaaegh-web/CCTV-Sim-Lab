@@ -6,7 +6,7 @@ permissions:
   contents: write
 jobs:
   audit-lock:
-    if: github.event.head_commit.message == 'security: run audited dependency upgrade'
+    if: github.event.head_commit.message == 'trigger_audit_lock_upgrade'
     runs-on: ubuntu-24.04
     defaults:
       run:
