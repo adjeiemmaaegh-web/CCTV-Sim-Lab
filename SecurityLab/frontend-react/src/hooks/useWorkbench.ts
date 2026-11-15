@@ -216,6 +216,15 @@ export function useWorkbench(){
    if(commit({...old,cables:[...old.cables,cable]},`${medium==='coax'?'Coaxial video':medium==='alarm'?'Alarm terminal':medium==='access'?'Access control circuit':'Ethernet'} connection installed; simulation recalculated`))setSelected({kind:'cable',id:cable.id});
  };
  const doMotion=(p:Point,intensity=75)=>{const r=triggerMotion(currentRef.current,p,undefined,intensity,floorRef.current);const alarm=triggerAlarmStimulus(r.project,'motion',p,intensity,floorRef.current);commit(alarm.project,`${r.detected} camera(s) detected movement; ${alarm.detected} alarm PIR(s) reacted; ${alarm.alerts} alert(s)`);setTab(alarm.detected?'alarm':'events');};
+ const [view,setView]=useState<'floor'|'topology'>('floor');
+ const [toolId,setToolId]=useState('cli');
+ const [runLeft,setRunLeft]=useState(0);
+ /** One virtual minute of recording time, without switching tabs (used by the Run control). */
+ const runStep=()=>{if(blocked)return false;try{commit(advanceRecording(currentRef.current,1));return true;}catch{return false;}};
+ const runRef=useRef(runStep);runRef.current=runStep;
+ const isRunning=runLeft>0;
+ useEffect(()=>{if(!isRunning)return;const id=setInterval(()=>{if(!runRef.current()){setRunLeft(0);return;}setRunLeft(n=>Math.max(0,n-1));},1000);return()=>clearInterval(id);},[isRunning]);
+ const toggleRun=()=>setRunLeft(r=>r>0?0:60);
  const advanceTime=(minutes:number)=>{if(blocked)return;try{commit(advanceRecording(currentRef.current,minutes),`Virtual recording clock advanced ${minutes} minutes`);setTab('recordings');}catch(e){setNotice(`Cannot advance recording: ${String(e)}`);}};
  // Alarm laboratory: virtual keypad commands and sensor stimuli are engine operations, not UI animations.
  const alarmCommand=(panelId:string,command:'stay'|'away'|'disarm'|'silence',pin:string)=>{
@@ -486,7 +495,7 @@ export function useWorkbench(){
  };
  const updateRoom=(id:string,fields:Partial<Room>)=>{const p=currentRef.current,old=p.rooms.find(r=>r.id===id);if(!old)return;const changed=normalizeRoom({...old,...fields,id});commit({...p,rooms:p.rooms.map(r=>r.id===id?changed:r),walls:transformRoomWalls(p.walls,old,changed)});};
  const updateWall=(id:string,fields:Partial<Wall>)=>{const p=currentRef.current,old=p.walls.find(w=>w.id===id),removeAccess=old?.kind==='door'&&fields.kind!==undefined&&fields.kind!=='door';const states={...p.accessDoorStates};if(removeAccess)delete states[id];commit({...p,walls:p.walls.map(w=>w.id===id?{...w,...fields,id,roomId:undefined}:w),accessDoorStates:states,devices:removeAccess?p.devices.map(d=>d.accessController?.doorWallId===id?{...d,accessController:{...d.accessController,doorWallId:''}}:d):p.devices});};
- return {floor,setFloor,hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
+ return {view,setView,toolId,setToolId,running:isRunning,runLeft,toggleRun,floor,setFloor,hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
   cableStart,setCableStart,tab,setTab,listOpen,setListOpen,backups,openList,restoreBackup,canUndo,canRedo,generation,
   undo,redo,flush,saveCurrent,openNative,openFile,newBlank,switchScenario,update,removeSelection,install,selectOrCable,doMotion,addWall,addRoom,
   runFault,runAssessment,downloadAssessment,advanceTime,alarmCommand,alarmStimulus,alarmTime,alarmFault,loadAlarmRig,accessPresent,accessExit,accessDoor,accessAcknowledge,accessTime,accessFault,addIdentity,updateIdentity,removeIdentity,loadAccessRig,setPowerSettings,powerTime,powerFault,loadPowerRig,workedExample,jsonExport,jsonImport,imageImport,retrySave,fork,reload,commit,updateRoom,updateWall,

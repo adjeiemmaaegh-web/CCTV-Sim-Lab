@@ -2,20 +2,68 @@ import React,{useState} from 'react';
 import {PROFILES} from '../../../src/domain/catalog.js';
 import {MANUFACTURERS} from '../../../src/domain/manufacturers/index.js';
 import type {Workbench} from '../hooks/useWorkbench.js';
+import {Icon,kindIcon} from './icons.js';
+
+/** Library categories: each groups several device kinds, as in the workstation design. */
+const CATEGORIES:{id:string;title:string;icon:string;kinds:string[]}[]=[
+ {id:'cctv',title:'CCTV Cameras',icon:'camera',kinds:['camera']},
+ {id:'rec',title:'Recording & Storage',icon:'recorder',kinds:['nvr','dvr']},
+ {id:'net',title:'Network Devices',icon:'network',kinds:['switch','router','ap','server']},
+ {id:'alarm',title:'Alarm Devices',icon:'alarm',kinds:['alarm-panel','alarm-sensor','alarm-keypad','alarm-output']},
+ {id:'access',title:'Access Control',icon:'access',kinds:['access-controller','access-reader','access-lock','access-exit','access-server']},
+ {id:'power',title:'Power & Infrastructure',icon:'power',kinds:['power-grid','power-ups','power-psu','power-solar','power-controller','power-battery','power-inverter','power-ac-panel','power-dc-panel']},
+];
+const specLine=(p:(typeof PROFILES)[number])=>{
+ const bits:string[]=[];
+ if(p.kind==='camera'){if(p.megapixels)bits.push(`${p.megapixels} MP`);bits.push(p.signal==='analog'?'Analog':'IP');if(p.defaultFov)bits.push(`${p.defaultFov}°`);}
+ else bits.push(p.model);
+ bits.push(`${p.powerW} W`);
+ if(p.manufacturerSpec)bits.push(p.manufacturerSpec.status==='reference-only'?'Data sheet only':'Documented simulation');
+ return bits.join(' · ');
+};
+
 export function Catalog({w}:{w:Workbench}){
  const [query,setQuery]=useState('');
  const [maker,setMaker]=useState('all');
  const [family,setFamily]=useState<'all'|'generic'|'manufacturer'>('all');
  const [inspectedId,setInspectedId]=useState('');
+ const [open,setOpen]=useState<Record<string,boolean>>({cctv:true});
  const inspected=PROFILES.find(p=>p.id===inspectedId&&p.manufacturerSpec);
- const groups=[['camera','IP / ANALOG CAMERAS'],['switch','SWITCHES / VLANs'],['router','ROUTERS & DHCP'],['ap','WIRELESS ACCESS POINTS'],['server','NETWORK DIAGNOSTICS'],['alarm-panel','INTRUSION CONTROL PANELS'],['alarm-sensor','ALARMS / INTRUSION DETECTORS'],['alarm-keypad','ALARM KEYPADS'],['alarm-output','SIRENS & STROBES'],['access-controller','ACCESS CONTROLLERS'],['access-reader','RFID / PIN / BIOMETRIC READERS'],['access-lock','ELECTRONIC LOCKS'],['access-exit','EXIT BUTTONS'],['access-server','EVENT SERVERS'],['power-grid','AC GRID SUPPLY'],['power-ups','UNINTERRUPTIBLE POWER (UPS)'],['power-psu','DC POWER SUPPLIES'],['power-solar','SOLAR PV ARRAYS'],['power-controller','SOLAR CHARGE CONTROLLERS'],['power-battery','STORAGE BATTERIES'],['power-inverter','POWER INVERTERS'],['power-ac-panel','AC DISTRIBUTION'],['power-dc-panel','DC DISTRIBUTION'],['nvr','IP RECORDERS (NVR)'],['dvr','ANALOG RECORDERS (DVR)']] as const;
- const filtered=(kind:string)=>PROFILES.filter(p=>p.kind===kind&&w.isAllowedProfile(p.id)&&(maker==='all'||p.manufacturer===maker)&&(family==='all'||(family==='manufacturer')===!!p.manufacturerSpec)&&`${p.name} ${p.model} ${p.manufacturer} ${p.protocols.join(' ')}`.toLowerCase().includes(query.toLowerCase()));
- return <aside className="catalog panel"><div className="panel-heading"><h2>Equipment Library</h2><p>Place, cable and configure virtual security hardware</p></div>
- <div className="pad"><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search cameras, intrusion alarms, routers…" aria-label="Search equipment"/></div>
- <div className="catalog-filters"><label>Library <select aria-label="Equipment family" value={family} onChange={e=>setFamily(e.target.value as 'all'|'generic'|'manufacturer')}><option value="all">All models</option><option value="generic">Generic training</option><option value="manufacturer">Manufacturer profiles</option></select></label><label>Manufacturer <select aria-label="Manufacturer" value={maker} onChange={e=>setMaker(e.target.value)}><option value="all">All manufacturers</option>{MANUFACTURERS.map(name=><option value={name} key={name}>{name}</option>)}</select></label><small>Manufacturer models are documented references, not real firmware or product endorsements. GHS prices require your own quotations.</small></div>
- <div className="vendor-browser"><label>Manufacturer specification sheet<select aria-label="Browse documented manufacturer models" value={inspectedId} onChange={e=>setInspectedId(e.target.value)}><option value="">Select a device model to inspect…</option>{PROFILES.filter(p=>p.manufacturerSpec).map(p=><option key={p.id} value={p.id}>{p.manufacturer} · {p.model}</option>)}</select></label>{inspected?.manufacturerSpec&&<section className="vendor-detail" aria-label="Documented virtual device specification"><strong>{inspected.name}</strong><small>{inspected.manufacturerSpec.variant} · Profile {inspected.manufacturerSpec.edition} · {inspected.manufacturerSpec.status==='reference-only'?'REFERENCE ONLY — NOT PLACEABLE':'VIRTUAL SIMULATION PROFILE'}</small><ul>{inspected.manufacturerSpec.sourcedFacts.map((fact,i)=><li key={i}>{fact}</li>)}</ul><p><b>SecurityLab limitations:</b> {inspected.manufacturerSpec.limitations.join(' · ')}</p><a href={inspected.manufacturerSpec.sourceUrl} target="_blank" rel="noopener noreferrer">Open official reference documentation</a></section>}</div>
- <div className="catalog-scroll">{groups.map(([kind,title])=><section key={kind}><h3>{title} ({filtered(kind).length})</h3>{filtered(kind).map(p=><button key={p.id} draggable={!w.blocked&&p.manufacturerSpec?.status!=='reference-only'} onDragStart={e=>{if(p.manufacturerSpec?.status==='reference-only'){e.preventDefault();return;}e.dataTransfer.setData('application/x-securitylab-profile',p.id);}} onClick={()=>{if(p.manufacturerSpec?.status==='reference-only'){setInspectedId(p.id);w.setNotice(`${p.name}: reference only. Review official source and limitations above; wireless Jeweller pairing is not simulated.`);return;}w.setPlacing(p.id);w.setMode('place');w.setNotice(`Click the floor plan to place ${p.name}`);}} className={`equipment ${w.placing===p.id?'chosen':''}`} disabled={w.blocked}>
-  <span className={`equipment-icon ${kind}`}>{kind==='camera'?'◉':kind==='switch'?'▤':kind==='router'?'⇆':kind==='ap'?'◌':kind.startsWith('alarm-')?'⚑':kind.startsWith('access-')?'⌑':kind.startsWith('power-')?'⚡':kind==='server'?'▣':'▣'}</span><span className="equipment-content"><strong>{p.name}</strong><small>{p.model} · {p.powerW} W {p.manufacturerSpec?.status==='reference-only'?' · DATA SHEET ONLY':p.manufacturerSpec?' · DOCUMENTED SIMULATION':''} {p.kind==='camera'?` · ${p.signal||'ip'} · ${p.defaultFov}°`:''}</small></span><span className="price">{p.manufacturerSpec?'Quote needed':`₵${p.costGhs}`}</span>
- </button>)}</section>)}{w.isAllowedProfile('alarm-panel-8')&&<section><h3>STAGE 6 ALARM PRACTICE</h3><button className="alarm-practice" onClick={w.loadAlarmRig} disabled={w.blocked||w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind==='alarm-panel')}>Install wired alarm practice rig</button><p className="muted tiny">The starter installs an 8-zone panel, three detectors, a keypad, siren and strobe, with physical alarm circuits. Configure, arm and investigate faults in the Alarm Console. Access control, solar and backup power are available in the catalogue. Electrical supplies are connected with dedicated AC/DC/PV wires.</p></section>} {w.isAllowedProfile('access-controller-1')&&<section><h3>STAGE 7 ACCESS PRACTICE</h3><button className="alarm-practice" onClick={w.loadAccessRig} disabled={w.blocked||w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind==='access-controller')}>Install single-door access rig</button><p className="muted tiny">Includes controller, RFID reader, keypad, maglock, exit switch, physical door and fictional access credential. Open the Access Console to make permission decisions.</p></section>} {w.isAllowedProfile('power-solar')&&<section><h3>STAGE 8 ELECTRICAL PRACTICE</h3><button className="alarm-practice" onClick={w.loadPowerRig} disabled={w.blocked||w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind.startsWith('power-'))}>Install grid + UPS + solar power rig</button><p className="muted tiny">Creates a wired demonstration circuit with a 230 V grid, UPS, AC distribution, 12 V supply, solar panel, MPPT, battery and inverter. Load availability and energy storage are calculated by the power engine.</p></section>}</div>
+ const q=query.trim().toLowerCase();
+ const items=(kinds:string[])=>PROFILES.filter(p=>kinds.includes(p.kind)&&w.isAllowedProfile(p.id)&&(maker==='all'||p.manufacturer===maker)&&(family==='all'||(family==='manufacturer')===!!p.manufacturerSpec)&&`${p.name} ${p.model} ${p.manufacturer} ${p.protocols.join(' ')}`.toLowerCase().includes(q));
+ const choose=(p:(typeof PROFILES)[number])=>{
+  if(p.manufacturerSpec?.status==='reference-only'){setInspectedId(p.id);w.setNotice(`${p.name}: reference only. Review official source and limitations in Filters; wireless Jeweller pairing is not simulated.`);return;}
+  w.setPlacing(p.id);w.setMode('place');w.setNotice(`Click the floor plan to place ${p.name}`);
+ };
+ const rigs=[
+  {id:'alarm-panel-8',label:'Install wired alarm practice rig',done:w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind==='alarm-panel'),run:w.loadAlarmRig},
+  {id:'access-controller-1',label:'Install single-door access rig',done:w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind==='access-controller'),run:w.loadAccessRig},
+  {id:'power-solar',label:'Install grid + UPS + solar power rig',done:w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind.startsWith('power-')),run:w.loadPowerRig},
+ ].filter(r=>w.isAllowedProfile(r.id));
+ return <aside className="catalog panel" aria-label="Equipment library">
+  <div className="panel-heading"><h2>Equipment Library</h2><p>Drag devices onto the floor plan</p></div>
+  <div className="pad search-box"><Icon name="search" size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search equipment..." aria-label="Search equipment"/></div>
+  <details className="catalog-filter-box"><summary>Filters and specification sheets</summary>
+   <div className="catalog-filters"><label>Library <select aria-label="Equipment family" value={family} onChange={e=>setFamily(e.target.value as 'all'|'generic'|'manufacturer')}><option value="all">All models</option><option value="generic">Generic training</option><option value="manufacturer">Manufacturer profiles</option></select></label><label>Manufacturer <select aria-label="Manufacturer" value={maker} onChange={e=>setMaker(e.target.value)}><option value="all">All manufacturers</option>{MANUFACTURERS.map(name=><option value={name} key={name}>{name}</option>)}</select></label><small>Manufacturer models are documented references, not real firmware or product endorsements. GHS prices require your own quotations.</small></div>
+   <div className="vendor-browser"><label>Manufacturer specification sheet<select aria-label="Browse documented manufacturer models" value={inspectedId} onChange={e=>setInspectedId(e.target.value)}><option value="">Select a device model to inspect…</option>{PROFILES.filter(p=>p.manufacturerSpec).map(p=><option key={p.id} value={p.id}>{p.manufacturer} · {p.model}</option>)}</select></label>{inspected?.manufacturerSpec&&<section className="vendor-detail" aria-label="Documented virtual device specification"><strong>{inspected.name}</strong><small>{inspected.manufacturerSpec.variant} · Profile {inspected.manufacturerSpec.edition} · {inspected.manufacturerSpec.status==='reference-only'?'REFERENCE ONLY — NOT PLACEABLE':'VIRTUAL SIMULATION PROFILE'}</small><ul>{inspected.manufacturerSpec.sourcedFacts.map((fact,i)=><li key={i}>{fact}</li>)}</ul><p><b>SecurityLab limitations:</b> {inspected.manufacturerSpec.limitations.join(' · ')}</p><a href={inspected.manufacturerSpec.sourceUrl} target="_blank" rel="noopener noreferrer">Open official reference documentation</a></section>}</div>
+  </details>
+  <div className="catalog-scroll">
+   {CATEGORIES.map(cat=>{
+    const list=items(cat.kinds),isOpen=q?list.length>0:!!open[cat.id];
+    return <section key={cat.id} className={`cat ${isOpen?'open':''}`}>
+     <button className="cat-head" aria-expanded={isOpen} onClick={()=>setOpen(o=>({...o,[cat.id]:!o[cat.id]}))}><Icon name={cat.icon} size={18}/><span>{cat.title} ({list.length})</span><Icon name="chevron" size={16}/></button>
+     {isOpen&&<div className="cat-items">{list.length===0&&<p className="muted tiny">No matching equipment.</p>}{list.map(p=><button key={p.id} draggable={!w.blocked&&p.manufacturerSpec?.status!=='reference-only'}
+      onDragStart={e=>{if(p.manufacturerSpec?.status==='reference-only'){e.preventDefault();return;}e.dataTransfer.setData('application/x-securitylab-profile',p.id);}}
+      onClick={()=>choose(p)} className={`equipment ${w.placing===p.id?'chosen':''}`} disabled={w.blocked} title={`${p.name} — ${p.manufacturerSpec?'quotation needed':`training estimate ₵${p.costGhs}`}`}>
+      <span className={`equipment-icon ${p.kind}`}><Icon name={kindIcon(p.kind)} size={22}/></span>
+      <span className="equipment-content"><strong>{p.name}</strong><small>{specLine(p)}</small></span>
+      <span className="grip" aria-hidden="true">{'⋮⋮'}</span>
+     </button>)}</div>}
+    </section>;
+   })}
+   {rigs.length>0&&<section className={`cat ${open.rigs?'open':''}`}><button className="cat-head" aria-expanded={!!open.rigs} onClick={()=>setOpen(o=>({...o,rigs:!o.rigs}))}><Icon name="scenarios" size={18}/><span>Practice rigs ({rigs.length})</span><Icon name="chevron" size={16}/></button>
+    {open.rigs&&<div className="cat-items">{rigs.map(r=><button key={r.id} className="alarm-practice" onClick={r.run} disabled={w.blocked||r.done}>{r.label}</button>)}
+     <p className="muted tiny">Starter circuits with physical wiring. Configure, test and investigate faults in the matching dock tab. Electrical supplies use dedicated AC/DC/PV wires.</p></div>}</section>}
+  </div>
  </aside>;
 }

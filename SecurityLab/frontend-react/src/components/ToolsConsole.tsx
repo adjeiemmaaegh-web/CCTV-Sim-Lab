@@ -28,7 +28,7 @@ export const TOOLS:{id:string;key:Key;render:(w:Workbench)=>React.ReactNode}[]=[
 ];
 export function ToolsConsole({w}:{w:Workbench}){
  useLocale();
- const [tool,setTool]=useState(TOOLS[0].id);
+ const tool=w.toolId,setTool=w.setToolId;
  const current=TOOLS.find(t=>t.id===tool)||TOOLS[0];
  return <section className="tools-console" aria-label="Engineering tools">
   <div className="tool-tabs" role="tablist" aria-label="Tools">{TOOLS.map(tl=><button key={tl.id} role="tab" aria-selected={tl.id===current.id} className={tl.id===current.id?'active':''} onClick={()=>setTool(tl.id)}>{t(tl.key)}</button>)}</div>

@@ -1,5 +1,6 @@
 import {PowerConfigPanel} from './PowerConfig.js';
 import React from 'react';
+import {Icon,kindIcon} from './icons.js';
 import {profile} from '../../../src/domain/catalog.js';
 import {distanceMeters,scaleOf} from '../../../src/property/editor.js';
 import type {Device,Point,Room,Wall,FloorplanSettings} from '../../../src/domain/types.js';
@@ -44,6 +45,7 @@ function ReferenceFields({w}:{w:Workbench}){
 }
 export function Inspector({w}:{w:Workbench}){
  const s=w.selected;
+ const [tab,setTab]=React.useState<'general'|'coverage'|'network'>('general');
  const device=s?.kind==='device'?w.project.devices.find(d=>d.id===s.id):undefined;
  const room=s?.kind==='room'?w.project.rooms.find(r=>r.id===s.id):undefined;
  const wall=s?.kind==='wall'?w.project.walls.find(x=>x.id===s.id):undefined;
@@ -52,17 +54,16 @@ export function Inspector({w}:{w:Workbench}){
  const site=s?.kind==='site'?w.project.siteElements?.find(t=>t.id===s.id):undefined;
  const reference=s?.kind==='reference'&&Boolean(w.project.floorplanImage);
  const dProfile=device?profile(device.profileId):undefined,health=device?w.result.devices[device.id]:undefined;
- return <aside className="inspector panel"><div className="panel-heading"><h2>Properties & Diagnostics</h2><p>Physical geometry, equipment settings and simulation state</p></div>
+ return <aside className="inspector panel" aria-label="Properties"><div className="panel-heading prop-heading"><h2><Icon name={dProfile?kindIcon(dProfile.kind):'settings'} size={20}/> {device?'Device Properties':room?'Room Properties':wall?'Wall Properties':cable?'Cable Properties':'Properties'}</h2>{s&&<button className="icon-btn" aria-label="Close properties" onClick={()=>w.setSelected(null)}><Icon name="close" size={18}/></button>}</div>
  <div className="inspector-scroll">
  {device&&dProfile?<>
-  <div className="device-summary"><span className="big-icon">{dProfile.kind==='camera'?'◉':dProfile.kind==='switch'?'▤':dProfile.kind==='router'?'⇆':dProfile.kind==='ap'?'◌':'▣'}</span><div><strong>{device.name}</strong><small>{dProfile.model} · Simulated profile</small></div><span className={health?.powered?'good':'warn'}>{health?.powered?'Powered':'Offline'}</span></div>
-  <div className="section-heading">POSITION & NETWORK SETTINGS</div><div className="fields"><DeviceField w={w} device={device} label="Name" keyName="name"/>
+  <div className="device-summary"><span className="big-icon"><Icon name={kindIcon(dProfile.kind)} size={34}/></span><div><strong>{dProfile.name}</strong><small>{device.name}</small></div><span className={health?.powered?'badge good':'badge warn'}><i className="dot"/>{health?.powered?(health.networkOk||!dProfile.kind.match(/camera|nvr|dvr/)?'Online':'Powered'):'Offline'}</span></div>
+  <div className="prop-tabs" role="tablist" aria-label="Device property groups">{([["general","General"],["coverage","Coverage"],["network","Network"]] as const).map(([id,lbl])=><button key={id} role="tab" aria-selected={tab===id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{lbl}</button>)}</div>
+  {tab==="general"&&<>
+  <div className="section-heading">IDENTITY & POSITION</div><div className="fields"><DeviceField w={w} device={device} label="Name" keyName="name"/>
   <Numeric name="X (plan units)" value={device.x} disabled={w.blocked} onChange={x=>w.moveDevice(device.id,{x,y:device.y})}/>
   <Numeric name="Y (plan units)" value={device.y} max={650} disabled={w.blocked} onChange={y=>w.moveDevice(device.id,{x:device.x,y})}/>
-  {(dProfile.kind==='nvr'||dProfile.kind==='router'||dProfile.kind==='server'||dProfile.kind==='ap'||(dProfile.kind==='camera'&&signalOf(device)==='ip'))&&<><DeviceField w={w} device={device} label="IP Address" keyName="ip"/><DeviceField w={w} device={device} label="Subnet Mask" keyName="mask"/><DeviceField w={w} device={device} label="Gateway" keyName="gateway"/></>}
-  {dProfile.kind==='camera'&&<><DeviceField w={w} device={device} label="Orientation (°)" keyName="heading" type="number" min={0} max={360}/><DeviceField w={w} device={device} label="Field of View (°)" keyName="fov" type="number" min={1} max={180}/><DeviceField w={w} device={device} label="Range (units)" keyName="range" type="number" min={0} max={1000}/></>}
   {dProfile.kind==='switch'&&<DeviceField w={w} device={device} label="PoE budget (W)" keyName="poeBudgetW" type="number" min={0} max={dProfile.manufacturerSpec?dProfile.poeBudgetW:500}/>}
-  
   {(dProfile.kind==='camera'?['enabled','motionEnabled'] as const:['enabled'] as const).map(k=><label key={k} className="checkfield"><span>{k==='enabled'?'Device enabled':k==='motionEnabled'?'Motion detection':'Recording enabled'}</span><input disabled={w.blocked} type="checkbox" checked={device[k]} onChange={e=>w.update(device.id,{[k]:e.target.checked})}/></label>)}
   </div>{dProfile.kind==='camera'&&<CameraSettings w={w} camera={device}/>}
   {dProfile.kind.startsWith('alarm-')&&<AlarmConfig w={w} device={device}/>}
@@ -80,6 +81,9 @@ export function Inspector({w}:{w:Workbench}){
     <p className="editor-muted">Enter a genuine local equipment quotation. Until then, assessment budget points are withheld. This is not a vendor price list.</p>
    </>:<p>Catalogue training estimate: GHS {dProfile.costGhs}</p>}
   <p>Virtual rules only — NOT actual manufacturer firmware, security approval or certified interoperability.</p></div>
+  </>}
+  {tab==="coverage"&&(dProfile.kind==='camera'?<><div className="section-heading">CAMERA COVERAGE</div><div className="fields"><><DeviceField w={w} device={device} label="Orientation (°)" keyName="heading" type="number" min={0} max={360}/><DeviceField w={w} device={device} label="Field of View (°)" keyName="fov" type="number" min={1} max={180}/><DeviceField w={w} device={device} label="Range (units)" keyName="range" type="number" min={0} max={1000}/></></div><p className="editor-muted">The shaded area on the plan follows these values, walls and the day/night and weather settings. Open Tools &gt; Lens calculator or Camera view for pixel density and a simulated view.</p></>:<p className="editor-muted">Coverage fields apply to cameras. Detector heading and range for alarm sensors are in the General tab.</p>)}
+  {tab==="network"&&((dProfile.kind==='nvr'||dProfile.kind==='router'||dProfile.kind==='server'||dProfile.kind==='ap'||(dProfile.kind==='camera'&&signalOf(device)==='ip'))?<><div className="section-heading">IP NETWORK SETTINGS</div><div className="fields"><><DeviceField w={w} device={device} label="IP Address" keyName="ip"/><DeviceField w={w} device={device} label="Subnet Mask" keyName="mask"/><DeviceField w={w} device={device} label="Gateway" keyName="gateway"/></></div><p className="editor-muted">VLANs, ports, DHCP and routing: use Tools &gt; Network CLI or the Network tab of the dock.</p></>:<p className="editor-muted">This device has no IP settings. Wired alarm, access and power devices connect through their own circuits.</p>)}
  </>:room?<RoomFields w={w} room={room}/>:wall?<WallFields w={w} wall={wall}/>:cable?<div className="fields"><h3>{cable.medium?.startsWith('power-')?`Electrical ${cable.medium.slice(6).toUpperCase()} circuit`:cable.medium==='alarm'?'Wired alarm circuit':cable.medium==='access'?'Dedicated access-control wiring':cable.medium==='coax'?'Coaxial video cable':'Ethernet cable'}</h3>
   {cable.medium!=='coax'&&cable.medium!=='alarm'&&cable.medium!=='access'&&!cable.medium?.startsWith('power-')&&<><Numeric name="End A port (0 = automatic)" value={cable.aPort||0} min={0} max={48} disabled={w.blocked} onChange={aPort=>w.commit({...w.project,cables:w.project.cables.map(c=>c.id===cable.id?{...c,aPort:aPort||undefined}:c)},'Cable end A port changed')}/><Numeric name="End B port (0 = automatic)" value={cable.bPort||0} min={0} max={48} disabled={w.blocked} onChange={bPort=>w.commit({...w.project,cables:w.project.cables.map(c=>c.id===cable.id?{...c,bPort:bPort||undefined}:c)},'Cable end B port changed')}/><Numeric name="Link maximum (Mb/s)" value={cable.speedMbps||1000} min={1} max={10000} disabled={w.blocked} onChange={speedMbps=>w.commit({...w.project,cables:w.project.cables.map(c=>c.id===cable.id?{...c,speedMbps}:c)},'Link bandwidth updated')}/></>}
   {cable.medium?.startsWith('power-')&&<Numeric name="Electrical cable maximum current (A)" value={cable.powerMaxAmps|| (cable.medium==='power-ac'?16:cable.medium==='power-pv'?15:60)} min={0.1} max={200} disabled={w.blocked} onChange={powerMaxAmps=>w.commit({...w.project,cables:w.project.cables.map(c=>c.id===cable.id?{...c,powerMaxAmps}:c)},'Electrical cable current rating changed')}/>} 

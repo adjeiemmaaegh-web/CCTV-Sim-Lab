@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {probeNetwork,resolveNetworkName} from '../../../src/engine/networking.js';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import type {LabEvent} from '../../../src/domain/types.js';
-import {SystemHealth} from './SystemHealth.js';
+import {DockTabs,RealtimePanel} from './Dock.js';
 import {clockLabel,modeOf,signalOf} from '../../../src/engine/cctv.js';
 import {profile} from '../../../src/domain/catalog.js';
 import {AlarmConsole} from './AlarmConsole.js';
@@ -42,11 +42,11 @@ export function Console({w}:{w:Workbench}){
   const event:LabEvent={id:`dns-${crypto.randomUUID()}`,at:new Date().toISOString(),kind:lookup.ok?'info':'warning',message,recorded:false};
   w.commit({...w.project,events:[...w.project.events,event].slice(-250)},'Simulated DNS lookup recorded');
  };
- return <section className={`console panel ${w.tab==='field-review'||w.tab==='tools'?'console-expanded':''}`}><div className="console-head"><strong>▣ SECURITY ENGINEERING SIMULATION CONSOLE</strong><div className="tabs">{(['systems','diagnostics','network','events','recordings','alarm','access','power','scenario','assessment','field-review','tools'] as const).map(tab=><button className={w.tab===tab?'active':''} onClick={()=>w.setTab(tab)} key={tab}>{tab[0].toUpperCase()+tab.slice(1)}</button>)}</div>
-  <div className="fault-controls"><select aria-label="Fault type" value={fault} onChange={e=>setFault(e.currentTarget.value)}>{faults.map(([value,title])=><option value={value} key={value}>{title}</option>)}</select><button disabled={w.blocked} onClick={()=>w.runFault(fault)}>Inject Fault</button><button disabled={w.blocked} onClick={()=>w.commit({...w.project,events:[]},'Event log cleared')}>Clear Events</button></div></div>
+ return <section className={`console panel ${w.tab==='field-review'||w.tab==='tools'?'console-expanded':''}`}><div className="console-head"><DockTabs w={w}/>
+  {(w.tab==='diagnostics'||w.tab==='events')&&<div className="fault-controls"><select aria-label="Fault type" value={fault} onChange={e=>setFault(e.currentTarget.value)}>{faults.map(([value,title])=><option value={value} key={value}>{title}</option>)}</select><button disabled={w.blocked} onClick={()=>w.runFault(fault)}>Inject Fault</button><button disabled={w.blocked} onClick={()=>w.commit({...w.project,events:[]},'Event log cleared')}>Clear Events</button></div>}</div>
   {w.tab==='network'&&<div className="network-probe"><strong>SIMULATED IPV4 CONNECTIVITY PROBE</strong><label>From <select aria-label="Probe source" value={source} onChange={e=>setSource(e.currentTarget.value)}><option value="">Choose source</option>{participants.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label>To <select aria-label="Probe destination" value={destination} onChange={e=>setDestination(e.currentTarget.value)}><option value="">Choose destination</option>{participants.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label><button disabled={w.blocked} onClick={probe}>Probe Route</button><label>DNS hostname <input aria-label="DNS hostname" value={hostname} onChange={e=>setHostname(e.target.value)} maxLength={79}/></label><button disabled={w.blocked} onClick={dnsProbe}>Resolve DNS</button>{lastProbe&&<span role="status">{lastProbe}</span>}</div>}
   {w.tab==='recordings'&&<div className="recording-time"><strong>VIRTUAL TIME · {clockLabel(w.project)}</strong><span>Advance recording storage &amp; active schedules:</span>{[1,15,60].map(min=><button key={min} disabled={w.blocked} onClick={()=>w.advanceTime(min)}>+{min} min</button>)}<small>Only continuous/scheduled streams grow storage while clock advances. Motion recording creates virtual clip metadata.</small></div>}
-  {w.tab==='systems'&&<SystemHealth w={w}/>}
+  {w.tab==='systems'&&<RealtimePanel w={w}/>}
   {w.tab==='power'&&<PowerConsole w={w}/>}
   {w.tab==='scenario'&&<ScenarioConsole w={w}/>}
   {w.tab==='assessment'&&<AssessmentConsole w={w}/>}

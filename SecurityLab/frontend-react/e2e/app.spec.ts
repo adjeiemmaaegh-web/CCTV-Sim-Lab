@@ -1,12 +1,13 @@
 import {test,expect,Page} from '@playwright/test';
+import {project,dock,settings} from './helpers.js';
 const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter','school-block','hospital-ward','market-kiosk-gh','church-compound-gh','office-fire'];
 function watch(page:Page){const errs:string[]=[];page.on('dialog',d=>{void d.accept();});page.on('pageerror',e=>errs.push(String(e)));page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});return errs;}
 
 test('startup renders workstation without errors',async({page})=>{
  const errs=watch(page);await page.goto('/');
- await expect(page.getByText('VIRTUAL ENGINEERING')).toBeVisible();
+ await expect(page.getByText('SecurityLab',{exact:true}).first()).toBeVisible();
  await expect(page.getByLabel('Installation workspace')).toBeVisible();
- await expect(page.getByRole('button',{name:'Save As'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Project',exact:true})).toBeVisible();
  expect(errs).toEqual([]);
 });
 
@@ -17,7 +18,7 @@ test('service worker controls page and app reloads offline',async({page,context}
  await expect.poll(()=>page.evaluate(()=>!!navigator.serviceWorker.controller)).toBe(true);
  await context.setOffline(true);
  await page.reload();
- await expect(page.getByText('VIRTUAL ENGINEERING')).toBeVisible();
+ await expect(page.getByText('SecurityLab',{exact:true}).first()).toBeVisible();
  await expect(page.getByLabel('Installation workspace')).toBeVisible();
  await context.setOffline(false);
 });
@@ -28,20 +29,19 @@ test('all fifteen scenarios load, simulate and show a briefing',async({page})=>{
  for(const id of IDS){
   await sel.selectOption(id);
   await expect(sel).toHaveValue(id);
-  await expect(page.getByRole('button',{name:/^Briefing ·/})).toBeVisible();
+  await expect(page.getByRole('status',{name:'Live status'})).toContainText('Simulation Ready');
  }
  expect(errs).toEqual([]);
 });
 
 test('worked example, assessment, undo/redo',async({page})=>{
  const errs=watch(page);await page.goto('/');
- const brief=page.getByRole('button',{name:/^Briefing ·/});
- const before=await brief.textContent();
- await page.getByRole('button',{name:/Load Worked Example/i}).click();
- await expect(brief).not.toHaveText(before!);
+ await expect(page.getByLabel('Realtime status')).toContainText('0 / 0 Recording');
+ await project(page,'Load Worked Example');
+ await expect(page.getByLabel('Realtime status')).toContainText('4 / 4 Recording');
  await page.getByRole('button',{name:'Assess Installation'}).click();
- await page.getByRole('button',{name:/Undo/}).click();
- await expect(page.getByRole('button',{name:/Redo/})).toBeEnabled();
+ await page.getByRole('button',{name:'Undo',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Redo',exact:true})).toBeEnabled();
  expect(errs).toEqual([]);
 });
 
@@ -59,7 +59,7 @@ test('Save As falls back to labelled download, reopen via Open JSON, corrupt fil
  await page.addInitScript(()=>{delete (window as any).showSaveFilePicker;delete (window as any).showOpenFilePicker;});
  await page.goto('/');
  const errs=watch(page);
- const [dl]=await Promise.all([page.waitForEvent('download',{timeout:10000}).catch(()=>null),page.getByRole('button',{name:'Save As'}).click()]);
+ const [dl]=await Promise.all([page.waitForEvent('download',{timeout:10000}).catch(()=>null),project(page,'Save As')]);
  expect(dl).not.toBeNull();
  const path=await dl!.path();
  const fs=await import('node:fs');
