@@ -13,6 +13,7 @@ import {reportAsHtml,reportAsJson} from '../../../src/engine/reports.js';
 import {simulate,triggerMotion,injectFault,advanceRecording} from '../../../src/engine/simulator.js';
 import {installationHealth} from '../../../src/engine/integration.js';
 import {signalOf} from '../../../src/engine/cctv.js';
+import {suggestEthernetPorts} from '../../../src/tools/wiring-guide.js';
 import {commandAlarm,triggerAlarmStimulus,advanceAlarmTime,injectAlarmFault,panelConfig} from '../../../src/engine/alarm.js';
 import {presentAccessToken,requestExit,operateDoor,clearAccessAlarm,advanceAccessTime,injectAccessFault,controllerConfig} from '../../../src/engine/access.js';
 import {advancePower,injectPowerFault,plannedPowerCable,isPowerDevice,DEFAULT_POWER_SETTINGS} from '../../../src/engine/power.js';
@@ -212,8 +213,13 @@ export function useWorkbench(){
    const coax=(analog(a)&&dvr(b))||(analog(b)&&dvr(a));
    if((analog(a)||analog(b))&&!coax){setNotice('Analog cameras require a coaxial video link directly to a DVR.');return;}
    const medium=powerLink?.medium||(accessPair?'access' as const:alarmPair?'alarm' as const:coax?'coax' as const:'ethernet' as const);
-   const cable={id:crypto.randomUUID(),a:powerLink?.a||a.id,b:powerLink?.b||b.id,connected:true,medium,lengthMeters:Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/scaleOf(old)))};
-   if(commit({...old,cables:[...old.cables,cable]},`${medium==='coax'?'Coaxial video':medium==='alarm'?'Alarm terminal':medium==='access'?'Access control circuit':'Ethernet'} connection installed; simulation recalculated`))setSelected({kind:'cable',id:cable.id});
+   const allocation=medium==='ethernet'?suggestEthernetPorts(old,a,b):null;
+   if(allocation&&!allocation.ok){setNotice(allocation.reason);return;}
+   const cable={id:crypto.randomUUID(),a:powerLink?.a||a.id,b:powerLink?.b||b.id,connected:true,medium,
+     ...(allocation?{aPort:allocation.aPort,bPort:allocation.bPort}:{}),
+     lengthMeters:Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/scaleOf(old)))};
+   const warning=allocation?.notes.find(n=>n.includes('does not supply PoE')||n.includes('exceeds'));
+   if(commit({...old,cables:[...old.cables,cable]},(medium==='coax'?'Coaxial video':medium==='alarm'?'Alarm terminal':medium==='access'?'Access control circuit':'Ethernet')+' connection installed; inspect its ports and simulation status'+(warning?'. '+warning:'')))setSelected({kind:'cable',id:cable.id});
  };
  const doMotion=(p:Point,intensity=75)=>{const r=triggerMotion(currentRef.current,p,undefined,intensity,floorRef.current);const alarm=triggerAlarmStimulus(r.project,'motion',p,intensity,floorRef.current);commit(alarm.project,`${r.detected} camera(s) detected movement; ${alarm.detected} alarm PIR(s) reacted; ${alarm.alerts} alert(s)`);setTab(alarm.detected?'alarm':'events');};
  const [view,setView]=useState<'floor'|'topology'>('floor');
