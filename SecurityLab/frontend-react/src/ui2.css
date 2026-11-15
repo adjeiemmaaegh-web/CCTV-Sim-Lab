@@ -289,3 +289,11 @@ button{color:var(--text)}
 .raw-diagnostics summary{cursor:pointer;color:var(--muted);padding:5px 0}
 .raw-diagnostics p{margin:7px 0;font-size:12px}
 @media(max-width:600px){.guided-findings{grid-template-columns:1fr}.guided-head{align-items:flex-start}}
+
+/* Diagnosing faults must not collapse the plan into a thumbnail on 1024px laptops. */
+@media(min-width:901px){
+ .shell .console.diagnostics-expanded{height:min(32vh,255px);max-height:36vh}
+}
+@media(min-width:1200px) and (min-height:850px){
+ .shell .console.diagnostics-expanded{height:min(38vh,340px)}
+}
