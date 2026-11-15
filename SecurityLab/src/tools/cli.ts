@@ -16,7 +16,14 @@ export const initialCliState=():CliState=>({deviceId:null,mode:'exec'});
 
 const isManagedSwitch=(d:Device)=>profile(d.profileId).kind==='switch'&&!!profile(d.profileId).managed;
 const kindOf=(d:Device)=>profile(d.profileId).kind;
-const find=(p:Project,name:string)=>p.devices.find(d=>d.name.toLowerCase()===name.toLowerCase())??p.devices.find(d=>d.name.toLowerCase().startsWith(name.toLowerCase()));
+/** Exact name wins; otherwise a unique prefix. Ambiguous prefixes return undefined so a command never hits the wrong device. */
+const find=(p:Project,name:string)=>{
+ const n=name.toLowerCase();if(!n)return undefined;
+ const exact=p.devices.find(d=>d.name.toLowerCase()===n);if(exact)return exact;
+ const partial=p.devices.filter(d=>d.name.toLowerCase().startsWith(n));
+ return partial.length===1?partial[0]:undefined;
+};
+const ambiguous=(p:Project,name:string)=>{const n=name.toLowerCase();return !!n&&!p.devices.some(d=>d.name.toLowerCase()===n)&&p.devices.filter(d=>d.name.toLowerCase().startsWith(n)).length>1;};
 const replace=(p:Project,id:string,fn:(d:Device)=>Device):Project=>({...p,devices:p.devices.map(d=>d.id===id?fn(d):d)});
 const vlanOk=(n:number)=>Number.isInteger(n)&&n>=1&&n<=4094;
 const parseVlanList=(s:string)=>s.split(',').flatMap(x=>{const m=x.split('-').map(Number);if(m.length===2&&m.every(Number.isFinite)&&m[1]>=m[0]&&m[1]-m[0]<4094)return Array.from({length:m[1]-m[0]+1},(_,i)=>m[0]+i);return m.length===1?[m[0]]:[NaN];});
@@ -71,7 +78,7 @@ export function runCommand(project:Project,state:CliState,line:string):CliResult
  if(c==='help'||c==='?')return out(...HELP);
  if(c==='devices')return out(...project.devices.filter(d=>!/^(alarm|access|power)-/.test(kindOf(d))).map(d=>`${d.name}  [${kindOf(d)}]`));
  if(c==='connect'){
-  const d=find(project,arg);if(!d)return out(`% Unknown device "${arg}". Type "devices".`);
+  const d=find(project,arg);if(!d)return out(ambiguous(project,arg)?`% "${arg}" matches several devices; type the full name (see "devices").`:`% Unknown device "${arg}". Type "devices".`);
   if(/^(alarm|access|power)-/.test(kindOf(d)))return out('% This device has no network console.');
   return {project,state:{deviceId:d.id,mode:'exec'},output:[`Connected to ${d.name}.`]};
  }

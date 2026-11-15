@@ -1,0 +1,31 @@
+name: Release package (artifact only)
+# Builds the static package and attaches it as a workflow artifact. It does NOT publish a GitHub release,
+# deploy, or upload anywhere else; publishing is an explicit owner decision.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: SecurityLab/frontend-react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: SecurityLab/frontend-react/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: securitylab-static-package
+          path: release/
+          if-no-files-found: error

@@ -134,7 +134,7 @@ export type Project = {
   powerSettings?:PowerSettings;
   scenarioState?:ScenarioState;
   fieldReview?:FieldReview; // optional local project evidence, no personal identifiers
-  environment?:Environment;floors?:Floor[];diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>; // Stage 17: simplified training weather/temperature effects
+  environment?:Environment;floors?:Floor[];diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>;profilePack?:Record<string,unknown>[]; // Stage 17: simplified training weather/temperature effects
 };
 export type DeviceStatus = {id:string; powered:boolean; connected:boolean; networkOk:boolean; recordingReady:boolean; recorderId?:string; faults:string[]; poeSourceId?:string; channel?:number; signal?:SignalType; streamMbps?:number; scheduleActive?:boolean};
 export type CableStatus = {id:string; up:boolean; reason:string};

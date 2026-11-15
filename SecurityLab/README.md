@@ -111,3 +111,14 @@ npm run test:e2e     # real-browser tests (serves the built app via vite preview
 ```
 
 See `ACCEPTANCE_STAGE16.md` in the repository root for exact results and the list of unverified acceptance gates. Status remains NO-GO for production.
+
+
+## Stage 17 - twenty upgrades
+
+See `docs/FEATURES_STAGE17.md` (features, limits, tests) and `docs/MANUAL_ACCEPTANCE.md` (checks that need a person and real hardware). New developer commands:
+
+```bash
+npm run package      # reproducible unsigned static zip + SHA256SUMS in ../../release
+npm run test:e2e     # includes tools, mobile and file-persistence suites
+CROSS_BROWSER=1 npx playwright test --project=webkit --project=firefox
+```

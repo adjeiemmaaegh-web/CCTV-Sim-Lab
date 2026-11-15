@@ -92,3 +92,13 @@ describe('packet trace',()=>{
   expect(t.steps[0].stage).toBe('power');
  });
 });
+
+describe('CLI device selection safety',()=>{
+ it('an ambiguous prefix never connects to a device; exact names and unique prefixes do',()=>{
+  const s=session(lab());
+  const out=s.run('connect IP Bullet');expect(out.join()).toMatch(/several devices/);expect(s.state.deviceId).toBeNull();
+  const full=nameOf(s.project,'cam-bullet',0);s.run(`connect ${full}`);expect(s.state.deviceId).toBeTruthy();
+  const s2=session(lab());s2.run('connect Dual-VLAN');expect(s2.state.deviceId).toBeTruthy();
+  expect(session(lab()).run('connect ')[0]).toMatch(/Unknown/);
+ });
+});

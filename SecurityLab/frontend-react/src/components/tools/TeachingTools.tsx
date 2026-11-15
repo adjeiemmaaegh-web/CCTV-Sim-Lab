@@ -10,6 +10,7 @@ import {SAMPLE_PACK_SCENARIO,classSheetCsv,exportPack,loadPack,type SheetRow} fr
 import {parseProjectText,downloadText} from '../../../../src/persistence/file-projects.js';
 import {SCENARIOS} from '../../../../src/scenarios/index.js';
 import {planReportHtml} from '../../../../src/tools/report.js';
+import {SAMPLE_PROFILE,exportProfilePack,loadProfilePack} from '../../../../src/tools/profilePack.js';
 
 /** Feature 8: guided lessons, progress derived from the real simulation. */
 export function LessonsPanel({w}:{w:Workbench}){
@@ -48,10 +49,11 @@ export function FaultGenPanel({w}:{w:Workbench}){
 
 /** Feature 10: instructor mode (scenario packs, class sheet). File-based only. */
 export function InstructorPanel({w}:{w:Workbench}){
- const packRef=useRef<HTMLInputElement>(null),sheetRef=useRef<HTMLInputElement>(null);const [msg,setMsg]=useState('');
+ const packRef=useRef<HTMLInputElement>(null),sheetRef=useRef<HTMLInputElement>(null),profRef=useRef<HTMLInputElement>(null);const [msg,setMsg]=useState('');
  const custom=SCENARIOS.filter(s=>s.id.startsWith('custom-'));
  const readText=(f:File)=>new Promise<string>((res,rej)=>{if(f.size>2_000_000){rej(new Error('File too large'));return;}f.text().then(res,rej);});
  const onPack=async(f:File)=>{try{const sc=loadPack(await readText(f));setMsg(`Loaded ${sc.length} custom scenario(s): ${sc.map(s=>s.title).join(', ')}`);w.setNotice('Scenario pack loaded');}catch(e){setMsg(`Pack rejected: ${(e as Error).message}`);}};
+ const onProfiles=async(f:File)=>{try{const ps=loadProfilePack(await readText(f));setMsg(`Loaded ${ps.length} device profile(s): ${ps.map(x=>x.model).join(', ')}. They are educational simulations; enter your own quotation per device.`);w.setNotice('Device profile pack loaded');}catch(e){setMsg(`Profile pack rejected: ${(e as Error).message}`);}};
  const onSheet=async(files:FileList)=>{
   const rows:SheetRow[]=[];const bad:string[]=[];
   for(const f of Array.from(files).slice(0,200)){try{
@@ -65,8 +67,11 @@ export function InstructorPanel({w}:{w:Workbench}){
   <p className="editor-muted">Local files only. Scenario packs define the brief, permitted equipment and scored objectives. Custom scenarios are embedded in each project, so learners can open them without the pack.</p>
   <div className="tool-row"><button onClick={()=>packRef.current?.click()}>Load scenario pack…</button>
    <button onClick={()=>downloadText(exportPack([SAMPLE_PACK_SCENARIO]),'sample-scenario-pack.json')}>Download sample pack</button>
+   <button onClick={()=>profRef.current?.click()}>Load device profile pack…</button>
+   <button onClick={()=>downloadText(exportProfilePack([SAMPLE_PROFILE]),'sample-profile-pack.json')}>Download sample profile pack</button>
    <button onClick={()=>sheetRef.current?.click()}>Class results sheet from project files…</button></div>
   <input hidden type="file" ref={packRef} accept=".json,application/json" onChange={e=>{const f=e.currentTarget.files?.[0];if(f)void onPack(f);e.currentTarget.value='';}}/>
+  <input hidden type="file" ref={profRef} accept=".json,application/json" onChange={e=>{const f=e.currentTarget.files?.[0];if(f)void onProfiles(f);e.currentTarget.value='';}}/>
   <input hidden type="file" multiple ref={sheetRef} accept=".json,application/json" onChange={e=>{const f=e.currentTarget.files;if(f?.length)void onSheet(f);e.currentTarget.value='';}}/>
   {msg&&<p role="status">{msg}</p>}
   <h4>Custom scenarios loaded ({custom.length})</h4>

@@ -1,3 +1,4 @@
+import {registerProfile} from '../tools/profilePack.js';
 import {registerPackScenario} from '../tools/scenarioPack.js';
 import type {Project} from '../domain/types.js';
 import {PROFILES} from '../domain/catalog.js';
@@ -21,6 +22,10 @@ export function validateProject(input:unknown):Project{
  input=migrateProject(input);
  if(!input||typeof input!=='object')throw new Error('Expected a SecurityLab project JSON object');
  const p=input as Record<string,unknown>;
+ if(p.profilePack!==undefined){
+  if(!Array.isArray(p.profilePack)||p.profilePack.length>40)throw new Error('Invalid embedded profile list');
+  for(const prof of p.profilePack){try{registerProfile(prof);}catch(e){throw new Error(`Invalid embedded device profile: ${(e as Error).message}`);}}
+ }
  if(p.customScenario!==undefined){try{registerPackScenario(p.customScenario);}catch(e){throw new Error(`Invalid embedded custom scenario: ${(e as Error).message}`);}}
  if(p.schemaVersion!==2||!idTxt(p.id)||!idTxt(p.title)||!idTxt(p.scenarioId)||!SCENARIOS.some(s=>s.id===p.scenarioId))throw new Error('Unsupported project format, scenario or schema');
  if(!Array.isArray(p.devices)||!Array.isArray(p.cables)||!Array.isArray(p.rooms)||!Array.isArray(p.walls)||!Array.isArray(p.events)||!Array.isArray(p.targets))throw new Error('Project has missing geometry/equipment fields');

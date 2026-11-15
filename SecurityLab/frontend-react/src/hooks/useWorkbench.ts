@@ -1,3 +1,4 @@
+import {withEmbeddedProfiles} from '../../../src/tools/profilePack.js';
 import {stampNewItems} from '../../../src/tools/floors.js';
 import {recordAudit} from '../../../src/tools/audit.js';
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
@@ -79,7 +80,7 @@ export function useWorkbench(){
  const markDirty=()=>{setSaveState('unsaved');setSaveError('');setGeneration(x=>x+1);};
  const commit=useCallback((next:Project,message?:string)=>{
    if(blocked){setNotice('Editing paused after a file-save error. Use Save As or Export Backup before proceeding.');return false;}
-   const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,stampNewItems(currentRef.current,next,floorRef.current))});currentRef.current=valid;setProject(valid);
+   const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,withEmbeddedProfiles(stampNewItems(currentRef.current,next,floorRef.current)))});currentRef.current=valid;setProject(valid);
    markDirty();if(message)setNotice(message);return true;
  },[blocked]);
  const undo=()=>{if(blocked)return;const p=history.current.undo();if(p){setProject(p);currentRef.current=p;markDirty();}};

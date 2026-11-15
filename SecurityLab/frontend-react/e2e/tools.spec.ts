@@ -73,7 +73,14 @@ test('teaching tools: lesson progress, fault exercise, quote, audit, instructor 
  await expect(page.getByLabel('Scenario',{exact:true})).toHaveValue('custom-e2e-kiosk');
  // a bad pack is rejected and does not register anything
  await page.locator('input[type=file]').nth(2).setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"format":"nope"}')});
- await expect(page.getByText(/Pack rejected/)).toBeVisible();
+ await expect(page.getByText(/^Pack rejected/)).toBeVisible();
+ // profile packs: a valid pack loads and its device appears in the equipment library; an unattested pack is refused
+ const prof={format:'securitylab.profile-pack',version:1,attestation:'educational-simulation-not-real-firmware',profiles:[{id:'pack-e2e-camera',kind:'camera',name:'E2E Pack Camera',manufacturer:'Example Maker',model:'E2E-1',powerW:5,ethernetPorts:1,poePorts:0,signal:'ip',defaultFov:80,defaultRange:150,protocols:['IPv4'],manufacturerSpec:{edition:'1',variant:'E2E-1',documentedAt:'2026-01-01',status:'simulation',sourceUrl:'https://www.example.com/datasheet',sourceTitle:'Datasheet',sourcedFacts:['fact'],simulatedFeatures:[],limitations:['training only']}}]};
+ await page.locator('input[type=file]').nth(3).setInputFiles({name:'profiles.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(prof))});
+ await expect(page.getByText(/Loaded 1 device profile/)).toBeVisible();
+ await expect(page.locator('.catalog-scroll')).toContainText('E2E Pack Camera');
+ await page.locator('input[type=file]').nth(3).setInputFiles({name:'bad-profiles.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...prof,attestation:'real'}))});
+ await expect(page.getByText(/Profile pack rejected: .*attestation/)).toBeVisible();
  expect(errs).toEqual([]);
 });
 
