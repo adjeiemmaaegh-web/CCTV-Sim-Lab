@@ -42,3 +42,20 @@ test('empty project guidance does not misrepresent success',async({page})=>{
  await expect(guide).toContainText('No equipment installed');
  await expect(guide).toContainText('not a physical test');
 });
+
+
+test('diagnostics dock expands only when requested and restores canvas space',async({page})=>{
+ await page.setViewportSize({width:1024,height:768});
+ await page.goto('/');
+ await dock(page,'Diagnostics');
+ const canvas=page.locator('.canvas-body');
+ const normal=(await canvas.boundingBox())!.height;
+ expect(normal).toBeGreaterThan(300);
+ const expand=page.getByRole('button',{name:'Expand diagnostics'});
+ await expand.click();
+ await expect(page.getByRole('button',{name:'Restore canvas space'})).toHaveAttribute('aria-pressed','true');
+ const deep=(await canvas.boundingBox())!.height;
+ expect(deep).toBeLessThan(normal-40);
+ await page.getByRole('button',{name:'Restore canvas space'}).click();
+ expect((await canvas.boundingBox())!.height).toBeGreaterThan(300);
+});
