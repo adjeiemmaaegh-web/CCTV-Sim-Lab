@@ -4,6 +4,7 @@ import {coveragePolygon} from '../../../src/engine/geometry.js';
 import {adjustDevice} from '../../../src/engine/environment.js';
 import {floorView,hasFloors} from '../../../src/tools/floors.js';
 import {FloorBar} from './FloorBar.js';
+import {WorkflowStrip,type WorkflowStep} from './WorkflowStrip.js';
 import {Icon} from './icons.js';
 import {signalOf,mediumOf} from '../../../src/engine/cctv.js';
 import {PLAN_WIDTH,PLAN_HEIGHT,snapped,bounded,distance,distanceMeters,scaleOf,clamp,transformRoomWalls} from '../../../src/property/editor.js';
@@ -25,7 +26,7 @@ const DEFAULT_LAYERS:Record<LayerName,boolean>={rooms:true,walls:true,targets:tr
 const pointEqual=(a:Point,b:Point)=>Math.abs(a.x-b.x)<1&&Math.abs(a.y-b.y)<1;
 const kinds:PropertyTemplate[]=['residential','apartment','retail','office','warehouse'];
 
-export function Canvas({w:wb,focusMode,onToggleFocus}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void}){
+export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void;onWorkflow:(step:WorkflowStep)=>void}){
  const viewProject=useMemo(()=>floorView(wb.project,wb.floor),[wb.project,wb.floor]);
  const w:Workbench=viewProject===wb.project?wb:{...wb,project:viewProject};
  const svg=useRef<SVGSVGElement>(null),gesture=useRef<Gesture|null>(null);
@@ -211,6 +212,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus}:{w:Workbench;focusMode:boo
    <span className="toolbar-spacer"/>
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
+  <WorkflowStrip w={wb} onChoose={onWorkflow}/>
   {showOpts&&<div className="canvas-options">
    {!hasFloors(wb.project)&&<div className="editor-mode-row"><span>Floors</span><FloorBar w={wb}/></div>}
    <div className="editor-mode-row annotator"><span>Site markers</span>{(['gate','entrance','label'] as Mode[]).map(modeButton)}<span className="editor-muted">References, not alarm devices</span></div>

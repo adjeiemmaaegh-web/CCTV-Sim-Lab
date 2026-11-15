@@ -227,3 +227,78 @@ button{color:var(--text)}
  .shell .inspector{max-height:480px}
  .shell-body.canvas-focus-mode .canvas-panel{min-height:max(530px,calc(100dvh - 240px))}
 }
+
+
+/* Stage 20 installation: compact port-aware connection inspector. */
+.connection-guide{border:1px solid var(--line2);border-radius:9px;padding:12px;background:#0b2235;margin:8px 0;display:flex;flex-direction:column;gap:9px}
+.connection-guide .section-heading{margin:0;font-size:11px;letter-spacing:.08em;color:#73cbbd}
+.connection-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;line-height:1.5}
+.connection-route strong{overflow-wrap:anywhere}
+.connection-route span{color:var(--accent);font-size:20px}
+.connection-ok,.connection-warning{padding:8px;border:1px solid;border-radius:7px;margin:0;font-size:12.5px;line-height:1.5}
+.connection-ok{background:#10382f;border-color:#216c58;color:#9af0d6}
+.connection-warning{background:#3b2a25;border-color:#705141;color:#ffd0a5}
+.connection-tip{background:#142e47;border-radius:7px;padding:9px;margin:0;font-size:13px;line-height:1.5}
+.connection-guide .fields{gap:8px;min-width:0}
+.connection-guide .prop-field select{width:100%;min-width:0}
+.connection-guide .editor-muted{line-height:1.6;margin:2px 0;font-size:12px}
+
+
+/* Stage 3: compact, optional task discovery. No locked workflow or fabricated acceptance status. */
+.workflow-strip{display:flex;align-items:center;gap:8px;min-height:42px;flex:none;padding:5px 10px;background:#0c2032;border-bottom:1px solid var(--line);overflow:hidden}
+.workflow-caption{font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:700;white-space:nowrap;flex:none}
+.workflow-caption strong{color:#c6dedf;margin-left:3px}
+.workflow-actions{display:flex;align-items:center;gap:4px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin}
+.workflow-step{display:flex;align-items:center;gap:5px;white-space:nowrap;border:1px solid transparent;border-radius:7px;background:transparent;color:#adc2d2;padding:5px 8px;min-height:30px;font-size:12px}
+.workflow-step:hover:not(:disabled),.workflow-step:focus-visible{background:#183650;border-color:#3a617c;color:white}
+.workflow-step.next{color:#b0fff0;background:#10392f;border-color:#167f6a}
+.workflow-step.complete{color:#9be0cf}
+.workflow-mark{border:1px solid currentColor;border-radius:50%;width:19px;height:19px;font-size:11px;display:grid;place-items:center}
+.workflow-disclaimer{font-size:10px;color:var(--muted);white-space:nowrap;flex:none}
+.device-quick-actions{display:flex;gap:7px;flex-wrap:wrap;padding:5px 12px 9px}
+.device-quick-actions button{font-size:12px;line-height:1.4;min-height:32px;padding:5px 9px;background:#12324c;border:1px solid #315a76;border-radius:7px;text-align:left}
+.device-quick-actions button:hover:not(:disabled){border-color:var(--accent);color:#fff}
+.device-quick-actions button:disabled{opacity:.45}
+@media(max-width:1100px){.workflow-disclaimer{display:none}}
+@media(max-width:600px){.workflow-strip{padding:4px 7px;gap:4px}.workflow-caption{font-size:9px}.workflow-step{padding:4px 6px;font-size:11px}.workflow-mark{width:17px;height:17px}}
+
+
+/* Stage 4: explainable virtual diagnostics, optimized for a scrollable investigation dock. */
+.guided-diagnostics{display:flex;flex-direction:column;gap:10px}
+.guided-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.guided-head>div{display:flex;flex-direction:column;gap:3px}
+.guided-head strong{font-size:14px;color:#e8f4fa}
+.guided-head small{color:var(--muted);font-size:12px}
+.guided-head label{display:flex;align-items:center;gap:7px;font-size:12px}
+.guided-head select{min-width:135px;border:1px solid var(--line2);background:#0a2035;color:var(--text);padding:5px 8px;border-radius:6px}
+.guided-caveat{font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+.guided-findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:9px;padding-bottom:10px}
+.guided-finding{border:1px solid var(--line2);background:#10263c;border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.guided-finding.critical{border-left:3px solid #e89d62}
+.guided-finding.warning{border-left:3px solid #dbc073}
+.guided-finding.info{border-left:3px solid #75b7d5}
+.guided-finding-title{display:flex;gap:8px;align-items:center;min-width:0;font-size:12px}
+.guided-finding-title strong{overflow-wrap:anywhere}
+.guided-severity{font-size:10px;letter-spacing:.07em;border:1px solid #675a4f;padding:2px 5px;border-radius:4px;color:#ffd7b3;flex:none}
+.guided-finding p{margin:0;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.guided-finding p b{color:#d9e5f1}
+.guided-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
+.guided-actions button{font-size:12px;padding:6px 9px;min-height:32px;background:#143c49;border:1px solid #2c7582;border-radius:7px}
+.guided-actions button:hover:not(:disabled){border-color:var(--accent);color:white}
+.raw-diagnostics{padding:8px 2px 12px;border-top:1px solid var(--line);font-size:12px}
+.raw-diagnostics summary{cursor:pointer;color:var(--muted);padding:5px 0}
+.raw-diagnostics p{margin:7px 0;font-size:12px}
+@media(max-width:600px){.guided-findings{grid-template-columns:1fr}.guided-head{align-items:flex-start}}
+
+/* Diagnosing faults must not collapse the plan into a thumbnail on 1024px laptops. */
+@media(min-width:901px){
+ .shell .console.diagnostics-expanded{height:min(29vh,230px);max-height:32vh}
+}
+@media(min-width:1200px) and (min-height:850px){
+ .shell .console.diagnostics-expanded{height:min(38vh,340px)}
+}
+
+/* Deliberate opt-in to a deeper investigation view; restoring gives drawing space back. */
+@media(min-width:901px){
+ .shell .console.diagnostics-expanded.diagnostics-full{height:min(52vh,520px);max-height:60vh}
+}
