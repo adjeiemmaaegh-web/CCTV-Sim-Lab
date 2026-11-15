@@ -3,15 +3,18 @@ on:
   push:
     branches: [stage18-ux-hardening]
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit-lock:
+    if: github.event.head_commit.message == 'security: run audited dependency upgrade'
     runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: SecurityLab/frontend-react
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -32,3 +35,21 @@ jobs:
             SecurityLab/frontend-react/package.json
             SecurityLab/frontend-react/package-lock.json
           if-no-files-found: error
+
+      # GITHUB_TOKEN is scoped to this final step only; npm installation and tests
+      # run without repository write credentials. No secret is committed or printed.
+      - name: Commit validated dependency manifests to this branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for name in package.json package-lock.json; do
+            path="SecurityLab/frontend-react/$name"
+            if git diff --quiet -- "$name"; then continue; fi
+            sha="$(gh api "repos/${GITHUB_REPOSITORY}/contents/${path}?ref=stage18-ux-hardening" --jq .sha)"
+            body="$(base64 -w0 "$name")"
+            gh api -X PUT "repos/${GITHUB_REPOSITORY}/contents/${path}" \
+              -f message="security: update audited test dependencies" \
+              -f branch="stage18-ux-hardening" \
+              -f sha="$sha" -f content="$body" > /dev/null
+          done
