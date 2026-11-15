@@ -18,7 +18,7 @@ export function SecurityLab(){
  }),[]);
  useEffect(()=>{const check=(e:BeforeUnloadEvent)=>{
   const current=currentWorkbench.current;
-  if(current.saveState!=='saved'){e.preventDefault();e.returnValue='';}
+  if(current.hasUnsavedWork()){e.preventDefault();e.returnValue='';}
  };window.addEventListener('beforeunload',check);return()=>window.removeEventListener('beforeunload',check);},[]);
  useEffect(()=>{const onKey=(e:KeyboardEvent)=>{
   const w=currentWorkbench.current;

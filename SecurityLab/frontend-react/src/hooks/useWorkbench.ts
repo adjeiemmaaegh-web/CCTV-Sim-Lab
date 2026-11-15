@@ -32,6 +32,9 @@ export function useWorkbench(){
  const fileSession=useRef(new ProjectFileSession());
  const savePromise=useRef<Promise<boolean>|null>(null);
  const savedSignature=useRef<string|null>(null);
+ // Untouched new/starter projects hold nothing worth a leave-page or discard warning.
+ const [pristineInit]=useState(()=>JSON.stringify(project));
+ const pristine=useRef<string|null>(pristineInit);
  const currentRef=useRef(project);currentRef.current=project;
  const [saveState,setSaveState]=useState<SaveState>('unsaved');
  const [revision,setRevision]=useState(0);
@@ -57,7 +60,11 @@ export function useWorkbench(){
  const scenario=scenarioFor(project.scenarioId)!;
  const isAllowedProfile=(profileId:string)=>allowedInScenario(project,profile(profileId).kind);
  const canUndo=history.current.canUndo;const canRedo=history.current.canRedo;
- const dirty=()=>saveState!=='saved'||savedSignature.current!==JSON.stringify(currentRef.current);
+ const dirty=()=>{
+  const now=JSON.stringify(currentRef.current);
+  if(savedSignature.current===null&&pristine.current===now)return false;
+  return saveState!=='saved'||savedSignature.current!==now;
+ };
  const confirmDiscard=(action:string)=>{
   if(savePromise.current){setNotice('A project-file write is in progress. Finish saving before changing projects.');return false;}
   if(!dirty())return true;
@@ -117,7 +124,7 @@ export function useWorkbench(){
  const adopt=(next:Project,isSaved:boolean)=>{
   const clean=history.current.reset(validateProject(next));currentRef.current=clean;setProject(clean);
   setRevision(fileSession.current.revision);setFileName(fileSession.current.name);
-  savedSignature.current=isSaved?JSON.stringify(clean):null;
+  savedSignature.current=isSaved?JSON.stringify(clean):null;pristine.current=isSaved?null:JSON.stringify(clean);
   setSaveState(isSaved?'saved':'unsaved');setSaveError('');setAutosave(false);
   setSelected(null);setCableStart(null);setPlacing(null);setMode('select');setListOpen(false);setGeneration(x=>x+1);
  };
@@ -474,7 +481,7 @@ export function useWorkbench(){
  };
  const updateRoom=(id:string,fields:Partial<Room>)=>{const p=currentRef.current,old=p.rooms.find(r=>r.id===id);if(!old)return;const changed=normalizeRoom({...old,...fields,id});commit({...p,rooms:p.rooms.map(r=>r.id===id?changed:r),walls:transformRoomWalls(p.walls,old,changed)});};
  const updateWall=(id:string,fields:Partial<Wall>)=>{const p=currentRef.current,old=p.walls.find(w=>w.id===id),removeAccess=old?.kind==='door'&&fields.kind!==undefined&&fields.kind!=='door';const states={...p.accessDoorStates};if(removeAccess)delete states[id];commit({...p,walls:p.walls.map(w=>w.id===id?{...w,...fields,id,roomId:undefined}:w),accessDoorStates:states,devices:removeAccess?p.devices.map(d=>d.accessController?.doorWallId===id?{...d,accessController:{...d.accessController,doorWallId:''}}:d):p.devices});};
- return {project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
+ return {hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
   cableStart,setCableStart,tab,setTab,listOpen,setListOpen,backups,openList,restoreBackup,canUndo,canRedo,generation,
   undo,redo,flush,saveCurrent,openNative,openFile,newBlank,switchScenario,update,removeSelection,install,selectOrCable,doMotion,addWall,addRoom,
   runFault,runAssessment,downloadAssessment,advanceTime,alarmCommand,alarmStimulus,alarmTime,alarmFault,loadAlarmRig,accessPresent,accessExit,accessDoor,accessAcknowledge,accessTime,accessFault,addIdentity,updateIdentity,removeIdentity,loadAccessRig,setPowerSettings,powerTime,powerFault,loadPowerRig,workedExample,jsonExport,jsonImport,imageImport,retrySave,fork,reload,commit,updateRoom,updateWall,

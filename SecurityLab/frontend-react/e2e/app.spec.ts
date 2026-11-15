@@ -82,3 +82,25 @@ test('canvas stays usable on a 1280x720 laptop viewport',async({page})=>{
  const box=await page.locator('svg[role=application]').boundingBox();
  expect(box!.height).toBeGreaterThanOrEqual(250);
 });
+
+test('web manifest is valid and every icon is served and precached',async({page,request})=>{
+ await page.goto('/');
+ const m=await (await request.get('/manifest.webmanifest')).json();
+ expect(m.display).toBe('standalone');
+ const sizes=m.icons.map((i:any)=>i.sizes);
+ expect(sizes).toEqual(expect.arrayContaining(['192x192','512x512']));
+ const sw=await (await request.get('/service-worker.js')).text();
+ for(const i of m.icons){
+  const r=await request.get(i.src);expect(r.status()).toBe(200);
+  expect(sw).toContain(i.src);
+ }
+});
+
+test('service worker never self-activates (updates need the user to confirm)',async({request})=>{
+ const sw=await (await request.get('/service-worker.js')).text();
+ // skipWaiting is permitted only inside the ACTIVATE_UPDATE message handler
+ const idx=sw.indexOf('skipWaiting');
+ expect(idx).toBeGreaterThan(-1);
+ expect(sw.slice(0,idx)).toContain("ACTIVATE_UPDATE");
+ expect(sw.match(/skipWaiting/g)!.length).toBe(1);
+});
