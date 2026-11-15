@@ -6,3 +6,5 @@ dist-react/
 .env
 .env.*
 !.env.example
+frontend-react/test-results/
+frontend-react/playwright-report/

@@ -266,3 +266,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 .system-card button{align-self:flex-start;margin-top:auto}
 @media(max-width:1050px){.systems-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.systems-grid{grid-template-columns:1fr}}
+
+/* Stage 16: on short desktop viewports (e.g. 1280x720) the canvas was squeezed to ~65px.
+   Guarantee a usable editing area and let the workstation scroll vertically instead. */
+@media(min-width:871px){.workstation{overflow-y:auto}.main-grid{min-height:480px;flex:1 0 480px}.canvas-body{min-height:300px}}
