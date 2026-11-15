@@ -261,3 +261,31 @@ button{color:var(--text)}
 .device-quick-actions button:disabled{opacity:.45}
 @media(max-width:1100px){.workflow-disclaimer{display:none}}
 @media(max-width:600px){.workflow-strip{padding:4px 7px;gap:4px}.workflow-caption{font-size:9px}.workflow-step{padding:4px 6px;font-size:11px}.workflow-mark{width:17px;height:17px}}
+
+
+/* Stage 4: explainable virtual diagnostics, optimized for a scrollable investigation dock. */
+.guided-diagnostics{display:flex;flex-direction:column;gap:10px}
+.guided-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.guided-head>div{display:flex;flex-direction:column;gap:3px}
+.guided-head strong{font-size:14px;color:#e8f4fa}
+.guided-head small{color:var(--muted);font-size:12px}
+.guided-head label{display:flex;align-items:center;gap:7px;font-size:12px}
+.guided-head select{min-width:135px;border:1px solid var(--line2);background:#0a2035;color:var(--text);padding:5px 8px;border-radius:6px}
+.guided-caveat{font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+.guided-findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:9px;padding-bottom:10px}
+.guided-finding{border:1px solid var(--line2);background:#10263c;border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.guided-finding.critical{border-left:3px solid #e89d62}
+.guided-finding.warning{border-left:3px solid #dbc073}
+.guided-finding.info{border-left:3px solid #75b7d5}
+.guided-finding-title{display:flex;gap:8px;align-items:center;min-width:0;font-size:12px}
+.guided-finding-title strong{overflow-wrap:anywhere}
+.guided-severity{font-size:10px;letter-spacing:.07em;border:1px solid #675a4f;padding:2px 5px;border-radius:4px;color:#ffd7b3;flex:none}
+.guided-finding p{margin:0;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.guided-finding p b{color:#d9e5f1}
+.guided-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
+.guided-actions button{font-size:12px;padding:6px 9px;min-height:32px;background:#143c49;border:1px solid #2c7582;border-radius:7px}
+.guided-actions button:hover:not(:disabled){border-color:var(--accent);color:white}
+.raw-diagnostics{padding:8px 2px 12px;border-top:1px solid var(--line);font-size:12px}
+.raw-diagnostics summary{cursor:pointer;color:var(--muted);padding:5px 0}
+.raw-diagnostics p{margin:7px 0;font-size:12px}
+@media(max-width:600px){.guided-findings{grid-template-columns:1fr}.guided-head{align-items:flex-start}}
