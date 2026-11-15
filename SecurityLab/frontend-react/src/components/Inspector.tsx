@@ -59,6 +59,10 @@ export function Inspector({w}:{w:Workbench}){
  <div className="inspector-scroll">
  {device&&dProfile?<>
   <div className="device-summary"><span className="big-icon"><Icon name={kindIcon(dProfile.kind)} size={34}/></span><div><strong>{dProfile.name}</strong><small>{device.name}</small></div><span className={health?.powered?'badge good':'badge warn'}><i className="dot"/>{health?.powered?(health.networkOk||!dProfile.kind.match(/camera|nvr|dvr/)?'Online':'Powered'):'Offline'}</span></div>
+  <div className="device-quick-actions" role="group" aria-label="Selected device actions">
+   <button disabled={w.blocked||w.project.devices.length<2} onClick={()=>{w.setPlacing(null);w.setCableStart(device.id);w.setMode('cable');w.setNotice('Connect '+device.name+': select its second endpoint on the canvas.');}}>Connect this device</button>
+   <button onClick={()=>w.setTab('diagnostics')}>Check simulation faults</button>
+  </div>
   <div className="prop-tabs" role="tablist" aria-label="Device property groups">{([["general","General"],["coverage","Coverage"],["network","Network"]] as const).map(([id,lbl])=><button key={id} role="tab" aria-selected={tab===id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{lbl}</button>)}</div>
   {tab==="general"&&<>
   <div className="section-heading">IDENTITY & POSITION</div><div className="fields"><DeviceField w={w} device={device} label="Name" keyName="name"/>
