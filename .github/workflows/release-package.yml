@@ -3,6 +3,7 @@ name: Release package (artifact only)
 # deploy, or upload anywhere else; publishing is an explicit owner decision.
 on:
   push:
+    branches: [main]
     tags: ['v*']
   workflow_dispatch:
 permissions:
