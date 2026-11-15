@@ -1,3 +1,4 @@
+import {registerPackScenario} from '../tools/scenarioPack.js';
 import type {Project} from '../domain/types.js';
 import {PROFILES} from '../domain/catalog.js';
 import {SCENARIOS} from '../scenarios/index.js';
@@ -20,6 +21,7 @@ export function validateProject(input:unknown):Project{
  input=migrateProject(input);
  if(!input||typeof input!=='object')throw new Error('Expected a SecurityLab project JSON object');
  const p=input as Record<string,unknown>;
+ if(p.customScenario!==undefined){try{registerPackScenario(p.customScenario);}catch(e){throw new Error(`Invalid embedded custom scenario: ${(e as Error).message}`);}}
  if(p.schemaVersion!==2||!idTxt(p.id)||!idTxt(p.title)||!idTxt(p.scenarioId)||!SCENARIOS.some(s=>s.id===p.scenarioId))throw new Error('Unsupported project format, scenario or schema');
  if(!Array.isArray(p.devices)||!Array.isArray(p.cables)||!Array.isArray(p.rooms)||!Array.isArray(p.walls)||!Array.isArray(p.events)||!Array.isArray(p.targets))throw new Error('Project has missing geometry/equipment fields');
  if(p.devices.length>120||p.cables.length>240||p.walls.length>400||p.rooms.length>200||p.events.length>250||p.targets.length>50)throw new Error('Project exceeds safety limits');
@@ -251,6 +253,12 @@ export function validateProject(input:unknown):Project{
     for(const g of v.gates)if(!g||!idTxt(g.id)||!txt(g.title)||!txt(g.description)||typeof g.met!=='boolean')throw new Error('Invalid assessment pass gate');
    }
   }
+ }
+ if(p.audit!==undefined){
+  if(!Array.isArray(p.audit)||p.audit.length>400||p.audit.some((a:any)=>!a||typeof a.summary!=='string'||a.summary.length>400||typeof a.at!=='string'||!Number.isFinite(Date.parse(a.at))||!Number.isInteger(a.devices)||!Number.isInteger(a.cables)))throw new Error('Invalid audit trail');
+ }
+ if(p.diagnosis!==undefined){const g=p.diagnosis as any;
+  if(!g||!Number.isInteger(g.seed)||!Array.isArray(g.applied)||g.applied.length>4||g.applied.some((a:any)=>!a||typeof a.kind!=='string'||typeof a.message!=='string')||typeof g.revealed!=='boolean'||!Array.isArray(g.guesses)||g.guesses.some((x:unknown)=>typeof x!=='string'))throw new Error('Invalid fault exercise data');
  }
  if(p.environment!==undefined){const e=p.environment as any;
   if(!e||!['clear','rain','fog','dust'].includes(e.weather)||!finite(e.ambientC)||e.ambientC<-40||e.ambientC>70||typeof e.glare!=='boolean')throw new Error('Invalid environment settings');

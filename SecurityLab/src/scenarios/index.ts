@@ -1,3 +1,4 @@
+import {sourceOf} from '../tools/scenarioPack.js';
 import type {Cable,Device,Project,ScenarioChallenge,ScenarioState,Wall} from '../domain/types.js';
 import {createDevice} from '../domain/catalog.js';
 import {plannedPowerCable} from '../engine/power.js';
@@ -81,7 +82,7 @@ export function newProject(scenarioId='home4'):Project {
  const s=scenarioFor(scenarioId);if(!s)throw new Error('Unknown scenario');const timestamp=now();
  const base:Project={schemaVersion:2,id:crypto.randomUUID(),title:s.title.replace(/^\d+ · /,''),scenarioId:s.id,createdAt:timestamp,updatedAt:timestamp,
   rooms:structuredClone(s.rooms),walls:structuredClone(s.walls),targets:structuredClone(s.targets),devices:[],cables:[],events:[],assessments:[],night:false,mainsOn:true,assisted:false,
-  scenarioState:stage()};
+  scenarioState:stage(),...(s.id.startsWith('custom-')&&sourceOf(s.id)?{customScenario:structuredClone(sourceOf(s.id)) as unknown as Record<string,unknown>}:{})};
  if(s.baseline==='faulty')return {...cameraPreset(base,true),assisted:false};
  if(s.baseline==='starter')return {...starter(base),assisted:false};
  return base;

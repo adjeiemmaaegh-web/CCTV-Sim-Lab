@@ -286,3 +286,6 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 .trace-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
 .camera-strip{width:100%;max-width:760px;border:1px solid #23465d;border-radius:6px}
 .target-list{margin:0;padding-left:18px}
+.lesson-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.lesson-steps .current-step{color:#51d3d0}.lesson-detail{margin:4px 0 0 4px;padding:6px 10px;border-left:3px solid #51d3d0;color:#d9e8f2}
+.fault-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px}.fault-picks label{font-size:12px}
+.audit-list{margin:0;padding-left:18px;max-height:150px;overflow:auto;font-size:12px}

@@ -1,3 +1,4 @@
+import {recordAudit} from '../../../src/tools/audit.js';
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import type {Device,Project,Wall,Room,Point,SiteElement,FloorplanSettings,AccessMethod,AccessIdentity,AssessmentRecord,FieldTrial,FieldIssue} from '../../../src/domain/types.js';
 import {bounded,distance,scaleOf,normalizeRoom,shiftRoom,resizeRoom,roomEdges,transformRoomWalls,shiftWall,wallEndpoint,replaceWallWithOpening,propertyTemplate,DEFAULT_FLOORPLAN,sanitizeFloorplan} from '../../../src/property/editor.js';
@@ -75,7 +76,7 @@ export function useWorkbench(){
  const markDirty=()=>{setSaveState('unsaved');setSaveError('');setGeneration(x=>x+1);};
  const commit=useCallback((next:Project,message?:string)=>{
    if(blocked){setNotice('Editing paused after a file-save error. Use Save As or Export Backup before proceeding.');return false;}
-   const valid=history.current.dispatch({type:'replace',project:next});currentRef.current=valid;setProject(valid);
+   const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,next)});currentRef.current=valid;setProject(valid);
    markDirty();if(message)setNotice(message);return true;
  },[blocked]);
  const undo=()=>{if(blocked)return;const p=history.current.undo();if(p){setProject(p);currentRef.current=p;markDirty();}};
@@ -446,7 +447,7 @@ export function useWorkbench(){
  };
  const workedExample=()=>{
   if(!confirmDiscard('Loading the worked example'))return;
-  const example=exampleProject(currentRef.current);
+  const example=recordAudit(currentRef.current,exampleProject(currentRef.current));
   fileSession.current.detach();adopt(example,false);
   setNotice('Worked example opened as an independent unsaved project. It cannot overwrite your previously opened file. Assisted examples cannot earn a competency pass.');
  };

@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import {CliPanel,TracePanel} from './tools/NetworkTools.js';
+import {LessonsPanel,FaultGenPanel,InstructorPanel,AuditPanel,QuotePanel} from './tools/TeachingTools.js';
 import {CameraViewPanel,LensPanel,CablePanel,StoragePanel,EnvironmentPanel} from './tools/EngineeringTools.js';
 
 /** Stage 17 tool registry: add new tools here and they appear as sub-tabs. */
@@ -12,6 +13,11 @@ export const TOOLS:{id:string;label:string;render:(w:Workbench)=>React.ReactNode
  {id:'cable',label:'Cabling',render:w=><CablePanel w={w}/>},
  {id:'storage',label:'Storage',render:w=><StoragePanel w={w}/>},
  {id:'env',label:'Environment',render:w=><EnvironmentPanel w={w}/>},
+ {id:'lessons',label:'Lessons',render:w=><LessonsPanel w={w}/>},
+ {id:'faults',label:'Fault exercise',render:w=><FaultGenPanel w={w}/>},
+ {id:'quote',label:'Quotation',render:w=><QuotePanel w={w}/>},
+ {id:'audit',label:'Audit trail',render:w=><AuditPanel w={w}/>},
+ {id:'instructor',label:'Instructor',render:w=><InstructorPanel w={w}/>},
 ];
 export function ToolsConsole({w}:{w:Workbench}){
  const [tool,setTool]=useState(TOOLS[0].id);

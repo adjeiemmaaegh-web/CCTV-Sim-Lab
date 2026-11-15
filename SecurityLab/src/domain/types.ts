@@ -116,6 +116,8 @@ export type FieldTrialTask='property-editor'|'cctv-installation'|'network-troubl
 export type FieldTrial={id:string;at:string;role:FieldRole;platform:string;browser:string;deviceClass:'low-spec'|'standard'|'other';ramGb:number;offline:boolean;scenarioId:string;task:FieldTrialTask;outcome:FieldOutcome;durationMinutes:number;notes:string};
 export type FieldIssue={id:string;at:string;severity:'critical'|'major'|'minor';status:'open'|'resolved'|'deferred';area:FieldTrialTask;summary:string;steps:string;expected:string;observed:string;trialId?:string};
 export type FieldReview={version:1;trials:FieldTrial[];issues:FieldIssue[]};
+export type Diagnosis={seed:number;count:number;applied:{kind:string;message:string}[];revealed:boolean;guesses:string[]};
+export type AuditEntry={at:string;summary:string;devices:number;cables:number};
 export type Weather='clear'|'rain'|'fog'|'dust';
 export type Environment={weather:Weather;ambientC:number;glare:boolean};
 export type Project = {
@@ -130,7 +132,7 @@ export type Project = {
   powerSettings?:PowerSettings;
   scenarioState?:ScenarioState;
   fieldReview?:FieldReview; // optional local project evidence, no personal identifiers
-  environment?:Environment; // Stage 17: simplified training weather/temperature effects
+  environment?:Environment;diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>; // Stage 17: simplified training weather/temperature effects
 };
 export type DeviceStatus = {id:string; powered:boolean; connected:boolean; networkOk:boolean; recordingReady:boolean; recorderId?:string; faults:string[]; poeSourceId?:string; channel?:number; signal?:SignalType; streamMbps?:number; scheduleActive?:boolean};
 export type CableStatus = {id:string; up:boolean; reason:string};
