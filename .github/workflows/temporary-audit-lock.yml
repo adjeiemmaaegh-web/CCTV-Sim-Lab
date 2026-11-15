@@ -1,0 +1,30 @@
+name: Temporary dependency-lock repair
+on:
+  push:
+    branches: [stage18-ux-hardening]
+permissions:
+  contents: read
+jobs:
+  audit-lock:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: SecurityLab/frontend-react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: SecurityLab/frontend-react/package-lock.json
+      - run: npm ci
+      - name: Repair lockfile within allowed semver ranges
+        run: npm audit fix --package-lock-only --ignore-scripts
+      - name: Verify every audited dependency meets moderate threshold
+        run: npm audit --audit-level=moderate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audited-dependency-lock
+          path: SecurityLab/frontend-react/package-lock.json
+          if-no-files-found: error
