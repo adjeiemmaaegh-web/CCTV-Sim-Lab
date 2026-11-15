@@ -37,7 +37,7 @@ export function SecurityLab(){
   if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();if(e.shiftKey)w.redo();else w.undo();}
   if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();w.redo();}
   if(e.key==='Delete'&&!w.blocked)w.removeSelection();
-  if(e.key==='Escape'){w.setSelected(null);w.setPlacing(null);w.setMode('select');}
+  if(e.key==='Escape'){w.setSelected(null);w.setPlacing(null);w.setCableStart(null);w.setMode('select');}
   if(!e.ctrlKey&&!e.metaKey&&!e.altKey&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)&&w.selected&&!w.blocked){
    e.preventDefault();const step=e.shiftKey?10:1;w.nudgeSelected(e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0,e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0);
   }
