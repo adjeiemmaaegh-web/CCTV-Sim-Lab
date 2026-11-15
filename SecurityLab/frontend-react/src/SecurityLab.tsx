@@ -10,6 +10,7 @@ import {CheckpointDialog} from './components/CheckpointDialog.js';
 import {NavRail,type Panel} from './components/NavRail.js';
 import {SettingsDialog,HelpDialog} from './components/Dialogs.js';
 import {Icon} from './components/icons.js';
+import type {WorkflowStep} from './components/WorkflowStrip.js';
 
 export function SecurityLab(){
  const w=useWorkbench();
@@ -43,9 +44,32 @@ export function SecurityLab(){
   }
  };document.addEventListener('keydown',onKey);return()=>document.removeEventListener('keydown',onKey);},[]);
  const handle=(task:()=>void|Promise<unknown>)=>{try{Promise.resolve(task()).catch(e=>w.setNotice(`Operation failed: ${String(e)}`));}catch(e){w.setNotice(`Operation failed: ${String(e)}`);}};
+
+ const chooseWorkflow=(step:WorkflowStep)=>{
+  if(step==='save'){handle(()=>w.saveCurrent(false));return;}
+  setFocusCanvas(false);
+  if(step==='place'){
+   w.setTab('systems');w.setPlacing(null);w.setMode('select');
+   w.setNotice('Step 1 · Choose equipment from the library and place it on the plan.');return;
+  }
+  if(step==='connect'){
+   if(w.project.devices.length<2){w.setNotice('Step 2 · Place at least two compatible devices before wiring.');return;}
+   w.setPlacing(null);w.setCableStart(null);w.setMode('cable');
+   w.setNotice('Step 2 · Click two compatible devices. Review the resulting cable in Connection setup.');return;
+  }
+  if(step==='configure'){
+   const d=w.project.devices.find(d=>w.project.cables.some(c=>c.a===d.id||c.b===d.id))||w.project.devices[0];
+   w.setPlacing(null);w.setMode('select');
+   if(d){w.setSelected({kind:'device',id:d.id});w.setNotice('Step 3 · Review the device Properties and Network settings.');}
+   else w.setNotice('Step 3 · Place a device first, then select it to configure its modeled behavior.');
+   return;
+  }
+  if(step==='test'){w.setTab('diagnostics');w.setNotice('Step 4 · Inspect live simulated issues; choose an injected training fault only when useful.');}
+ };
+
  return <main className="workstation shell"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w} onRevealPanels={()=>setFocusCanvas(false)}/>
  <div className={`shell-body ${focusCanvas?'canvas-focus-mode':''}`}><NavRail w={w} openPanel={setPanel} onView={w.setView} onRevealPanels={()=>setFocusCanvas(false)}/>
- <div className="main-grid"><Catalog w={w}/><Canvas w={w} focusMode={focusCanvas} onToggleFocus={()=>setFocusCanvas(v=>!v)}/><Inspector w={w}/></div>
+ <div className="main-grid"><Catalog w={w}/><Canvas w={w} focusMode={focusCanvas} onToggleFocus={()=>setFocusCanvas(v=>!v)} onWorkflow={chooseWorkflow}/><Inspector w={w}/></div>
  <Console w={w}/></div>
  <footer className="status-footer"><span className="footer-note"><Icon name="info" size={16}/>SecurityLab &ndash; Educational simulation only. Manufacturer profiles are simulated or based on documented references. Not real device firmware, and no manufacturer certification is implied.</span>
  <span className={`save ${w.saveState}`} title={w.fileName}>Project: {w.saveState==='saved'?`Saved \u00b7 revision ${w.revision}`:w.saveState==='saving'?'Writing file\u2026':w.saveState==='blocked'?'File save blocked':'Unsaved changes'}</span></footer>
