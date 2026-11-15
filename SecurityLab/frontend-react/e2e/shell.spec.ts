@@ -172,3 +172,27 @@ test('canvas-first: phone shows plan before equipment catalog without a 250px to
  expect(m.catalogY).toBeGreaterThan(m.canvasY);
  expect(m.overflow).toBeLessThanOrEqual(1);
 });
+
+
+test('navigation highlights reflect actual dock selection rather than stale rail clicks',async({page})=>{
+ await page.goto('/');
+ const nav=page.getByRole('navigation',{name:'Sections'});
+ const network=nav.getByRole('button',{name:'Network'});
+ const equipment=nav.getByRole('button',{name:'Equipment'});
+ await network.click();
+ await expect(network).toHaveAttribute('aria-current','page');
+ await dock(page,'Tools');
+ await expect(network).not.toHaveAttribute('aria-current','page');
+ await dock(page,'Realtime');
+ await expect(equipment).toHaveAttribute('aria-current','page');
+ await expect(network).not.toHaveAttribute('aria-current','page');
+});
+
+test('empty simulation does not claim a configured network is online',async({page})=>{
+ await page.goto('/');
+ const rt=page.getByRole('region',{name:'Realtime status'});
+ await expect(rt.locator('.stat').filter({hasText:'Network'})).toContainText('Not configured');
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:/IP Bullet/i}).first().click();
+ await page.locator('svg[role=application]').click({position:{x:330,y:180}});
+ await expect(rt.locator('.stat').filter({hasText:'Network'})).not.toContainText('Online');
+});
