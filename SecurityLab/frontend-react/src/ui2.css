@@ -297,3 +297,8 @@ button{color:var(--text)}
 @media(min-width:1200px) and (min-height:850px){
  .shell .console.diagnostics-expanded{height:min(38vh,340px)}
 }
+
+/* Deliberate opt-in to a deeper investigation view; restoring gives drawing space back. */
+@media(min-width:901px){
+ .shell .console.diagnostics-expanded.diagnostics-full{height:min(52vh,520px);max-height:60vh}
+}
