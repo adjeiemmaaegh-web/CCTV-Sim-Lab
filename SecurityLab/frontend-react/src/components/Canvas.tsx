@@ -197,7 +197,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus}:{w:Workbench;focusMode:boo
     <button className={view==='floor'?'active':''} aria-label="Floor Plan" aria-pressed={view==='floor'} onClick={()=>switchView('floor')}><Icon name="floorplan" size={18}/><span>Floor Plan</span></button>
     <button className={view==='topology'?'active':''} aria-label="Network Topology" aria-pressed={view==='topology'} onClick={()=>switchView('topology')}><Icon name="topology" size={18}/><span>Network Topology</span></button>
    </div>
-   <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name="floorplan" size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
+   <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name={focusMode?'restore':'focus'} size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
    <span className="tb-sep"/>
    <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
    <span className="tb-sep"/>
