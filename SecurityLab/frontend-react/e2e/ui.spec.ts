@@ -1,15 +1,17 @@
 import {test,expect,Page} from '@playwright/test';
+import {project,dock,settings} from './helpers.js';
 import AxeBuilder from '@axe-core/playwright';
-const TABS=['Systems','Diagnostics','Network','Events','Recordings','Alarm','Access','Power','Scenario','Assessment','Field-review'];
+const TABS=['Realtime','Diagnostics','Network','Events','Recordings','Alarm','Access','Power','Scenario','Assessment','Field-review','Tools'];
 const watch=(page:Page)=>{const errs:string[]=[];page.on('dialog',d=>{void d.accept();});page.on('pageerror',e=>errs.push(String(e)));page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});return errs;};
 
 test('every console tab renders for every scenario without errors',async({page})=>{
+ test.setTimeout(150_000); // 15 scenarios x 12 tabs; WebKit is several times slower than Chromium
  const errs=watch(page);await page.goto('/');
  const ids=await page.getByLabel('Scenario',{exact:true}).locator('option').evaluateAll(o=>o.map(x=>(x as HTMLOptionElement).value));
  expect(ids.length).toBe(15);
  for(const id of ids){
   await page.getByLabel('Scenario',{exact:true}).selectOption(id);
-  for(const t of TABS){await page.getByRole('button',{name:t,exact:true}).first().click();}
+  for(const t of TABS){await dock(page,t);}
  }
  expect(errs).toEqual([]);
 });
@@ -28,7 +30,7 @@ test('topology view, zoom, fit and placement-mode escape work',async({page})=>{
 
 test('worked example: device selectable by keyboard and nudged with arrow keys',async({page})=>{
  const errs=watch(page);await page.goto('/');
- await page.getByRole('button',{name:/Load Worked Example/i}).click();
+ await project(page,'Load Worked Example');
  const dev=page.locator('svg[role=application] g[data-device]').first();
  const before=await dev.getAttribute('transform');
  await dev.focus();await page.keyboard.press('Enter');
@@ -76,11 +78,12 @@ test('unsaved edits trigger the browser leave-page warning; a clean project does
 });
 
 test('accessibility: every console tab is free of serious/critical axe violations',async({page})=>{
+ test.setTimeout(120_000);
  await page.goto('/');
- await page.getByRole('button',{name:'Load Worked Example'}).click();
+ await project(page,'Load Worked Example');
  const found:string[]=[];
  for(const t of TABS){
-  await page.getByRole('button',{name:t,exact:true}).first().click();
+  await dock(page,t);
   const res=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();
   for(const v of res.violations.filter(v=>['serious','critical'].includes(v.impact||'')))found.push(`${t}: ${v.id} x${v.nodes.length}`);
  }

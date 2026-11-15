@@ -1,4 +1,4 @@
-import React,{useEffect,useRef} from 'react';
+import React,{useEffect,useRef,useState} from 'react';
 import {setupOffline} from './offline.js';
 import {useWorkbench} from './hooks/useWorkbench.js';
 import {TopBar} from './components/TopBar.js';
@@ -7,9 +7,14 @@ import {Canvas} from './components/Canvas.js';
 import {Inspector} from './components/Inspector.js';
 import {Console} from './components/Console.js';
 import {CheckpointDialog} from './components/CheckpointDialog.js';
+import {NavRail,type Panel} from './components/NavRail.js';
+import {SettingsDialog,HelpDialog} from './components/Dialogs.js';
+import {Icon} from './components/icons.js';
 
 export function SecurityLab(){
- const w=useWorkbench(),imageFile=useRef<HTMLInputElement>(null);
+ const w=useWorkbench();
+ const [section,setSection]=useState('equipment');const [panel,setPanel]=useState<Panel>(null);
+ useEffect(()=>{if(!w.notice)return;const id=setTimeout(()=>w.setNotice(''),12000);return()=>clearTimeout(id);},[w.notice]);
  const currentWorkbench=useRef(w);currentWorkbench.current=w;
  useEffect(()=>setupOffline(async()=>{
   const active=currentWorkbench.current;
@@ -37,13 +42,16 @@ export function SecurityLab(){
   }
  };document.addEventListener('keydown',onKey);return()=>document.removeEventListener('keydown',onKey);},[]);
  const handle=(task:()=>void|Promise<unknown>)=>{try{Promise.resolve(task()).catch(e=>w.setNotice(`Operation failed: ${String(e)}`));}catch(e){w.setNotice(`Operation failed: ${String(e)}`);}};
- return <main className="workstation"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w}/><div className="main-grid"><Catalog w={w}/><Canvas w={w}/><Inspector w={w}/></div>
- <Console w={w}/><footer className="status-footer"><span>SECURITYLAB STAGE 15 · INTEGRATED OFFLINE ENGINEERING WORKSTATION</span>
- <span className={`save ${w.saveState}`}>{w.saveState==='saved'?`✓ File saved · revision ${w.revision}`:w.saveState==='saving'?'◌ Writing project file…':w.saveState==='blocked'?'⚠ File save blocked':'◌ Unsaved in-memory changes'}</span>
- <span title={w.fileName}>{w.fileName}</span>
- <div className="undo-controls"><button onClick={w.undo} disabled={!w.canUndo||w.blocked}>↶ Undo</button><button onClick={w.redo} disabled={!w.canRedo||w.blocked}>↷ Redo</button><button onClick={()=>handle(w.workedExample)} disabled={w.blocked}>Load Worked Example</button><button disabled={w.blocked} onClick={()=>imageFile.current?.click()}>Floor-plan image</button><input hidden type="file" ref={imageFile} accept="image/png,image/jpeg,image/webp" onChange={e=>{const file=e.currentTarget.files?.[0];if(file)handle(()=>w.imageImport(file));e.currentTarget.value='';}}/></div><span>NO ACCOUNTS • NO DATABASE</span></footer>
+ return <main className="workstation shell"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w}/>
+ <div className="shell-body"><NavRail w={w} section={section} setSection={setSection} openPanel={setPanel} onView={w.setView}/>
+ <div className="main-grid"><Catalog w={w}/><Canvas w={w}/><Inspector w={w}/></div>
+ <Console w={w}/></div>
+ <footer className="status-footer"><span className="footer-note"><Icon name="info" size={16}/>SecurityLab &ndash; Educational simulation only. Manufacturer profiles are simulated or based on documented references. Not real device firmware, and no manufacturer certification is implied.</span>
+ <span className={`save ${w.saveState}`} title={w.fileName}>Project: {w.saveState==='saved'?`Saved \u00b7 revision ${w.revision}`:w.saveState==='saving'?'Writing file\u2026':w.saveState==='blocked'?'File save blocked':'Unsaved changes'}</span></footer>
  {w.notice&&<div className="toast" role="status">{w.notice}<button aria-label="Dismiss notification" onClick={()=>w.setNotice('')}>×</button></div>}
  {w.saveError&&<div role="alert" className="error-banner"><strong>Local file protection: </strong>{w.saveError}<div><button onClick={w.jsonExport}>Export backup now</button><button onClick={()=>handle(w.retrySave)}>Retry</button><button onClick={()=>handle(()=>w.saveCurrent(true))}>Save As new file</button><button onClick={w.fork}>Fork draft</button><button onClick={()=>handle(w.reload)} disabled={!w.hasWritableHandle}>Reload file</button></div></div>}
  {w.listOpen&&<CheckpointDialog w={w}/>}
+ {panel==='settings'&&<SettingsDialog w={w} onClose={()=>setPanel(null)}/>}
+ {panel==='help'&&<HelpDialog onClose={()=>setPanel(null)}/>}
  </main>;
 }
