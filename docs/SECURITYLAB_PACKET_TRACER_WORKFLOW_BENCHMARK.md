@@ -30,13 +30,17 @@ Cisco documentation references: [Interface Overview](https://tutorials.ptnetacad
 **Reproduced defect:** In canvas-focus mode, clicking Equipment or Network changed the internal tab while catalog/console remained hidden; clicking **Assess Installation** recorded a local result but left the assessment panel invisible. The controls appeared to do nothing.  
 **Correction on Stage 19 branch:** Top-bar assessment and left-rail section commands explicitly restore normal workstation panels before selecting the tab; canvas Focus/Restore control remains available. Regression test checks Equipment, Network and Assessment transitions.
 
+### Cable-workflow clarity
+
+Previously, selecting the Cable tool displayed generic engineering notes even after the first endpoint had been chosen. Stage 19 now supplies a first-device prompt and a second-device prompt, and Escape resets any partly selected connection. A new browser regression asserts these transitions.
+
 ### Workstation layout
 
 A 1600×900 browser screenshot of the prior UX-hardened preview in Focus canvas mode showed a 1472×717 drawing canvas, with visible editing tools, left navigation and project footer. At 1024×768 the earlier post-Stage-18 measurement was 403px of canvas height in normal mode and 575px in focus mode. These are screenshot/browser layout measurements, **not an accessibility or preference study**.
 
 ### Priority queue (not claims of implementation)
 
-1. **P1 — discoverability:** Help text and short contextual guidance for cable-endpoint selection and the difference between *simulated* connectivity, power and recording diagnostics. Validate with learners rather than inventing affordances that hide modeled constraints.
+1. **P1 — discoverability:** The Stage 19 change adds step-specific first/second cable endpoint prompts and Escape cancellation. Further context-sensitive guidance on *simulated* connectivity, power and recording diagnostics still needs real learner review.
 2. **P1 — interaction quality:** Test project creation, undo, navigation, small-screen focus switching and panel discoverability with actual learners. Do not infer human ease-of-use from scripted test execution speeds.
 3. **P2 — inspectability:** A future explicitly scoped UX change could offer cable endpoint/port information as a selectable inspector without pretending the engine already models Packet Tracer-style modular hardware.
 4. **Separate engineering scope decision:** Full packet-by-packet PDU simulation, IOS command coverage, physical rack/module graphics and dynamic protocols are **not** part of this targeted UX fix. They require independent requirements, modeling, tests and agreement on scope.
@@ -48,8 +52,8 @@ A 1600×900 browser screenshot of the prior UX-hardened preview in Focus canvas 
 | Cisco documented UX/workflow comparison | **Complete** (documentation-grounded, not hands-on Cisco A/B testing) |
 | SecurityLab live-preview place/connect/configure/diagnose | **PASS** in remote Chromium |
 | Save, revision, checkpoint and reopen | **PASS** using browser-origin file-handle test double |
-| Reproduced focus-navigation bug | **FIX IMPLEMENTED** on Stage 19 branch; CI must pass before merge |
-| Integrated automated five-step regression | **ADDED** to Stage 19 branch; result is pending until GitHub CI runs |
+| Reproduced focus-navigation bug | **FIX IMPLEMENTED** on Stage 19 branch, with an automated regression; final CI required before merge |
+| Integrated automated five-step regression | **PASS** in Chromium CI on commit `7688405d6e92c4a2cc12e4a1125db4f1145ba782`; final branch CI must also pass |
 | Native Windows 11 real-disk picker/save and PWA cold offline restart | **OPEN — HUMAN / DEVICE REQUIRED** |
 | Physical Android/iPad touch; Firefox/Safari/Edge; NVDA/VoiceOver; reduced-motion/high-contrast; 8 GB Windows performance | **OPEN — HUMAN / DEVICE REQUIRED** |
 | Ghanaian installer/instructor validation of scenarios and formulas; native French wording review | **OPEN — EXPERT REVIEW REQUIRED** |
