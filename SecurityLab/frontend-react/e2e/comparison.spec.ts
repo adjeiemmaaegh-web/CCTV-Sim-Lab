@@ -106,3 +106,21 @@ test('focus canvas cannot silently hide results of a left-rail command or assess
  await expect(page.locator('.dock-more > button')).toContainText('Assessment');
  expect(errors).toEqual([]);
 });
+
+test('cable affordance guides each endpoint and Escape cancels the gesture',async({page})=>{
+ const errors=spy(page);await page.goto('/');
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:'IP Bullet • 2MP'}).first().click();
+ await page.locator('svg[role=application]').click({position:{x:300,y:170}});
+ await page.getByRole('button',{name:/Network Devices/}).click();
+ await page.locator('.catalog-scroll button.equipment').filter({hasText:'4-Port PoE+ Switch'}).first().click();
+ await page.locator('svg[role=application]').click({position:{x:480,y:220}});
+ await page.getByRole('button',{name:'Cable',exact:true}).click();
+ await expect(page.locator('.canvas-hint')).toContainText('click the first device');
+ await page.locator('svg[role=application] g[data-device]').first().click();
+ await expect(page.locator('.canvas-hint')).toContainText('First cable endpoint selected');
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('button',{name:'Select',exact:true})).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('.canvas-hint')).not.toContainText('First cable endpoint selected');
+ await expect(page.locator('svg[role=application] g[data-cable]')).toHaveCount(0);
+ expect(errors).toEqual([]);
+});
