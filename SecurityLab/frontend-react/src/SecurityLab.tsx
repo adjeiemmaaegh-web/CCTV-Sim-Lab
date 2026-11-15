@@ -37,14 +37,14 @@ export function SecurityLab(){
   if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();if(e.shiftKey)w.redo();else w.undo();}
   if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();w.redo();}
   if(e.key==='Delete'&&!w.blocked)w.removeSelection();
-  if(e.key==='Escape'){w.setSelected(null);w.setPlacing(null);w.setMode('select');}
+  if(e.key==='Escape'){w.setSelected(null);w.setPlacing(null);w.setCableStart(null);w.setMode('select');}
   if(!e.ctrlKey&&!e.metaKey&&!e.altKey&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)&&w.selected&&!w.blocked){
    e.preventDefault();const step=e.shiftKey?10:1;w.nudgeSelected(e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0,e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0);
   }
  };document.addEventListener('keydown',onKey);return()=>document.removeEventListener('keydown',onKey);},[]);
  const handle=(task:()=>void|Promise<unknown>)=>{try{Promise.resolve(task()).catch(e=>w.setNotice(`Operation failed: ${String(e)}`));}catch(e){w.setNotice(`Operation failed: ${String(e)}`);}};
- return <main className="workstation shell"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w}/>
- <div className={`shell-body ${focusCanvas?'canvas-focus-mode':''}`}><NavRail w={w} openPanel={setPanel} onView={w.setView}/>
+ return <main className="workstation shell"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w} onRevealPanels={()=>setFocusCanvas(false)}/>
+ <div className={`shell-body ${focusCanvas?'canvas-focus-mode':''}`}><NavRail w={w} openPanel={setPanel} onView={w.setView} onRevealPanels={()=>setFocusCanvas(false)}/>
  <div className="main-grid"><Catalog w={w}/><Canvas w={w} focusMode={focusCanvas} onToggleFocus={()=>setFocusCanvas(v=>!v)}/><Inspector w={w}/></div>
  <Console w={w}/></div>
  <footer className="status-footer"><span className="footer-note"><Icon name="info" size={16}/>SecurityLab &ndash; Educational simulation only. Manufacturer profiles are simulated or based on documented references. Not real device firmware, and no manufacturer certification is implied.</span>
