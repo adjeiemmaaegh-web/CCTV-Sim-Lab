@@ -92,6 +92,12 @@ const measured=(p:Project,r:SimResult,s:Scenario,m:ScenarioObjective['metric'],c
     ctrl.exitIds.some(id=>!!r.access?.devices[id]?.powered)&&
     (!p.scenarioState?.startedAt||Date.parse(e.at)>=Date.parse(p.scenarioState.startedAt));
   }).length;
+  case 'fire-detectors':return all(p,'alarm-sensor').filter(d=>['smoke','heat'].includes(profile(d.profileId).alarmSensorType||'')&&r.alarm?.devices[d.id]?.powered&&r.alarm?.devices[d.id]?.wired&&r.alarm?.devices[d.id]?.faults.length===0).length;
+  case 'fire-callpoint':return all(p,'alarm-sensor').filter(d=>profile(d.profileId).alarmSensorType==='callpoint'&&r.alarm?.devices[d.id]?.powered&&r.alarm?.devices[d.id]?.wired).length;
+  case 'fire-sounder':return all(p,'alarm-output').filter(d=>d.profileId==='alarm-sounder'&&r.alarm?.devices[d.id]?.powered&&r.alarm?.devices[d.id]?.wired).length;
+  case 'fire-24h':{const fire=all(p,'alarm-sensor').filter(d=>['smoke','heat','callpoint'].includes(profile(d.profileId).alarmSensorType||''));
+   return fire.length>0&&fire.every(d=>{const st=r.alarm?.devices[d.id],zone=st?.panelId?r.alarm?.panels[st.panelId]?.zones.find(z=>z.number===st.zone):undefined;return zone?.type==='24h';})?1:0;}
+  case 'fire-alarm':return alarm.some(a=>a.powered&&a.phase==='triggered'&&a.zones.some(z=>z.triggered&&z.type==='24h'))?1:0;
   case 'power-wired':return p.powerSettings?.mode==='wired'?1:0;
   case 'solar-generation':return (r.power?.solarGenerationW||0)>0?1:0;
   case 'battery-ready':return all(p,'power-battery').some(d=>!!r.power?.devices[d.id]?.powered&&!!d.powerConfig&&d.powerConfig.chargeWh>0)?1:0;

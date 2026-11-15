@@ -1,9 +1,12 @@
 import React,{useRef} from 'react';
+import {t,LOCALES} from '../../../src/i18n/index.js';
+import {LanguageSelect,useLocale} from './Speak.js';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import {clockLabel} from '../../../src/engine/cctv.js';
 import {canOpenNativeFile} from '../../../src/persistence/file-projects.js';
 
 export function TopBar({w}:{w:Workbench}){
+ useLocale();
  const openFile=useRef<HTMLInputElement>(null),importFile=useRef<HTMLInputElement>(null);
  const handle=(action:()=>void|Promise<unknown>)=>{
   try{Promise.resolve(action()).catch(e=>w.setNotice(`Operation failed: ${String(e)}`));}
@@ -14,22 +17,23 @@ export function TopBar({w}:{w:Workbench}){
   <span className="mode-pill">OFFLINE • FILE-BASED</span>
   <span className="project-title" title={w.fileName}>{w.project.title} <button className="rename-small" title="Rename project" disabled={w.blocked} onClick={()=>{const name=window.prompt('New project title',w.project.title);if(name!==null)w.renameProject(name);}}>✎</button></span>
   <div className="top-actions">
-   <button onClick={()=>handle(w.newBlank)}>New</button>
-   <button onClick={()=>canOpenNativeFile()?handle(w.openNative):openFile.current?.click()}>Open JSON</button>
-   <button onClick={()=>handle(()=>w.saveCurrent(false))} disabled={w.saveState==='saving'}>Save Project</button>
-   <button onClick={()=>handle(()=>w.saveCurrent(true))} disabled={w.saveState==='saving'}>Save As</button>
-   <button onClick={w.jsonExport}>Export Backup</button>
-   <button onClick={w.openList}>Checkpoints</button>
-   <button onClick={()=>importFile.current?.click()}>Import Copy</button>
-   <button className="primary" onClick={w.runAssessment} disabled={w.blocked}>Assess Installation</button>
+   <button onClick={()=>handle(w.newBlank)}>{t('top.new')}</button>
+   <button onClick={()=>canOpenNativeFile()?handle(w.openNative):openFile.current?.click()}>{t('top.open')}</button>
+   <button onClick={()=>handle(()=>w.saveCurrent(false))} disabled={w.saveState==='saving'}>{t('top.save')}</button>
+   <button onClick={()=>handle(()=>w.saveCurrent(true))} disabled={w.saveState==='saving'}>{t('top.saveAs')}</button>
+   <button onClick={w.jsonExport}>{t('top.export')}</button>
+   <button onClick={w.openList}>{t('top.checkpoints')}</button>
+   <button onClick={()=>importFile.current?.click()}>{t('top.import')}</button>
+   <button className="primary" onClick={w.runAssessment} disabled={w.blocked}>{t('top.assess')}</button>
   </div>
   <input type="file" hidden ref={openFile} accept=".json,application/json" onChange={e=>{const file=e.currentTarget.files?.[0];if(file)handle(()=>w.openFile(file));e.currentTarget.value='';}}/>
   <input type="file" hidden ref={importFile} accept=".json,application/json" onChange={e=>{const file=e.currentTarget.files?.[0];if(file)handle(()=>w.jsonImport(file));e.currentTarget.value='';}}/>
  </header>
  <div className="subbar"><span>LABORATORY / CCTV · NETWORK · ALARM · ACCESS · POWER · PRACTICE</span>
+  <LanguageSelect locales={Object.entries(LOCALES).map(([id,l])=>({id,name:l.name}))}/>
   <label>Scenario <select aria-label="Scenario" value={w.project.scenarioId} onChange={e=>{const id=e.currentTarget.value;handle(()=>w.switchScenario(id));}}>{w.SCENARIOS.map(s=><option value={s.id} key={s.id}>{s.title}</option>)}</select></label>
-  <button onClick={()=>w.setTab('field-review')} title="Open the Stage 14 anonymous field review">Field Review · {w.fieldReadiness.reviewedTasks}/{w.fieldReadiness.totalTasks}</button>
-  <button onClick={()=>w.setTab('scenario')} title="Open practical assignment briefing">Briefing · {w.scenarioProgress.completed}/{w.scenarioProgress.total}</button>
+  <button onClick={()=>w.setTab('field-review')} title="Open the Stage 14 anonymous field review">{t('top.fieldReview')} · {w.fieldReadiness.reviewedTasks}/{w.fieldReadiness.totalTasks}</button>
+  <button onClick={()=>w.setTab('scenario')} title="Open practical assignment briefing">{t('top.briefing')} · {w.scenarioProgress.completed}/{w.scenarioProgress.total}</button>
   <label title="Available only after a project file has been explicitly chosen and writable access granted"><input type="checkbox" checked={w.autosave} disabled={!w.hasWritableHandle||w.blocked} onChange={e=>w.setAutosave(e.currentTarget.checked)}/> Autosave to file</label>
   <span className="subbar-right"><span className="good">● {w.result.onlineCameras} online</span><span className="good">● {w.result.recordingCameras} recording</span><span>GHS {w.result.budgetUsedGhs.toLocaleString()}</span><span>⚡ {(w.result.power?.totalLoadW||0).toFixed(0)} W</span><span>⚑ {Object.values(w.result.alarm?.panels||{}).filter(p=>p.mode!=='disarmed').length} alarm armed</span><span>◷ {clockLabel(w.project)}</span><label><input type="checkbox" checked={w.project.night} disabled={w.blocked} onChange={e=>w.commit({...w.project,night:e.currentTarget.checked})}/> Night</label><label><input type="checkbox" checked={w.project.mainsOn} disabled={w.blocked} onChange={e=>w.commit({...w.project,mainsOn:e.currentTarget.checked})}/> AC power</label></span>
  </div></>;

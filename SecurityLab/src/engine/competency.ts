@@ -14,7 +14,8 @@ const CATEGORY:Record<ScenarioMetric,CompetencyCategory>={
  'router-ready':'network','dhcp-lease':'network','intervlan-route':'network',
  'access-controller':'access','access-readers':'access','access-lock':'access','access-door':'access',
  'access-granted':'access','access-denied':'access','access-exit':'access',
- 'power-wired':'power','solar-generation':'power','battery-ready':'power','backup-outage':'power'
+ 'power-wired':'power','solar-generation':'power','battery-ready':'power','backup-outage':'power',
+ 'fire-detectors':'alarm','fire-callpoint':'alarm','fire-sounder':'alarm','fire-24h':'alarm','fire-alarm':'alarm'
 };
 const TITLE:Record<CompetencyCategory,string>={equipment:'Equipment and budget',coverage:'Camera coverage',network:'IP networking',recording:'Recording and evidence',alarm:'Intrusion alarms',access:'Access control',power:'Electrical and backup power',reliability:'Installation reliability',troubleshooting:'Troubleshooting'};
 const ACTION:Record<ScenarioMetric,string>={
@@ -48,7 +49,12 @@ const ACTION:Record<ScenarioMetric,string>={
  'power-wired':'Enable the explicit electrical wiring model and connect load paths.',
  'solar-generation':'Wire PV to the charge controller under a simulated sunlight condition.',
  'battery-ready':'Install and connect a battery with available stored energy.',
- 'backup-outage':'Interrupt grid power and verify that the live camera, NVR and power path remain operational on battery.'
+ 'backup-outage':'Interrupt grid power and verify that the live camera, NVR and power path remain operational on battery.',
+ 'fire-detectors':'Install and wire enough smoke or heat detectors to the panel, then check power and supervision.',
+ 'fire-callpoint':'Install and wire a manual call point at the exit route.',
+ 'fire-sounder':'Install and wire an alarm sounder to a powered panel output.',
+ 'fire-24h':'Set every smoke, heat and call-point zone to a 24-hour zone so it works while the system is unarmed.',
+ 'fire-alarm':'Trigger smoke or heat at a detector and confirm the 24-hour zone raised the alarm and the sounder operates.'
 };
 const severityOrder={critical:0,major:1,minor:2,information:3};
 const clamp=(v:number)=>Number.isFinite(v)?Math.max(0,Math.min(100,v)):0;

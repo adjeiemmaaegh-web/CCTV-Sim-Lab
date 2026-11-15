@@ -20,6 +20,6 @@ const sourceModules={
 export default defineConfig({
  plugins:[sourceModules,react()],
  server:{port:5173,strictPort:true,fs:{allow:['..']}},
- build:{outDir:'../dist-react',emptyOutDir:true},
+ build:{outDir:'../dist-react',emptyOutDir:true,chunkSizeWarningLimit:700},
  base:'/'
 });

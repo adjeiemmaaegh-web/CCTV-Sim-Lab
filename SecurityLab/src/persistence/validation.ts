@@ -1,3 +1,5 @@
+import {registerProfile} from '../tools/profilePack.js';
+import {registerPackScenario} from '../tools/scenarioPack.js';
 import type {Project} from '../domain/types.js';
 import {PROFILES} from '../domain/catalog.js';
 import {SCENARIOS} from '../scenarios/index.js';
@@ -20,6 +22,11 @@ export function validateProject(input:unknown):Project{
  input=migrateProject(input);
  if(!input||typeof input!=='object')throw new Error('Expected a SecurityLab project JSON object');
  const p=input as Record<string,unknown>;
+ if(p.profilePack!==undefined){
+  if(!Array.isArray(p.profilePack)||p.profilePack.length>40)throw new Error('Invalid embedded profile list');
+  for(const prof of p.profilePack){try{registerProfile(prof);}catch(e){throw new Error(`Invalid embedded device profile: ${(e as Error).message}`);}}
+ }
+ if(p.customScenario!==undefined){try{registerPackScenario(p.customScenario);}catch(e){throw new Error(`Invalid embedded custom scenario: ${(e as Error).message}`);}}
  if(p.schemaVersion!==2||!idTxt(p.id)||!idTxt(p.title)||!idTxt(p.scenarioId)||!SCENARIOS.some(s=>s.id===p.scenarioId))throw new Error('Unsupported project format, scenario or schema');
  if(!Array.isArray(p.devices)||!Array.isArray(p.cables)||!Array.isArray(p.rooms)||!Array.isArray(p.walls)||!Array.isArray(p.events)||!Array.isArray(p.targets))throw new Error('Project has missing geometry/equipment fields');
  if(p.devices.length>120||p.cables.length>240||p.walls.length>400||p.rooms.length>200||p.events.length>250||p.targets.length>50)throw new Error('Project exceeds safety limits');
@@ -251,6 +258,22 @@ export function validateProject(input:unknown):Project{
     for(const g of v.gates)if(!g||!idTxt(g.id)||!txt(g.title)||!txt(g.description)||typeof g.met!=='boolean')throw new Error('Invalid assessment pass gate');
    }
   }
+ }
+
+ if(p.floors!==undefined){
+  const f=p.floors as any;
+  if(!Array.isArray(f)||f.length<2||f.length>9||f.some((x:any)=>!x||!Number.isInteger(x.id)||x.id<0||x.id>8||typeof x.name!=='string'||x.name.length<1||x.name.length>40)||new Set(f.map((x:any)=>x.id)).size!==f.length||!f.some((x:any)=>x.id===0))throw new Error('Invalid floor list');
+ }
+ const floorIds=new Set<number>(Array.isArray(p.floors)?(p.floors as any[]).map(x=>x.id):[0]);
+ for(const list of [p.devices,p.rooms,p.walls,p.targets,p.siteElements||[]] as any[][])for(const it of list)if(it&&it.floor!==undefined&&(!Number.isInteger(it.floor)||!floorIds.has(it.floor)))throw new Error('Item placed on an unknown floor');
+ if(p.audit!==undefined){
+  if(!Array.isArray(p.audit)||p.audit.length>400||p.audit.some((a:any)=>!a||typeof a.summary!=='string'||a.summary.length>400||typeof a.at!=='string'||!Number.isFinite(Date.parse(a.at))||!Number.isInteger(a.devices)||!Number.isInteger(a.cables)))throw new Error('Invalid audit trail');
+ }
+ if(p.diagnosis!==undefined){const g=p.diagnosis as any;
+  if(!g||!Number.isInteger(g.seed)||!Array.isArray(g.applied)||g.applied.length>4||g.applied.some((a:any)=>!a||typeof a.kind!=='string'||typeof a.message!=='string')||typeof g.revealed!=='boolean'||!Array.isArray(g.guesses)||g.guesses.some((x:unknown)=>typeof x!=='string'))throw new Error('Invalid fault exercise data');
+ }
+ if(p.environment!==undefined){const e=p.environment as any;
+  if(!e||!['clear','rain','fog','dust'].includes(e.weather)||!finite(e.ambientC)||e.ambientC<-40||e.ambientC>70||typeof e.glare!=='boolean')throw new Error('Invalid environment settings');
  }
  if(p.fieldReview!==undefined){
   // The import payload is untrusted until each field below is validated.

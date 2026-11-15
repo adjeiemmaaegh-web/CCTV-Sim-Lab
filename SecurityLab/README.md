@@ -96,3 +96,29 @@ declarations, tests and compiled outputs are NOT in this ZIP. This is source onl
 a certified release. For a connected development machine, install Node.js >=22.12,
 run `cd SecurityLab/frontend-react`, `npm install`, then `npm run build` and verify
 its live browser behaviour; no cloud, sign-in, browser database or backend is needed.
+
+
+## Stage 16 — verified build and tests
+
+```bash
+cd SecurityLab/frontend-react
+npm ci
+npm run check        # strict TypeScript
+npm test             # vitest engine/persistence/scenario tests
+npm run build        # -> SecurityLab/dist-react (+ service worker)
+npx playwright install chromium
+npm run test:e2e     # real-browser tests (serves the built app via vite preview on 127.0.0.1:4173)
+```
+
+See `ACCEPTANCE_STAGE16.md` in the repository root for exact results and the list of unverified acceptance gates. Status remains NO-GO for production.
+
+
+## Stage 17 - twenty upgrades
+
+See `docs/FEATURES_STAGE17.md` (features, limits, tests) and `docs/MANUAL_ACCEPTANCE.md` (checks that need a person and real hardware). New developer commands:
+
+```bash
+npm run package      # reproducible unsigned static zip + SHA256SUMS in ../../release
+npm run test:e2e     # includes tools, mobile and file-persistence suites
+CROSS_BROWSER=1 npx playwright test --project=webkit --project=firefox
+```

@@ -14,7 +14,7 @@ export type WirelessAssociation = {clientId:string; apId?:string; ssid:string; c
 export type NetworkTrace = {ok:boolean; reason:string; devices:string[]; links:string[]; viaRouter?:string};
 export type NetworkSnapshot = {addresses:Record<string,NetworkAddress>; links:Record<string,NetworkLinkStatus>; wireless:Record<string,WirelessAssociation>; dhcpLeases:Record<string,string>; diagnostics:string[]; traces:Record<string,NetworkTrace>};
 // Stage 6 alarm models. The structured state is saved with each project; no live hardware or firmware is accessed.
-export type AlarmSensorType='pir'|'door'|'window'|'glass'|'vibration'|'beam'|'panic';
+export type AlarmSensorType='pir'|'door'|'window'|'glass'|'vibration'|'beam'|'panic'|'smoke'|'heat'|'callpoint'|'fence';
 export type AlarmZoneType='instant'|'entry'|'interior'|'24h';
 export type AlarmArmMode='disarmed'|'stay'|'away';
 export type AlarmPhase='idle'|'exit'|'armed'|'entry'|'triggered';
@@ -51,12 +51,13 @@ export type MotionZone = {id:string; name:string; x:number; y:number; w:number; 
 export type RecordingSchedule = {days:number[]; startMinute:number; endMinute:number};
 export type PTZPreset = {id:string; name:string; heading:number; opticalZoom:number; tiltDegrees:number};
 export type RecordingClip = {id:string; cameraId:string; recorderId:string; at:string; simulatedDay:number; simulatedMinute:number; durationSeconds:number; sizeGB:number; kind:'motion'|'manual'; x?:number; y?:number};
-export type Room = {id:string; name:string; x:number; y:number; w:number; h:number};
-export type Wall = {id:string; kind:'wall'|'door'|'window'; x1:number; y1:number; x2:number; y2:number; roomId?:string};
+export type Floor = {id:number; name:string};
+export type Room = {id:string; name:string; x:number; y:number; w:number; h:number; floor?:number};
+export type Wall = {id:string; kind:'wall'|'door'|'window'; x1:number; y1:number; x2:number; y2:number; roomId?:string; floor?:number};
 export type Point = {x:number; y:number};
-export type SiteElement = Point & {id:string;kind:'entrance'|'gate'|'label';label:string};
+export type SiteElement = Point & {id:string;kind:'entrance'|'gate'|'label';label:string;floor?:number};
 export type FloorplanSettings = {x:number;y:number;width:number;height:number;opacity:number;locked:boolean};
-export type Target = Point & {id:string; name:string; required:true};
+export type Target = Point & {id:string; name:string; required:true; floor?:number};
 // Stage 9 manufacturer profiles: immutable profile IDs and documented/approximate facts.
 // Manufacturer names identify reference equipment only. No manufacturer sponsors SecurityLab.
 export type ManufacturerSpec = {
@@ -85,6 +86,7 @@ export type Profile = {
 
 };
 export type Device = {
+  floor?:number;
   id:string; profileId:string; name:string; x:number; y:number; heading:number; fov:number; range:number;
   ip:string; mask:string; gateway:string; enabled:boolean; motionEnabled:boolean; recordingEnabled:boolean;
   unitCostGhs?:number; poeBudgetW?:number; storageGB?:number; usedGB?:number; bitrateMbps?:number;
@@ -104,7 +106,7 @@ export type Device = {
 export type Cable = {id:string; a:string; b:string; connected:boolean; lengthMeters:number; medium?:CableMedia; aPort?:number; bPort?:number; speedMbps?:number;powerMaxAmps?:number};
 export type LabEvent = {id:string; at:string; kind:'info'|'motion'|'recorded'|'fault'|'warning'; message:string; x?:number; y?:number; deviceId?:string; recorded:boolean};
 export type ScenarioFocus='cctv'|'network'|'alarm'|'access'|'power'|'mixed';
-export type ScenarioMetric='camera-count'|'camera-powered'|'camera-online'|'camera-recording'|'target-coverage'|'night-coverage'|'recorded-event'|'technical-health'|'within-budget'|'resolved-challenges'|'alarm-panel'|'alarm-sensors'|'alarm-keypad'|'alarm-armed'|'alarm-triggered'|'alarm-output'|'alarm-beam'|'router-ready'|'dhcp-lease'|'intervlan-route'|'access-controller'|'access-readers'|'access-lock'|'access-door'|'access-granted'|'access-denied'|'access-exit'|'power-wired'|'solar-generation'|'battery-ready'|'backup-outage';
+export type ScenarioMetric='camera-count'|'camera-powered'|'camera-online'|'camera-recording'|'target-coverage'|'night-coverage'|'recorded-event'|'technical-health'|'within-budget'|'resolved-challenges'|'alarm-panel'|'alarm-sensors'|'alarm-keypad'|'alarm-armed'|'alarm-triggered'|'alarm-output'|'alarm-beam'|'router-ready'|'dhcp-lease'|'intervlan-route'|'access-controller'|'access-readers'|'access-lock'|'access-door'|'access-granted'|'access-denied'|'access-exit'|'power-wired'|'solar-generation'|'battery-ready'|'backup-outage'|'fire-detectors'|'fire-callpoint'|'fire-sounder'|'fire-24h'|'fire-alarm';
 export type ScenarioObjective={id:string;title:string;metric:ScenarioMetric;minimum:number;weight:number;critical:boolean;deviceKind?:DeviceKind};
 export type ScenarioChallenge={id:string;kind:'cable-repair'|'ip-conflict'|'alarm-wire-repair';cableId?:string;deviceId?:string;label:string;hint:string};
 export type ScenarioState={definitionVersion:number;startedAt:string;challenges:ScenarioChallenge[]};
@@ -116,6 +118,10 @@ export type FieldTrialTask='property-editor'|'cctv-installation'|'network-troubl
 export type FieldTrial={id:string;at:string;role:FieldRole;platform:string;browser:string;deviceClass:'low-spec'|'standard'|'other';ramGb:number;offline:boolean;scenarioId:string;task:FieldTrialTask;outcome:FieldOutcome;durationMinutes:number;notes:string};
 export type FieldIssue={id:string;at:string;severity:'critical'|'major'|'minor';status:'open'|'resolved'|'deferred';area:FieldTrialTask;summary:string;steps:string;expected:string;observed:string;trialId?:string};
 export type FieldReview={version:1;trials:FieldTrial[];issues:FieldIssue[]};
+export type Diagnosis={seed:number;count:number;applied:{kind:string;message:string}[];revealed:boolean;guesses:string[]};
+export type AuditEntry={at:string;summary:string;devices:number;cables:number};
+export type Weather='clear'|'rain'|'fog'|'dust';
+export type Environment={weather:Weather;ambientC:number;glare:boolean};
 export type Project = {
   schemaVersion:2; id:string; title:string; scenarioId:string; createdAt:string; updatedAt:string;
   rooms:Room[]; walls:Wall[]; targets:Target[]; devices:Device[]; cables:Cable[]; events:LabEvent[];
@@ -128,6 +134,7 @@ export type Project = {
   powerSettings?:PowerSettings;
   scenarioState?:ScenarioState;
   fieldReview?:FieldReview; // optional local project evidence, no personal identifiers
+  environment?:Environment;floors?:Floor[];diagnosis?:Diagnosis;audit?:AuditEntry[];customScenario?:Record<string,unknown>;profilePack?:Record<string,unknown>[]; // Stage 17: simplified training weather/temperature effects
 };
 export type DeviceStatus = {id:string; powered:boolean; connected:boolean; networkOk:boolean; recordingReady:boolean; recorderId?:string; faults:string[]; poeSourceId?:string; channel?:number; signal?:SignalType; streamMbps?:number; scheduleActive?:boolean};
 export type CableStatus = {id:string; up:boolean; reason:string};

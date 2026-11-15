@@ -1,3 +1,5 @@
+import {wallsOnFloor,cableRiseM} from '../tools/floors.js';
+import {applyEnvironment,adjustDevice} from './environment.js';
 import type {Cable,Device,DeviceStatus,PoEStatus,Project,SimResult,LabEvent,Point,RecorderStatus,RecordingClip} from '../domain/types.js';
 import {profile} from '../domain/catalog.js';
 import {manufacturerVideoCompatible} from '../domain/manufacturers/index.js';
@@ -19,7 +21,8 @@ const compare=(a:Device,b:Device)=>a.id.localeCompare(b.id);
 const incident=(project:Project,at:string,kind:LabEvent['kind'],message:string,point?:Point,cameraId?:string,recorded=false):LabEvent=>({id:`evt-${crypto.randomUUID()}`,at,kind,message,recorded,...(point?{x:point.x,y:point.y}:{}),...(cameraId?{deviceId:cameraId}:{})});
 
 /** Stateless source-of-truth derivation: project inputs alone determine the technical state. */
-export function simulate(project:Project):SimResult {
+export function simulate(projectInput:Project):SimResult {
+ const project=applyEnvironment(projectInput);
  const devices=project.devices,byId=new Map(devices.map(d=>[d.id,d]));
  const power=evaluatePower(project),strictPower=power.mode==='wired';
  const statuses:Record<string,DeviceStatus>={},cableStatuses:SimResult['cables']={},poe:Record<string,PoEStatus>={},recorders:Record<string,RecorderStatus>={};
@@ -59,7 +62,7 @@ export function simulate(project:Project):SimResult {
   let reason='';
   if(!a||!b||c.a===c.b)reason='Invalid cable endpoint';
   else if(!c.connected)reason='Cable disconnected';
-  else if(!Number.isFinite(c.lengthMeters)||c.lengthMeters<=0||c.lengthMeters>(medium==='coax'?300:100))reason=`${medium==='coax'?'Coaxial':'Ethernet'} run exceeds simulated maximum length`;
+  else if(!Number.isFinite(c.lengthMeters)||c.lengthMeters<=0||c.lengthMeters+cableRiseM(a,b)>(medium==='coax'?300:100))reason=`${medium==='coax'?'Coaxial':'Ethernet'} run exceeds simulated maximum length`;
   else if(medium==='coax'){
    const cam=isCamera(a)?a:isCamera(b)?b:null,rec=isDvr(a)?a:isDvr(b)?b:null;
    if(!cam||!rec||signalOf(cam)!=='analog')reason='Coax is supported only between an analog camera and a DVR';
@@ -211,7 +214,7 @@ export function simulate(project:Project):SimResult {
   r.faults=[...statuses[r.id].faults];
  }
  const coverage=project.targets.map(t=>{
-  const cameraIds=devices.filter(isCamera).filter(d=>statuses[d.id].powered&&statuses[d.id].networkOk&&visible(d,t,project.walls,project.night)).map(d=>d.id);
+  const cameraIds=devices.filter(isCamera).filter(d=>statuses[d.id].powered&&statuses[d.id].networkOk&&(d.floor??0)===(t.floor??0)&&visible(d,t,wallsOnFloor(project.walls,d.floor??0),project.night)).map(d=>d.id);
   return {id:t.id,name:t.name,covered:cameraIds.length>0,cameraIds};
  });
  const alarm=evaluateAlarms(project,power);
@@ -232,11 +235,11 @@ export function simulate(project:Project):SimResult {
 }
 
 /** Inject a virtual movement event. Clip records contain metadata, not real video footage. */
-export function triggerMotion(project:Project,point:Point,at:string=new Date().toISOString(),intensity=75):{project:Project;detected:number;recorded:number}{
+export function triggerMotion(project:Project,point:Point,at:string=new Date().toISOString(),intensity=75,floor?:number):{project:Project;detected:number;recorded:number}{
  const result=simulate(project),events:LabEvent[]=[],clips:RecordingClip[]=[];
  let recorded=0;const clock=clockOf(project),storageIncrement=new Map<string,number>();
  const triggered=project.devices.filter(d=>isCamera(d)&&d.motionEnabled&&result.devices[d.id].powered&&result.devices[d.id].networkOk&&
-  visible(d,point,project.walls,project.night)&&insideMotionZone(d,point)&&motionThresholdMet(d,intensity));
+  (floor===undefined||(d.floor??0)===floor)&&visible(adjustDevice(project,d),point,wallsOnFloor(project.walls,d.floor??0),project.night)&&insideMotionZone(d,point)&&motionThresholdMet(d,intensity));
  if(!triggered.length)events.push(incident(project,at,'warning','Movement not detected by any operational camera/active detection zone',point));
  for(const d of triggered){
   const status=result.devices[d.id],ready=status.recordingReady&&!!status.recorderId;

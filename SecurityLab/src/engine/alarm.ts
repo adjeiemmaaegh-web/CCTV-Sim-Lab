@@ -1,9 +1,11 @@
+import {wallsOnFloor} from '../tools/floors.js';
 /**
  * SecurityLab Stage 6: offline deterministic *teaching* model of wired alarm circuits.
  * It is not an EN50131-certified panel, a cryptographic keypad, a real bus protocol,
  * an intrusion detection service, or a substitute for manufacturer's installation manuals.
  * State transitions require explicit commands and are saved as part of the project.
  */
+import {adjustDevice} from './environment.js';
 import type {AlarmArmMode,AlarmPanelConfig,AlarmPanelStatus,AlarmResult,AlarmRuntime,AlarmSensorType,AlarmZone,Device,LabEvent,Point,Project} from '../domain/types.js';
 import {profile} from '../domain/catalog.js';
 import {evaluatePower} from './power.js';
@@ -127,15 +129,18 @@ export function commandAlarm(p:Project,panelId:string,command:'stay'|'away'|'dis
  const state:AlarmRuntime={mode:command,phase:conf.exitDelaySec>0?'exit':'armed',remainingSeconds:conf.exitDelaySec,triggeredZones:[],sirenSeconds:0};
  return append(setRuntime(p,panelId,state),message(p,'info',`${panel.name}: armed ${command}; ${conf.exitDelaySec}s exit delay`,panelId));
 }
-export type AlarmStimulus='motion'|'door'|'window'|'glass'|'vibration'|'beam'|'panic';
+export type AlarmStimulus='motion'|'door'|'window'|'glass'|'vibration'|'beam'|'panic'|'smoke'|'heat'|'callpoint'|'fence';
 const distance=(a:Point,b:Point)=>Math.hypot(a.x-b.x,a.y-b.y);
 function detects(d:Device,type:AlarmStimulus,point:Point,p:Project,intensity:number){
  const sensor=profile(d.profileId).alarmSensorType;
- if(sensor===undefined||sensor==='panic')return type==='panic'&&sensor==='panic'&&distance(d,point)<=20;
+ if(sensor===undefined)return false;
+ if(sensor==='panic'||sensor==='callpoint')return type===sensor&&distance(d,point)<=20; // manual devices: operated at the device
  if(sensor!==type&&!(sensor==='pir'&&type==='motion'))return false;
  if(intensity<100-(d.alarmDevice?.sensitivity??50))return false;
  if(sensor==='door'||sensor==='window')return distance(d,point)<=24;
- if(sensor==='vibration')return distance(d,point)<=Math.max(10,d.range||28);
+ if(sensor==='vibration'||sensor==='fence')return distance(d,point)<=Math.max(10,d.range||28);
+ // Fire: point detectors respond within their coverage radius (training model; ignores airflow/ceiling height).
+ if(sensor==='smoke'||sensor==='heat')return distance(d,point)<=Math.max(10,d.range||(sensor==='smoke'?75:53));
  if(sensor==='glass')return distance(d,point)<=Math.max(10,d.range||90);
  if(sensor==='beam'){
   const r=(d.heading||0)*Math.PI/180,dx=point.x-d.x,dy=point.y-d.y;
@@ -143,17 +148,18 @@ function detects(d:Device,type:AlarmStimulus,point:Point,p:Project,intensity:num
   return along>=0&&along<=(d.range||260)&&across<=8;
  }
  // IR motion detectors use wall occlusion and a simplified two-dimensional view cone.
- return visible(d,point,p.walls,false);
+ return visible(d,point,wallsOnFloor(p.walls,d.floor??0),false);
 }
 function startAlarm(run:AlarmRuntime,zone:number,duration:number):AlarmRuntime {
  return {...run,phase:'triggered',remainingSeconds:0,pendingZone:undefined,triggeredZones:[...new Set([...run.triggeredZones,zone])],sirenSeconds:duration};
 }
 /** Event detection changes physical alarm state; if disarmed, only 24h zones (e.g. panic) remain active. */
-export function triggerAlarmStimulus(p:Project,type:AlarmStimulus,point:Point,intensity=90):{project:Project;detected:number;alerts:number} {
+export function triggerAlarmStimulus(p:Project,type:AlarmStimulus,point:Point,intensity=90,floor?:number):{project:Project;detected:number;alerts:number} {
  const sim=evaluateAlarms(p);let next=p,detected=0,alerts=0;
  for(const sensor of [...p.devices].filter(sensorKind).sort((a,b)=>a.id.localeCompare(b.id))){
   const status=sim.devices[sensor.id];if(!status?.powered||!status.panelId||sensor.alarmDevice?.bypassed||sensor.alarmDevice?.fault&&sensor.alarmDevice.fault!=='none')continue;
-  if(!detects(sensor,type,point,p,intensity))continue;
+  if(floor!==undefined&&(sensor.floor??0)!==floor)continue;
+  if(!detects(adjustDevice(p,sensor),type,point,p,intensity))continue;
   const panelId=status.panelId,zone=sim.panels[panelId]?.zones.find(z=>z.number===status.zone);
   if(!zone||!zone.ready)continue;
   detected++;
@@ -236,4 +242,4 @@ export function injectAlarmFault(p:Project,kind:'open'|'short'|'tamper'|'battery
  }
  return append(next,message(next,'fault',description));
 }
-export const ALARM_STIMULI:readonly {type:AlarmStimulus;label:string}[]=[{type:'motion',label:'PIR movement'},{type:'door',label:'Door opened'},{type:'window',label:'Window opened'},{type:'glass',label:'Glass broken'},{type:'vibration',label:'Vibration'},{type:'beam',label:'Perimeter crossed'},{type:'panic',label:'Panic pressed'}];
+export const ALARM_STIMULI:readonly {type:AlarmStimulus;label:string}[]=[{type:'motion',label:'PIR movement'},{type:'door',label:'Door opened'},{type:'window',label:'Window opened'},{type:'glass',label:'Glass broken'},{type:'vibration',label:'Vibration'},{type:'beam',label:'Perimeter crossed'},{type:'panic',label:'Panic pressed'},{type:'smoke',label:'Smoke present'},{type:'heat',label:'Heat rise'},{type:'callpoint',label:'Call point pressed'},{type:'fence',label:'Fence disturbed'}];
