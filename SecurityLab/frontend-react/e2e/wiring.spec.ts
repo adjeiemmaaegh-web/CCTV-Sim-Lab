@@ -41,6 +41,6 @@ test('occupied switch ports are nonselectable in connection inspector',async({pa
  await devs.nth(1).click();await devs.nth(2).click();
  const setup=page.getByRole('region',{name:'Connection setup'});
  await expect(setup.getByLabel('End B port')).toHaveValue('2');
- await expect(setup.getByLabel('End B port').locator('option[value="1"]')).toBeDisabled();
+ await expect(setup.getByLabel('End B port').locator('option[value="1"]')).toHaveAttribute('disabled','');
  await expect(setup.getByLabel('End B port')).toContainText('PoE out');
 });
