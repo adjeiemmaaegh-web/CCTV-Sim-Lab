@@ -52,8 +52,8 @@ A 1600×900 browser screenshot of the prior UX-hardened preview in Focus canvas 
 | Cisco documented UX/workflow comparison | **Complete** (documentation-grounded, not hands-on Cisco A/B testing) |
 | SecurityLab live-preview place/connect/configure/diagnose | **PASS** in remote Chromium |
 | Save, revision, checkpoint and reopen | **PASS** using browser-origin file-handle test double |
-| Reproduced focus-navigation bug | **FIX IMPLEMENTED** on Stage 19 branch, with an automated regression; final CI required before merge |
-| Integrated automated five-step regression | **PASS** in Chromium CI on commit `7688405d6e92c4a2cc12e4a1125db4f1145ba782`; final branch CI must also pass |
+| Reproduced focus-navigation bug | **PASS** on Stage 19 branch; browser regression verifies rail, inspector and assessment reveal |
+| Integrated automated five-step regression | **PASS** in Chromium CI; all three Stage 19 workflow/interaction regressions pass |
 | Native Windows 11 real-disk picker/save and PWA cold offline restart | **OPEN — HUMAN / DEVICE REQUIRED** |
 | Physical Android/iPad touch; Firefox/Safari/Edge; NVDA/VoiceOver; reduced-motion/high-contrast; 8 GB Windows performance | **OPEN — HUMAN / DEVICE REQUIRED** |
 | Ghanaian installer/instructor validation of scenarios and formulas; native French wording review | **OPEN — EXPERT REVIEW REQUIRED** |
@@ -61,3 +61,7 @@ A 1600×900 browser screenshot of the prior UX-hardened preview in Focus canvas 
 | Public deployment of Stage 19 | **NOT CLAIMED**; production hosting must be independently verified |
 
 **Conclusion:** The five practical SecurityLab workflows were operable under browser test conditions, but Cisco's documented simulation depth and hardware/device configuration capabilities remain materially broader in the **networking domain**. SecurityLab's comparative value is its domain-specific CCTV, alarms, access control and power training, not literal Packet Tracer equivalence. It remains an **educational simulation**, not an engineering sign-off, compliance assessment or certification.
+
+## Final Stage 19 branch CI
+
+GitHub Actions run [43745279887](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43745279887) passed with **156/156 unit tests**, **50/50 Chromium end-to-end tests**, strict TypeScript, production build, and **0 reported npm vulnerabilities**. This is development verification, not a paired Packet Tracer user study, real Windows file picker test or professional training approval.
