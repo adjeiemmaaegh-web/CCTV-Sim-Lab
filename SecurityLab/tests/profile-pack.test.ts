@@ -2,7 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {newProject,exampleProject} from '../src/scenarios/index.js';
 import {PROFILES,createDevice,profile} from '../src/domain/catalog.js';
 import {simulate} from '../src/engine/simulator.js';
-import {validateProject} from '../src/persistence/validation.js';
+import {validateProject,activateProjectExtensions} from '../src/persistence/validation.js';
 import {buildProfile,loadProfilePack,exportProfilePack,SAMPLE_PROFILE,validateSourceUrl,withEmbeddedProfiles,usedPackProfiles,ATTESTATION,packSourceOf} from '../src/tools/profilePack.js';
 import {buildQuote} from '../src/tools/quote.js';
 
@@ -68,6 +68,8 @@ describe('profile pack validator (feature 20)',()=>{
   const idx=PROFILES.findIndex(x=>x.id===prof.id);PROFILES.splice(idx,1);
   expect(()=>profile(prof.id)).toThrow();
   expect(()=>validateProject(structuredClone(embedded))).not.toThrow();
+  expect(()=>profile(prof.id)).toThrow(); // validation alone cannot change shared models
+  activateProjectExtensions(embedded); // explicit accepted-project activation
   expect(profile(prof.id).model).toBe('EX-IPC-100');
   expect(packSourceOf(prof.id)).toBeTruthy();
  });
