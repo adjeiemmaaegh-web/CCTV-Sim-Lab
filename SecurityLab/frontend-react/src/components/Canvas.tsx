@@ -47,6 +47,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  const [showOpts,setShowOpts]=useState(false);
  const [showLayout,setShowLayout]=useState(false);
  const [showWelcome,setShowWelcome]=useState(true);
+ const [guideReopened,setGuideReopened]=useState(false);
  const [intensity,setIntensity]=useState(75);
  useEffect(()=>{
   const down=(e:KeyboardEvent)=>{if(e.code==='Space'&&!(e.target as HTMLElement)?.closest('input,textarea,select,button'))setSpaceDown(true);};
@@ -209,7 +210,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
    </div>
    <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name={focusMode?'restore':'focus'} size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
    <button className={`tool-btn text-btn ${showLayout?'active':''}`} aria-label="Workspace panels" aria-expanded={showLayout} aria-controls="workspace-layout-controls" onClick={()=>setShowLayout(v=>!v)}><Icon name="settings" size={18}/><span>Panels</span></button>
-   <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>setShowWelcome(true)}><Icon name="help" size={18}/></button>
+   <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>{setGuideReopened(true);setShowWelcome(true);}}><Icon name="help" size={18}/></button>
    <span className="tb-sep"/>
    <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
    <span className="tb-sep"/>
@@ -328,7 +329,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
     </>}
    </svg>
    <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>
-   {showWelcome&&wb.project.devices.length===0&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
+   {showWelcome&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
    <div className="canvas-overlay" role="group" aria-label="Zoom">
     <button onClick={fit} aria-label="Fit" title="Fit to view"><Icon name="floorplan" size={18}/></button>
     <button onClick={()=>zoomTo(zoom*0.8)} aria-label="Zoom out">&minus;</button><span className="zoom-readout">{Math.round(zoom*100)}%</span><button onClick={()=>zoomTo(zoom*1.25)} aria-label="Zoom in">+</button>
