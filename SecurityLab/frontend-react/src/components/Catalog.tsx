@@ -41,7 +41,7 @@ export function Catalog({w}:{w:Workbench}){
   {id:'power-solar',label:'Install grid + UPS + solar power rig',done:w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind.startsWith('power-')),run:w.loadPowerRig},
  ].filter(r=>w.isAllowedProfile(r.id));
  return <aside className="catalog panel" aria-label="Equipment library">
-  <div className="panel-heading"><h2>Equipment Library</h2><p>Drag devices onto the floor plan</p></div>
+  <div className="panel-heading"><h2>Equipment Library</h2><p>Choose a device, then place it on the plan</p></div>
   <div className="pad search-box"><Icon name="search" size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search equipment..." aria-label="Search equipment"/></div>
   <details className="catalog-filter-box"><summary>Filters and specification sheets</summary>
    <div className="catalog-filters"><label>Library <select aria-label="Equipment family" value={family} onChange={e=>setFamily(e.target.value as 'all'|'generic'|'manufacturer')}><option value="all">All models</option><option value="generic">Generic training</option><option value="manufacturer">Manufacturer profiles</option></select></label><label>Manufacturer <select aria-label="Manufacturer" value={maker} onChange={e=>setMaker(e.target.value)}><option value="all">All manufacturers</option>{MANUFACTURERS.map(name=><option value={name} key={name}>{name}</option>)}</select></label><small>Manufacturer models are documented references, not real firmware or product endorsements. GHS prices require your own quotations.</small></div>
