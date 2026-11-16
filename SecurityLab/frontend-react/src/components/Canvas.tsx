@@ -208,6 +208,8 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
     <button className={view==='topology'?'active':''} aria-label="Network Topology" aria-pressed={view==='topology'} onClick={()=>switchView('topology')}><Icon name="topology" size={18}/><span>Network Topology</span></button>
    </div>
    <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name={focusMode?'restore':'focus'} size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
+   <button className={`tool-btn text-btn ${showLayout?'active':''}`} aria-label="Workspace panels" aria-expanded={showLayout} aria-controls="workspace-layout-controls" onClick={()=>setShowLayout(v=>!v)}><Icon name="settings" size={18}/><span>Panels</span></button>
+   <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>setShowWelcome(true)}><Icon name="help" size={18}/></button>
    <span className="tb-sep"/>
    <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
    <span className="tb-sep"/>
@@ -219,8 +221,6 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
    <label className="compact-check"><input type="checkbox" checked={w.project.night} disabled={w.blocked} onChange={e=>w.commit({...w.project,night:e.currentTarget.checked})}/> Night</label>
    <label className="compact-check"><input type="checkbox" checked={w.project.mainsOn} disabled={w.blocked} onChange={e=>w.commit({...w.project,mainsOn:e.currentTarget.checked})}/> AC power</label>
    <span className="toolbar-spacer"/>
-   <button className={`tool-btn text-btn ${showLayout?'active':''}`} aria-label="Workspace panels" aria-expanded={showLayout} aria-controls="workspace-layout-controls" onClick={()=>setShowLayout(v=>!v)}><Icon name="settings" size={18}/><span>Panels</span></button>
-   <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>setShowWelcome(true)}><Icon name="help" size={18}/></button>
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
   <WorkflowStrip w={wb} onChoose={onWorkflow}/>
