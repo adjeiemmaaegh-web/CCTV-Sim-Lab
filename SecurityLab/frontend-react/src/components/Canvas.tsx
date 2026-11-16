@@ -329,7 +329,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
     </>}
    </svg>
    <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>
-   {showWelcome&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
+   {showWelcome&&!wb.placing&&(w.mode==='select'||guideReopened)&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
    <div className="canvas-overlay" role="group" aria-label="Zoom">
     <button onClick={fit} aria-label="Fit" title="Fit to view"><Icon name="floorplan" size={18}/></button>
     <button onClick={()=>zoomTo(zoom*0.8)} aria-label="Zoom out">&minus;</button><span className="zoom-readout">{Math.round(zoom*100)}%</span><button onClick={()=>zoomTo(zoom*1.25)} aria-label="Zoom in">+</button>
