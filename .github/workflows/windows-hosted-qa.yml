@@ -1,0 +1,59 @@
+name: Windows hosted-runner QA (not Windows 11 acceptance)
+# Windows GitHub-hosted automation gives OS-family portability evidence only.
+# windows-2025 is a Windows Server image, NOT a physical Windows 11 laptop.
+# Native file pickers are stubbed with browser OPFS in Playwright tests.
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-qa:
+    name: Windows Server 2025 / Chromium / portable package
+    runs-on: windows-2025
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: SecurityLab/frontend-react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: SecurityLab/frontend-react/package-lock.json
+      - name: Clean install
+        run: npm ci
+      - name: Strict typecheck
+        run: npm run check
+      - name: Deterministic unit suite
+        run: npm test
+      - name: Build offline-first static app
+        run: npm run build
+      - name: Install Chromium for Windows runner
+        run: npx playwright install chromium
+      - name: Chromium UI, conflict and recovery integration tests
+        run: npm run test:e2e -- --project=chromium
+      - name: Build portable unsigned static package
+        run: npm run package
+      - name: Check manifest and archive hashes on Windows
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $release = Join-Path $env:GITHUB_WORKSPACE "release"
+          $manifest = Get-Content (Join-Path $release "RELEASE_MANIFEST.json") -Raw | ConvertFrom-Json
+          if ($manifest.signed -ne $false) { throw "Expected unsigned artifact" }
+          $zipPath = Join-Path $release $manifest.archive
+          $actual = (Get-FileHash $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $manifest.archiveSha256) { throw "ZIP hash mismatch" }
+          $sums = Get-Content (Join-Path $release "SHA256SUMS.txt") -Raw
+          if (-not $sums.StartsWith($actual)) { throw "SHA256SUMS mismatch" }
+          Write-Host ("Verified {0} | SHA256 {1} | manifest entries {2}" -f $manifest.archive, $actual, $manifest.files.Count)
+      - name: Upload failure details
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-hosted-qa-failures
+          path: SecurityLab/frontend-react/test-results/
+          if-no-files-found: ignore
+          retention-days: 14
