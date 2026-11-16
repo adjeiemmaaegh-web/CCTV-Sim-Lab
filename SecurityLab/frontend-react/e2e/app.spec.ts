@@ -1,5 +1,6 @@
 import {test,expect,Page} from '@playwright/test';
 import {project,dock,settings} from './helpers.js';
+import {disposableStaticPreview} from './offline-origin.js';
 const IDS=['home4','home8','shop3','warehouse8','alarm-install','ip-network','rfid-access','solar-backup','diagnose4','perimeter','school-block','hospital-ward','market-kiosk-gh','church-compound-gh','office-fire'];
 function watch(page:Page){const errs:string[]=[];page.on('dialog',d=>{void d.accept();});page.on('pageerror',e=>errs.push(String(e)));page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});return errs;}
 
@@ -11,16 +12,45 @@ test('startup renders workstation without errors',async({page})=>{
  expect(errs).toEqual([]);
 });
 
-test('service worker controls page and app reloads offline',async({page,context})=>{
+test('service worker controls page and app reloads offline',async({page,context,browserName})=>{
+ // WebKit's Playwright setOffline(true) emulation can fail to navigate even
+ // when a service worker returns a literal response (upstream #42775).
+ // Test real origin unavailability instead: serve this build on a disposable
+ // loopback port, precache it, close the server and prove a SW response.
+ if(browserName==='webkit'){
+  const origin=await disposableStaticPreview();
+  try{
+   await page.goto(origin.url);
+   await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
+   await page.reload();
+   await expect.poll(()=>page.evaluate(()=>!!navigator.serviceWorker.controller)).toBe(true);
+   const cached=await page.evaluate(async()=>{
+    const names=(await caches.keys()).filter(x=>x.startsWith('securitylab-react-'));
+    if(names.length!==1)return false;
+    const cache=await caches.open(names[0]);
+    return !!(await cache.match('/index.html'))&&(await cache.keys()).length>=3;
+   });
+   expect(cached).toBe(true);
+   await origin.stop();
+   const response=await page.reload({waitUntil:'load'});
+   expect(response?.status()).toBe(200);
+   expect(response?.fromServiceWorker()).toBe(true);
+   await expect(page.getByText('SecurityLab',{exact:true}).first()).toBeVisible();
+   await expect(page.getByLabel('Installation workspace')).toBeVisible();
+  }finally{await origin.stop();}
+  return;
+ }
+ // Chromium and Firefox keep their stricter offline-emulation regression.
  await page.goto('/');
  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
  await page.reload();
  await expect.poll(()=>page.evaluate(()=>!!navigator.serviceWorker.controller)).toBe(true);
- await context.setOffline(true);
- await page.reload();
- await expect(page.getByText('SecurityLab',{exact:true}).first()).toBeVisible();
- await expect(page.getByLabel('Installation workspace')).toBeVisible();
- await context.setOffline(false);
+ try{
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByText('SecurityLab',{exact:true}).first()).toBeVisible();
+  await expect(page.getByLabel('Installation workspace')).toBeVisible();
+ }finally{await context.setOffline(false);}
 });
 
 test('all fifteen scenarios load, simulate and show a briefing',async({page})=>{
