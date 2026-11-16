@@ -5,6 +5,7 @@ import {adjustDevice} from '../../../src/engine/environment.js';
 import {floorView,hasFloors} from '../../../src/tools/floors.js';
 import {FloorBar} from './FloorBar.js';
 import {WorkflowStrip,type WorkflowStep} from './WorkflowStrip.js';
+import {GettingStarted} from './GettingStarted.js';
 import {Icon} from './icons.js';
 import {signalOf,mediumOf} from '../../../src/engine/cctv.js';
 import {PLAN_WIDTH,PLAN_HEIGHT,snapped,bounded,distance,distanceMeters,scaleOf,clamp,transformRoomWalls} from '../../../src/property/editor.js';
@@ -12,6 +13,12 @@ import type {Point,Wall,Device} from '../../../src/domain/types.js';
 import type {PropertyTemplate} from '../../../src/property/editor.js';
 import type {Workbench,Mode} from '../hooks/useWorkbench.js';
 
+export type WorkspaceLayout={
+ catalogVisible:boolean;inspectorVisible:boolean;consoleVisible:boolean;
+ catalogWidth:number;inspectorWidth:number;
+ toggleCatalog:()=>void;toggleInspector:()=>void;toggleConsole:()=>void;
+ setCatalogWidth:(width:number)=>void;setInspectorWidth:(width:number)=>void;reset:()=>void;
+};
 type View='floor'|'topology';
 type LayerName='rooms'|'walls'|'targets'|'site'|'coverage'|'zones'|'alarm'|'access'|'power'|'grid'|'image';
 type Gesture=
@@ -26,7 +33,7 @@ const DEFAULT_LAYERS:Record<LayerName,boolean>={rooms:true,walls:true,targets:tr
 const pointEqual=(a:Point,b:Point)=>Math.abs(a.x-b.x)<1&&Math.abs(a.y-b.y)<1;
 const kinds:PropertyTemplate[]=['residential','apartment','retail','office','warehouse'];
 
-export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void;onWorkflow:(step:WorkflowStep)=>void}){
+export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void;onWorkflow:(step:WorkflowStep)=>void;layout:WorkspaceLayout}){
  const viewProject=useMemo(()=>floorView(wb.project,wb.floor),[wb.project,wb.floor]);
  const w:Workbench=viewProject===wb.project?wb:{...wb,project:viewProject};
  const svg=useRef<SVGSVGElement>(null),gesture=useRef<Gesture|null>(null);
@@ -38,6 +45,9 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;fo
  const [measure,setMeasure]=useState<{start:Point;end:Point}|null>(null);
  const [spaceDown,setSpaceDown]=useState(false);
  const [showOpts,setShowOpts]=useState(false);
+ const [showLayout,setShowLayout]=useState(false);
+ const [showWelcome,setShowWelcome]=useState(true);
+ const [guideReopened,setGuideReopened]=useState(false);
  const [intensity,setIntensity]=useState(75);
  useEffect(()=>{
   const down=(e:KeyboardEvent)=>{if(e.code==='Space'&&!(e.target as HTMLElement)?.closest('input,textarea,select,button'))setSpaceDown(true);};
@@ -144,7 +154,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;fo
   }
  };
  const changeMode=(next:Mode)=>{w.setMode(next);if(next!=='place')w.setPlacing(null);w.setCableStart(null);};
- const modeButton=(id:Mode)=> <button key={id} className={`tool-btn ${w.mode===id?'active':''}`} aria-label={label(id)} aria-pressed={w.mode===id} title={label(id)} onClick={()=>changeMode(id)} disabled={w.blocked&&id!=='pan'}><Icon name={id==='place'?'equipment':id} size={19}/><span className="tool-label">{label(id)}</span></button>;
+ const modeButton=(id:Mode)=> <button key={id} className={`tool-btn ${w.mode===id?'active':''} ${['select','room','cable'].includes(id)?'tool-primary':''}`} aria-label={label(id)} aria-pressed={w.mode===id} title={label(id)} onClick={()=>changeMode(id)} disabled={w.blocked&&id!=='pan'}><Icon name={id==='place'?'equipment':id} size={19}/><span className="tool-label">{label(id)}</span></button>;
  const zoomTo=(next:number,anchor?:Point)=>{
   const value=clamp(next,0.5,3.5);
   if(anchor)setCenter(c=>({x:anchor.x-(anchor.x-c.x)*zoom/value,y:anchor.y-(anchor.y-c.y)*zoom/value}));
@@ -199,6 +209,8 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;fo
     <button className={view==='topology'?'active':''} aria-label="Network Topology" aria-pressed={view==='topology'} onClick={()=>switchView('topology')}><Icon name="topology" size={18}/><span>Network Topology</span></button>
    </div>
    <button className="tool-btn focus-toggle" aria-label={focusMode?'Restore workstation panels':'Focus canvas'} aria-pressed={focusMode} title={focusMode?'Restore the equipment library, inspector and console':'Expand the floor-plan workspace'} onClick={onToggleFocus}><Icon name={focusMode?'restore':'focus'} size={18}/><span className="focus-label">{focusMode?'Restore panels':'Focus canvas'}</span></button>
+   <button className={`tool-btn text-btn ${showLayout?'active':''}`} aria-label="Workspace panels" aria-expanded={showLayout} aria-controls="workspace-layout-controls" onClick={()=>setShowLayout(v=>!v)}><Icon name="settings" size={18}/><span>Panels</span></button>
+   <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>{setGuideReopened(true);setShowWelcome(true);}}><Icon name="help" size={18}/></button>
    <span className="tb-sep"/>
    <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
    <span className="tb-sep"/>
@@ -213,6 +225,16 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;fo
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
   <WorkflowStrip w={wb} onChoose={onWorkflow}/>
+  {showLayout&&<div id="workspace-layout-controls" className="workspace-layout-controls" role="group" aria-label="Workspace panel controls">
+   <div className="workspace-layout-heading"><strong>Customize workspace</strong><span>Show only the panels you need.</span><button type="button" onClick={layout.reset}>Reset layout</button></div>
+   <div className="workspace-layout-grid">
+    <label><input type="checkbox" checked={layout.catalogVisible} onChange={layout.toggleCatalog}/> Equipment library</label>
+    <label><input type="checkbox" checked={layout.inspectorVisible} onChange={layout.toggleInspector}/> Properties</label>
+    <label><input type="checkbox" checked={layout.consoleVisible} onChange={layout.toggleConsole}/> Simulation console</label>
+    <label className="workspace-width">Library width <input type="range" aria-label="Equipment library width" min={200} max={340} step={10} value={layout.catalogWidth} onChange={e=>layout.setCatalogWidth(Number(e.currentTarget.value))} disabled={!layout.catalogVisible||focusMode}/><span>{layout.catalogWidth}px</span></label>
+    <label className="workspace-width">Properties width <input type="range" aria-label="Properties width" min={220} max={360} step={10} value={layout.inspectorWidth} onChange={e=>layout.setInspectorWidth(Number(e.currentTarget.value))} disabled={!layout.inspectorVisible||focusMode}/><span>{layout.inspectorWidth}px</span></label>
+   </div>
+  </div>}
   {showOpts&&<div className="canvas-options">
    {!hasFloors(wb.project)&&<div className="editor-mode-row"><span>Floors</span><FloorBar w={wb}/></div>}
    <div className="editor-mode-row annotator"><span>Site markers</span>{(['gate','entrance','label'] as Mode[]).map(modeButton)}<span className="editor-muted">References, not alarm devices</span></div>
@@ -306,6 +328,8 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow}:{w:Workbench;fo
      {w.project.devices.filter(d=>!isAlarm(d)&&!profile(d.profileId).kind.startsWith('power-')).map(d=>{const kind=profile(d.profileId).kind,{x,y}=topologyPosition(d),addr=w.result.network?.addresses[d.id];return <g key={d.id} data-device={d.id} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Select network device ${d.name}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}><rect x="-66" y="-36" width="132" height="72" rx="8" fill="#173650" stroke={w.result.devices[d.id]?.networkOk?'#25daba':'#e1aa64'} strokeWidth="2"/><text y="-14" textAnchor="middle" fill="#d0eef3" fontSize="12" pointerEvents="none">{kind==='camera'?(signalOf(d)==='analog'?'ANALOG CAM':'IP CAMERA'):kind==='switch'?'SWITCH':kind==='router'?'ROUTER':kind==='ap'?'Wi-Fi AP':kind==='server'?'SERVER':kind==='dvr'?'DVR':'NVR'}</text><text y="4" textAnchor="middle" fill="#9bbed0" fontSize="11" pointerEvents="none">{d.name.slice(0,19)}</text><text y="22" textAnchor="middle" fill="#6bd8ce" fontSize="10" pointerEvents="none">{addr?.ip?`${addr.ip} · V${addr.vlanId}`:`VLAN ${addr?.vlanId??10}`}</text></g>;})}
     </>}
    </svg>
+   <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>
+   {showWelcome&&!wb.placing&&(w.mode==='select'||guideReopened)&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
    <div className="canvas-overlay" role="group" aria-label="Zoom">
     <button onClick={fit} aria-label="Fit" title="Fit to view"><Icon name="floorplan" size={18}/></button>
     <button onClick={()=>zoomTo(zoom*0.8)} aria-label="Zoom out">&minus;</button><span className="zoom-readout">{Math.round(zoom*100)}%</span><button onClick={()=>zoomTo(zoom*1.25)} aria-label="Zoom in">+</button>
