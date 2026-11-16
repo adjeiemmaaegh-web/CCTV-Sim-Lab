@@ -15,6 +15,10 @@ release gate passed until every row is PASS. Nothing here has been executed yet.
 | A7 | Edit the file by hand to corrupt the JSON, then Open | "checksum mismatch" or "Invalid JSON"; nothing overwritten |
 | A8 | Close the tab with unsaved edits | Browser leave-page warning; none for an untouched new project |
 
+### A4 extension — exclusive-writer acceptance (part of A4, not a substituted mock)
+
+After A4's external-edit conflict check, repeat with **two actual Chrome/Edge editor tabs or installed PWA windows** on the same origin holding the same real project file. Both open revision 1; independently change the draft, save one, then save the stale second editor. The stale operation must display a conflict instead of silently replacing the newer file. Preserve and inspect the on-disk revision plus **Export Backup** from the losing editor. Repeat with an external file editor, another browser profile or different origin and record the result honestly: **Web Locks protect only cooperating same-origin windows in one browser profile; they are not an OS filesystem transaction.** A failed external race is a release blocker until the single-writer policy and recovery procedure are demonstrated and accepted. Also test an interrupted or denied write: prior disk bytes must remain intact, the UI must show a block, and the unsaved draft must be exportable. Record browser build, operating system, real filename, byte/hash comparison, screenshots, outcome, and reviewer.
+
 ## B. Offline PWA (Chrome or Edge, https or localhost)
 | # | Step | Expected |
 |---|---|---|
