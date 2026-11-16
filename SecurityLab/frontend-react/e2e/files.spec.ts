@@ -74,3 +74,42 @@ test('corrupted file on disk is rejected on open',async({page})=>{
  await project(page,'Open JSON');
  await expect(notice(page)).toContainText(/checksum/i);
 });
+
+test('two same-origin editor tabs cannot silently overwrite a stale project revision',async({browser})=>{
+ const context=await browser.newContext();
+ const first=await context.newPage(),second=await context.newPage();
+ try{
+  await first.addInitScript(stub);await second.addInitScript(stub);
+  await first.goto('/');
+  await first.evaluate(async()=>{const d=await navigator.storage.getDirectory();try{await d.removeEntry('a.securitylab.json');}catch{}});
+  await second.goto('/');
+  await project(first,'Save As');
+  await expect(first.locator('body')).toContainText('(revision 1)');
+  await project(second,'Open JSON');
+  await expect(second.locator('footer')).toContainText('revision 1');
+  await first.getByLabel('Night').check();
+  await second.getByLabel('Night').check();
+  await Promise.all([project(first,'Save Project'),project(second,'Save Project')]);
+  await expect.poll(async()=>{
+   const texts=await Promise.all([first.locator('body').innerText(),second.locator('body').innerText()]);
+   return texts.filter(t=>t.includes('(revision 2)')).length;
+  }).toBe(1);
+  const texts=await Promise.all([first.locator('body').innerText(),second.locator('body').innerText()]);
+  expect(texts.some(t=>/changed outside this editor|file changed|file-write lock/i.test(t))).toBe(true);
+  const saved=JSON.parse(await read(first,'a.securitylab.json'));
+  expect(saved.revision).toBe(2);
+  expect(saved.project.night).toBe(true);
+ }finally{await context.close();}
+});
+
+test('a missing exclusive browser lock refuses native writes before changing file contents',async({page})=>{
+ await page.addInitScript(stub);
+ await page.addInitScript(()=>{Object.defineProperty(navigator,'locks',{configurable:true,value:undefined});});
+ await page.goto('/');
+ const d=await page.evaluate(async()=>{const fs=await navigator.storage.getDirectory();try{await fs.removeEntry('a.securitylab.json');}catch{}return true;});
+ expect(d).toBe(true);
+ await project(page,'Save As');
+ await expect(page.locator('body')).toContainText('Exclusive browser file-write lock unavailable');
+ const text=await read(page,'a.securitylab.json');
+ expect(text).toBe('');
+});
