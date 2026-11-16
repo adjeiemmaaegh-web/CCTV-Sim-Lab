@@ -329,8 +329,15 @@ export function validateProject(input:unknown):Project{
  * explicitly from the instructor tools remain separate intentional actions.
  */
 export function activateProjectExtensions(project:Project):void{
- // All extension definitions are checked before the first registry write.
+ // Preflight the global capacity guard as well as all source definitions before
+ // any registrations. This avoids half-installing profiles when the custom
+ // scenario limit has already been reached.
  validateProject(project);
- for(const profile of project.profilePack??[])registerProfile(profile);
+ if(project.customScenario!==undefined){
+  const id=String((project.customScenario as {id?:unknown}).id??'');
+  if(!SCENARIOS.some(s=>s.id===id)&&SCENARIOS.filter(s=>s.id.startsWith('custom-')).length>=20)
+   throw new Error('Custom scenario capacity reached; export a backup and close unused exercises before loading another');
+ }
  if(project.customScenario!==undefined)registerPackScenario(project.customScenario);
+ for(const profile of project.profilePack??[])registerProfile(profile);
 }
