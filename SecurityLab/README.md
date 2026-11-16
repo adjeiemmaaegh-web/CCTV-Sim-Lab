@@ -1,15 +1,32 @@
-> **Current (November 2026):** Stage 18's canvas-first React workstation is publicly
-> available as a free static educational preview at https://securitylab-theta.vercel.app/.
-> The active code is in `frontend-react/`; its source remains local-file-based with no
-> backend, accounts or telemetry. To maximize drawing area choose **Focus canvas** in
-> the floor-plan toolbar and choose **Restore workstation panels** to return.
-> See `../ACCEPTANCE_STAGE18.md` for verified engineering checks and
-> `../docs/MANUAL_ACCEPTANCE.md` for still-unverified Windows, devices, accessibility
-> and professional reviewer gates. Live availability does **not** constitute real-world
-> installation validation, certification, or professional training acceptance.
+> **Current (16 November 2026):** SecurityLab is a browser-based, free, offline-first
+> **educational security-system simulator**, publicly hosted as a static preview at
+> https://securitylab-theta.vercel.app/. Its active React workstation is in
+> `frontend-react/` and pure simulation/domain modules are in `../src/`. Learner
+> projects use local JSON files; there are no accounts, online project database,
+> real equipment integrations or telemetry.
 >
-> The older Stage 15 source notes below are preserved for historical provenance,
-> not as the current verification status.
+> **Current workstation:** Canvas-first Stage 18 UI, virtual wiring/task-flow/
+> troubleshooting improvements, and the first-page onboarding/adjustable panels
+> merged to `main` in PR #7 (`af883b33bf00b5bfa0d81a9b0bb19e35a4600acb`).
+> Use **Focus canvas / Restore workstation panels** to adjust drawing space.
+> See `../SECURITYLAB_ROADMAP_STATUS.md` for stages and accepted-source scope.
+>
+> **Draft reliability increment (PR #8, not merged):** untrusted import validation
+> no longer mutates the live profile/scenario catalogue before accepted adoption;
+> cooperating tabs serialize native file writes with origin-scoped Web Locks.
+> A second browser profile, separate origin, desktop editor or OS process is
+> **not** protected by that browser lock. Only one editor should modify any
+> physical project file at a time; when in doubt export a separate backup before
+> reopening or saving. See `../docs/RELIABILITY_HARDENING_2026-11-16.md`.
+>
+> **Release remains NO-GO for professional use.** Follow
+> `../docs/MANUAL_ACCEPTANCE.md` for Windows native save/recovery, installed/offline
+> PWA restart, browsers, phones, screen readers, low-memory performance and
+> qualified technician/French-review gates. A hosted preview or green CI is
+> **not** evidence of real-world installation approval or professional competency.
+>
+> The original Stage 15 source notes below are retained for provenance, not
+> as the up-to-date verification status.
 
 # SecurityLab â€” Stage 15 Integrated Source
 
