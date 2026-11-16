@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {PROFILES} from '../src/domain/catalog.js';
 import {SCENARIOS,newProject} from '../src/scenarios/index.js';
 import {SAMPLE_PROFILE} from '../src/tools/profilePack.js';
-import {SAMPLE_PACK_SCENARIO} from '../src/tools/scenarioPack.js';
+import {SAMPLE_PACK_SCENARIO,registerPackScenario} from '../src/tools/scenarioPack.js';
 import {validateProject,activateProjectExtensions} from '../src/persistence/validation.js';
 import {serializeProject,parseProjectText} from '../src/persistence/file-projects.js';
 
@@ -52,6 +52,21 @@ describe('untrusted project extension integrity',()=>{
    const sIdx=SCENARIOS.findIndex(x=>x.id==='custom-integrity-accepted');if(sIdx>=0)SCENARIOS.splice(sIdx,1);
   }
   expect(fingerprint()).toBe(before);
+ });
+
+ it('refuses a new embedded scenario when capacity is full without installing its profile',()=>{
+  const originalLength=SCENARIOS.length;
+  try{
+   for(let i=0;i<20;i++)registerPackScenario({...structuredClone(SAMPLE_PACK_SCENARIO),id:`custom-integrity-capacity-${i}`});
+   const project=newProject();
+   project.profilePack=[{...structuredClone(SAMPLE_PROFILE),id:unique('capacity-refusal')}];
+   project.customScenario={...structuredClone(SAMPLE_PACK_SCENARIO),id:'custom-integrity-capacity-overflow'};
+   const before=fingerprint();
+   expect(()=>activateProjectExtensions(project)).toThrow(/capacity reached/i);
+   expect(fingerprint()).toBe(before);
+  }finally{
+   SCENARIOS.splice(originalLength);
+  }
  });
 
  it('rejects duplicate embedded models without registering either copy',()=>{
