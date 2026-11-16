@@ -94,8 +94,14 @@ test('two same-origin editor tabs cannot silently overwrite a stale project revi
    const texts=await Promise.all([first.locator('body').innerText(),second.locator('body').innerText()]);
    return texts.filter(t=>t.includes('(revision 2)')).length;
   }).toBe(1);
-  const texts=await Promise.all([first.locator('body').innerText(),second.locator('body').innerText()]);
-  expect(texts.some(t=>/changed outside this editor|file changed|file-write lock/i.test(t))).toBe(true);
+  // React renders the winner's revision before the loser necessarily renders
+  // its blocked-save banner. Await that second outcome, not just the first save.
+  await expect.poll(async()=>{
+   const alerts=await Promise.all([first.getByRole('alert').count(),second.getByRole('alert').count()]);
+   return alerts.reduce((a,b)=>a+b,0);
+  }).toBe(1);
+  const alerts=await Promise.all([first.getByRole('alert').allTextContents(),second.getByRole('alert').allTextContents()]);
+  expect(alerts.flat().some(t=>/changed outside this editor|file changed|file-write lock/i.test(t))).toBe(true);
   const saved=JSON.parse(await read(first,'a.securitylab.json'));
   expect(saved.revision).toBe(2);
   expect(saved.project.night).toBe(true);
