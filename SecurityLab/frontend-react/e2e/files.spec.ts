@@ -113,3 +113,42 @@ test('a missing exclusive browser lock refuses native writes before changing fil
  const text=await read(page,'a.securitylab.json');
  expect(text).toBe('');
 });
+
+test('an interrupted staged write preserves the saved file and permits a separate draft backup',async({page})=>{
+ await page.addInitScript(`
+ window.__failWrites=false;
+ window.showSaveFilePicker=async()=>{
+  const dir=await navigator.storage.getDirectory();
+  const real=await dir.getFileHandle('faulted.securitylab.json',{create:true});
+  return {
+   name:real.name,
+   getFile:()=>real.getFile(),
+   queryPermission:async()=> 'granted',
+   createWritable:async()=>{
+    const writer=await real.createWritable();
+    if(!window.__failWrites)return writer;
+    return {
+     write:async content=>{await writer.write(content);throw new Error('Injected staged-write failure');},
+     close:()=>writer.close(),
+     abort:()=>writer.abort()
+    };
+   }
+  };
+ };
+ `);
+ await page.goto('/');
+ await page.evaluate(async()=>{const dir=await navigator.storage.getDirectory();try{await dir.removeEntry('faulted.securitylab.json');}catch{}});
+ await project(page,'Save As');
+ await expect(page.locator('body')).toContainText('(revision 1)');
+ const before=await read(page,'faulted.securitylab.json');
+ await page.getByLabel('Night').check();
+ await page.evaluate(()=>(window as any).__failWrites=true);
+ await project(page,'Save Project');
+ await expect(page.locator('body')).toContainText('Injected staged-write failure');
+ expect(await read(page,'faulted.securitylab.json')).toBe(before);
+ const [dl]=await Promise.all([page.waitForEvent('download'),project(page,'Export Backup')]);
+ const fs=await import('node:fs');
+ const exported=JSON.parse(fs.readFileSync((await dl.path())!,'utf8'));
+ expect(exported.project.night).toBe(true);
+ expect(exported.revision).toBe(1);
+});
