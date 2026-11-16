@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {newProject} from '../../../src/scenarios/index.js';
-import {createDevice} from '../../../src/domain/catalog.js';
-import type {Device,Wall} from '../../../src/domain/types.js';
+import {newProject} from '../../src/scenarios/index.js';
+import {createDevice} from '../../src/domain/catalog.js';
+import type {Device,Wall} from '../../src/domain/types.js';
 import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 
