@@ -1,6 +1,6 @@
 # SecurityLab roadmap and acceptance status (16 November 2026)
 
-**Authoritative released-source baseline:** `main` commit `af883b33bf00b5bfa0d81a9b0bb19e35a4600acb` at the start of the reliability increment; subsequent commits must be read from GitHub. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
+**Authoritative production-source baseline (as verified 17 November 2026):** `main` commit `2ad0a41a1c83b438efe2643666732d5fd3cbb397`, incorporating reliability PR #8. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
 
 | Workstream / stage label | Verified engineering evidence | Acceptance status |
 |---|---|---|
@@ -12,7 +12,8 @@
 | Stage 20 / virtual wiring | Port assignment and cable inspector (`docs/STAGE20_INSTALLATION_WIRING.md`) | Virtual simulation only; no physical cabling approval |
 | Engineering stages 3–4 | Five-step optional task strip and evidence-linked diagnostics (`docs/STAGES_2_3_4_ENGINEERING_HANDOFF.md`) | Source and simulated tests; learner/technician acceptance open |
 | First-page UX continuation | Merged PR #7, commit `af883b33bf00b5bfa0d81a9b0bb19e35a4600acb`; onboarding and adjustable panels | CI verified; real-device UX acceptance open |
-| Reliability-hardening increment | Draft PR #8, branch `reliability-hardening-2026-11-16`: pure import validation, accepted-project extension activation, origin-wide write lock, race/fault tests | **Under engineering review**; unmerged, no release acceptance claimed |
+| Reliability-hardening increment | PR #8 merged to `main` (`2ad0a41a1c83b438efe2643666732d5fd3cbb397`); pure project extension validation, accepted-only activation, scoped browser file-write lock and regression tests | Source/automated CI verified; **physical file-save acceptance still open** |
+| Cross-browser acceptance continuation | Draft PR #9 adds 38 Firefox and 38 Linux WebKit automated tests; [run 43950976466](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43950976466) **76/76 PASS** with WebKit stopped-origin offline shell fallback; [register](docs/ACCEPTANCE_EXECUTION_2026-11-16.md) | Browser-engine evidence only; Safari/iPad, Edge, Windows and professional gates **not signed off** |
 
 ## Required completion gates (do not infer PASS from a code change)
 
@@ -22,4 +23,4 @@
 4. Keep qualifying screenshots, device specifications, checked files/hashes, dates, browser versions, logs, and reviewer identities; failures become traceable defects.
 5. Re-run the exact final-source CI and independently assess accepted use before authorizing a full release or professional-training claims.
 
-**Design constraints:** no backend, accounts, hosted project database, telemetry, live device control or invented firmware compatibility; local user-owned JSON projects; free educational simulator only. None of the draft remediation changes authorizes a deployment or a merge.
+**Design constraints:** no backend, accounts, hosted project database, telemetry, live device control or invented firmware compatibility; local user-owned JSON projects; free educational simulator only. The QA-only PR #9 does not authorize a commercial or professional release, and it does not satisfy physical acceptance. Existing preview hosting must not be equated with acceptance.

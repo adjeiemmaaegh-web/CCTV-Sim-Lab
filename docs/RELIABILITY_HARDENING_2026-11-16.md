@@ -1,5 +1,7 @@
 # SecurityLab reliability-hardening engineering handoff — 16 November 2026
 
+> **Post-merge correction (17 November 2026):** PR #8 was merged and verified on `main` commit `2ad0a41a1c83b438efe2643666732d5fd3cbb397`; the historical draft/under-review language below describes the engineering handoff **before merge** and must not be interpreted as current state. Main CI [43877160667](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43877160667) passed 171/171 unit and 69/69 Chromium tests. Separate QA [PR #9](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/pull/9) later achieved 76/76 Firefox+Linux WebKit checks, documented in [the acceptance register](ACCEPTANCE_EXECUTION_2026-11-16.md). **Real-device and professional acceptance remain NO-GO.**
+
 **Status:** Engineering increment in draft PR #8, not merged, not released, not professionally validated. **Source baseline:** main `af883b33bf00b5bfa0d81a9b0bb19e35a4600acb`. Final accepted source and CI status must be read from the PR head before any merge. **No backend, telemetry, account, database or cloud project-storage changes.** Existing static Vercel educational preview is unaffected by this branch.
 
 ## Scope and changes
