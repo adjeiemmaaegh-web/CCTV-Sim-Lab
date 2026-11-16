@@ -1,6 +1,6 @@
-import {registerProfile} from '../tools/profilePack.js';
-import {registerPackScenario} from '../tools/scenarioPack.js';
-import type {Project} from '../domain/types.js';
+import {buildProfile,registerProfile} from '../tools/profilePack.js';
+import {buildScenario,registerPackScenario} from '../tools/scenarioPack.js';
+import type {Project,Profile,Scenario} from '../domain/types.js';
 import {PROFILES} from '../domain/catalog.js';
 import {SCENARIOS} from '../scenarios/index.js';
 
@@ -22,19 +22,33 @@ export function validateProject(input:unknown):Project{
  input=migrateProject(input);
  if(!input||typeof input!=='object')throw new Error('Expected a SecurityLab project JSON object');
  const p=input as Record<string,unknown>;
+ // Treat an imported document as untrusted: validation must not install or
+ // replace global catalogue/scenario entries. Those are activated only after
+ // a fully accepted document has been adopted by the editor.
+ const embeddedProfiles:Profile[]=[];
  if(p.profilePack!==undefined){
   if(!Array.isArray(p.profilePack)||p.profilePack.length>40)throw new Error('Invalid embedded profile list');
-  for(const prof of p.profilePack){try{registerProfile(prof);}catch(e){throw new Error(`Invalid embedded device profile: ${(e as Error).message}`);}}
+  for(const prof of p.profilePack){
+   try{embeddedProfiles.push(buildProfile(prof));}
+   catch(e){throw new Error(`Invalid embedded device profile: ${(e as Error).message}`);}
+  }
+  if(new Set(embeddedProfiles.map(x=>x.id)).size!==embeddedProfiles.length)throw new Error('Duplicate embedded device profile');
  }
- if(p.customScenario!==undefined){try{registerPackScenario(p.customScenario);}catch(e){throw new Error(`Invalid embedded custom scenario: ${(e as Error).message}`);}}
- if(p.schemaVersion!==2||!idTxt(p.id)||!idTxt(p.title)||!idTxt(p.scenarioId)||!SCENARIOS.some(s=>s.id===p.scenarioId))throw new Error('Unsupported project format, scenario or schema');
+ let embeddedScenario:Scenario|undefined;
+ if(p.customScenario!==undefined){
+  try{embeddedScenario=buildScenario(p.customScenario);}
+  catch(e){throw new Error(`Invalid embedded custom scenario: ${(e as Error).message}`);}
+ }
+ const profiles:Profile[]=PROFILES.filter(x=>!embeddedProfiles.some(v=>v.id===x.id)).concat(embeddedProfiles);
+ const scenarios:Scenario[]=embeddedScenario?[...SCENARIOS.filter(s=>s.id!==embeddedScenario!.id),embeddedScenario]:SCENARIOS;
+ if(p.schemaVersion!==2||!idTxt(p.id)||!idTxt(p.title)||!idTxt(p.scenarioId)||!scenarios.some(s=>s.id===p.scenarioId))throw new Error('Unsupported project format, scenario or schema');
  if(!Array.isArray(p.devices)||!Array.isArray(p.cables)||!Array.isArray(p.rooms)||!Array.isArray(p.walls)||!Array.isArray(p.events)||!Array.isArray(p.targets))throw new Error('Project has missing geometry/equipment fields');
  if(p.devices.length>120||p.cables.length>240||p.walls.length>400||p.rooms.length>200||p.events.length>250||p.targets.length>50)throw new Error('Project exceeds safety limits');
  for(const d of p.devices){
-  if(!d||!idTxt(d.id)||!idTxt(d.name)||!PROFILES.some(x=>x.id===d.profileId)||!validPoint(d)||!finite(d.heading)||!finite(d.fov)||!finite(d.range)||!txt(d.ip)||!txt(d.mask)||!txt(d.gateway)||typeof d.enabled!=='boolean'||typeof d.motionEnabled!=='boolean'||typeof d.recordingEnabled!=='boolean')throw new Error('Invalid device record');
+  if(!d||!idTxt(d.id)||!idTxt(d.name)||!profiles.some(x=>x.id===d.profileId)||!validPoint(d)||!finite(d.heading)||!finite(d.fov)||!finite(d.range)||!txt(d.ip)||!txt(d.mask)||!txt(d.gateway)||typeof d.enabled!=='boolean'||typeof d.motionEnabled!=='boolean'||typeof d.recordingEnabled!=='boolean')throw new Error('Invalid device record');
   for(const key of ['unitCostGhs','poeBudgetW','storageGB','usedGB','bitrateMbps','opticalZoom','tiltDegrees','motionSensitivity','incomingMbps','frameRate'])if(d[key]!==undefined&&!finite(d[key]))throw new Error(`Invalid numeric equipment value: ${key}`);
   // No mutable project can turn a radio-only reference profile into a fictitious wired panel.
-  const spec=PROFILES.find(x=>x.id===d.profileId)!;
+  const spec=profiles.find(x=>x.id===d.profileId)!;
   if(spec.manufacturerSpec?.status==='reference-only')throw new Error('Reference-only manufacturer profile cannot be installed');
   if(spec.manufacturerSpec&&d.unitCostGhs!==undefined&&(!finite(d.unitCostGhs)||d.unitCostGhs<=0||d.unitCostGhs>999999))throw new Error('Manufacturer local quotation must be positive GHS');
   // Stage 6 alarm configuration: bound counts, safe numeric fields, configured zone identifiers and legal states.
@@ -59,7 +73,7 @@ export function validateProject(input:unknown):Project{
   }
   // Stage 8 power configuration. Only fictional electrical training profiles may own it.
   if(d.powerConfig!==undefined){const c=d.powerConfig;
-   if(!PROFILES.find(x=>x.id===d.profileId)?.kind.startsWith('power-')||!c||
+   if(!profiles.find(x=>x.id===d.profileId)?.kind.startsWith('power-')||!c||
     !['ratedW','capacityWh','chargeWh','efficiency','chargeLimitW','dischargeLimitW'].every(k=>finite(c[k]))||
     c.ratedW<0||c.ratedW>10000||c.capacityWh<0||c.capacityWh>100000||
     c.chargeWh<0||c.chargeWh>c.capacityWh||c.efficiency<0.5||c.efficiency>1||
@@ -75,7 +89,7 @@ export function validateProject(input:unknown):Project{
     !finite(c.batteryChargeWh)||c.batteryChargeWh<0||c.batteryChargeWh>c.batteryCapacityWh)throw new Error('Invalid access controller settings');
   }
   if(d.accessReader!==undefined){const c=d.accessReader;
-   if(!c||!['card','pin','biometric'].includes(c.method)||c.method!==PROFILES.find(x=>x.id===d.profileId)?.accessReaderMethod||!['none','offline','tamper'].includes(c.fault))throw new Error('Invalid access reader');
+   if(!c||!['card','pin','biometric'].includes(c.method)||c.method!==profiles.find(x=>x.id===d.profileId)?.accessReaderMethod||!['none','offline','tamper'].includes(c.fault))throw new Error('Invalid access reader');
   }
   if(d.accessLock!==undefined){const c=d.accessLock;
    if(!c||!['fail-safe','fail-secure'].includes(c.failMode)||!['none','stuck-locked','stuck-open'].includes(c.fault))throw new Error('Invalid electronic lock configuration');
@@ -158,7 +172,7 @@ export function validateProject(input:unknown):Project{
   if(!states||typeof states!=='object'||Array.isArray(states)||Object.keys(states).length>16)throw new Error('Invalid alarm panel runtime state');
   for(const [id,runtime] of Object.entries(states)){
    const panel=p.devices.find((d:{id:string;profileId:string})=>d.id===id);
-   if(!panel||PROFILES.find(x=>x.id===panel.profileId)?.kind!=='alarm-panel')throw new Error('Alarm state refers to unknown panel');
+   if(!panel||profiles.find(x=>x.id===panel.profileId)?.kind!=='alarm-panel')throw new Error('Alarm state refers to unknown panel');
    const a=runtime as Record<string,unknown>;
    if(!a||!['disarmed','stay','away'].includes(String(a.mode))||!['idle','exit','armed','entry','triggered'].includes(String(a.phase))||
     !Number.isSafeInteger(a.remainingSeconds)||Number(a.remainingSeconds)<0||Number(a.remainingSeconds)>3600||
@@ -175,7 +189,7 @@ export function validateProject(input:unknown):Project{
   for(const c of p.accessIdentities){if(!c||!idTxt(c.id)||!txt(c.name)||typeof c.enabled!=='boolean'||
    !['cardToken','pinToken','biometricToken'].every(k=>typeof c[k]==='string'&&c[k].length<=64)||
    !Array.isArray(c.grants)||c.grants.length>24)throw new Error('Invalid access identity');
-   for(const g of c.grants)if(!g||!idTxt(g.controllerId)||!p.devices.some((d:{id:string;profileId:string})=>d.id===g.controllerId&&PROFILES.find(v=>v.id===d.profileId)?.kind==='access-controller')||
+   for(const g of c.grants)if(!g||!idTxt(g.controllerId)||!p.devices.some((d:{id:string;profileId:string})=>d.id===g.controllerId&&profiles.find(v=>v.id===d.profileId)?.kind==='access-controller')||
     !Array.isArray(g.days)||g.days.length>7||new Set(g.days).size!==g.days.length||g.days.some((n:unknown)=>!Number.isInteger(n)||Number(n)<0||Number(n)>6)||
     !Number.isSafeInteger(g.startMinute)||g.startMinute<0||g.startMinute>1439||!Number.isSafeInteger(g.endMinute)||g.endMinute<0||g.endMinute>1440)throw new Error('Invalid access permission');
   }
@@ -225,7 +239,7 @@ export function validateProject(input:unknown):Project{
   const ids=new Set<string>();
   const categories=['equipment','coverage','network','recording','alarm','access','power','reliability','troubleshooting'];
   for(const a of p.assessments){
-   if(!a||!idTxt(a.id)||ids.has(a.id)||!txt(a.at)||!Number.isFinite(Date.parse(String(a.at)))||!SCENARIOS.some(s=>s.id===a.scenarioId)||!a.assessment||
+   if(!a||!idTxt(a.id)||ids.has(a.id)||!txt(a.at)||!Number.isFinite(Date.parse(String(a.at)))||!scenarios.some(s=>s.id===a.scenarioId)||!a.assessment||
     !Number.isInteger(a.assessment.score)||a.assessment.score<0||a.assessment.score>100||typeof a.assessment.passed!=='boolean'||
     !Array.isArray(a.assessment.rubric)||a.assessment.rubric.length>40||!Array.isArray(a.assessment.recommendations)||a.assessment.recommendations.length>50||
     a.assessment.recommendations.some((x:unknown)=>!txt(x)))throw new Error('Invalid assessment record');
@@ -283,7 +297,7 @@ export function validateProject(input:unknown):Project{
   if(new Set(fr.trials.map((x:{id:string})=>x.id)).size!==fr.trials.length||new Set(fr.issues.map((x:{id:string})=>x.id)).size!==fr.issues.length)throw new Error('Duplicate field review identifiers');
   for(const t of fr.trials)if(!t||!idTxt(t.id)||!txt(t.at)||!Number.isFinite(Date.parse(t.at))||!['learner','technician','instructor'].includes(t.role)||
    !txt(t.platform)||!txt(t.browser)||!['low-spec','standard','other'].includes(t.deviceClass)||!finite(t.ramGb)||t.ramGb<0||t.ramGb>512||typeof t.offline!=='boolean'||
-   !SCENARIOS.some(x=>x.id===t.scenarioId)||!tasks.includes(t.task)||!['completed','partial','blocked'].includes(t.outcome)||!finite(t.durationMinutes)||t.durationMinutes<0||t.durationMinutes>1440||
+   !scenarios.some(x=>x.id===t.scenarioId)||!tasks.includes(t.task)||!['completed','partial','blocked'].includes(t.outcome)||!finite(t.durationMinutes)||t.durationMinutes<0||t.durationMinutes>1440||
    typeof t.notes!=='string'||t.notes.length>1200)throw new Error('Invalid anonymous field trial');
   for(const i of fr.issues)if(!i||!idTxt(i.id)||!txt(i.at)||!Number.isFinite(Date.parse(i.at))||!['critical','major','minor'].includes(i.severity)||
    !['open','resolved','deferred'].includes(i.status)||!tasks.includes(i.area)||!txt(i.summary)||!idTxt(i.summary)||
@@ -308,4 +322,15 @@ export function validateProject(input:unknown):Project{
   if(new Set(entries.map(e=>e.id)).size!==entries.length)throw new Error(`Duplicate ${kind} IDs`);
  }
  return structuredClone(input as Project);
+}
+
+/** Activate embedded extensions only after document validation and user adoption.
+ * Validation and checksum failures are side-effect-free. Pack imports performed
+ * explicitly from the instructor tools remain separate intentional actions.
+ */
+export function activateProjectExtensions(project:Project):void{
+ // All extension definitions are checked before the first registry write.
+ validateProject(project);
+ for(const profile of project.profilePack??[])registerProfile(profile);
+ if(project.customScenario!==undefined)registerPackScenario(project.customScenario);
 }
