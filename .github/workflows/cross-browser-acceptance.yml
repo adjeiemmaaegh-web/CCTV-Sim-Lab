@@ -1,0 +1,36 @@
+name: Cross-browser acceptance (Firefox and WebKit)
+# Supplemental automated checks only: Linux WebKit is not a physical iPad/Safari
+# acceptance test, and downloads cannot substitute for Windows native file pickers.
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cross-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: SecurityLab/frontend-react
+    env:
+      CROSS_BROWSER: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: SecurityLab/frontend-react/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps firefox webkit
+      - name: Test Firefox and WebKit browser engines
+        run: npm run test:e2e -- --project=firefox --project=webkit
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-browser-test-results
+          path: SecurityLab/frontend-react/test-results/
+          if-no-files-found: ignore
+          retention-days: 14
