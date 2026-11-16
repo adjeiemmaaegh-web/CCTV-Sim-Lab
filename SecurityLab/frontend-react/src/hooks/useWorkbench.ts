@@ -20,7 +20,7 @@ import {advancePower,injectPowerFault,plannedPowerCable,isPowerDevice,DEFAULT_PO
 import type {PowerFault,} from '../../../src/engine/power.js';
 import type {AlarmStimulus} from '../../../src/engine/alarm.js';
 import {ProjectHistory} from '../../../src/state/history.js';
-import {validateProject} from '../../../src/persistence/validation.js';
+import {validateProject,activateProjectExtensions} from '../../../src/persistence/validation.js';
 import {ProjectFileSession,parseProjectText} from '../../../src/persistence/file-projects.js';
 import {readSafeFloorplanImage} from '../../../src/persistence/safe-images.js';
 import {fieldReadiness,withFieldTrial,withFieldIssue,setIssueStatus,fieldReviewJson,fieldReviewHtml} from '../../../src/field/field-validation.js';
@@ -128,7 +128,11 @@ export function useWorkbench(){
   if(!ok)throw new Error('No confirmed file save. Keep a separate downloaded backup before updating.');
  };
  const adopt=(next:Project,isSaved:boolean)=>{
-  const clean=history.current.reset(validateProject(next));currentRef.current=clean;setProject(clean);
+  // Keep untrusted extensions out of the live registry until the file was
+  // validated, checksummed, and the asynchronous import accepted by this editor.
+  const validated=validateProject(next);
+  activateProjectExtensions(validated);
+  const clean=history.current.reset(validated);currentRef.current=clean;setProject(clean);
   setRevision(fileSession.current.revision);setFileName(fileSession.current.name);
   savedSignature.current=isSaved?JSON.stringify(clean):null;pristine.current=isSaved?null:JSON.stringify(clean);
   setSaveState(isSaved?'saved':'unsaved');setSaveError('');setAutosave(false);
