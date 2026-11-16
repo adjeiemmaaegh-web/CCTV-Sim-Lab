@@ -73,6 +73,14 @@
 .canvas-tool-readout strong{font-size:11px;color:#78ead4;white-space:nowrap}
 .canvas-tool-readout span{color:#bbd2df;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* Laptop-height workspaces keep the start guide brief so drawing stays primary. */
+@media(min-width:901px) and (max-height:800px){
+ .getting-started{padding:9px 12px 8px;bottom:50px}
+ .getting-started h2{font-size:15px;line-height:1.2;margin:4px 0 8px}
+ .getting-started > p{display:none}
+ .getting-started-actions button{min-height:30px;padding:5px 7px;font-size:11px}
+}
+
 /* Mobile: retain the short header and make the save state readable next to the brand. */
 @media(max-width:900px){
  .shell .brand{gap:7px}
