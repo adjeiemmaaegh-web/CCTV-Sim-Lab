@@ -127,13 +127,17 @@ export function useWorkbench(){
   const ok=await saveCurrent(false,true);
   if(!ok)throw new Error('No confirmed file save. Keep a separate downloaded backup before updating.');
  };
- const adopt=(next:Project,isSaved:boolean)=>{
+ const adopt=(next:Project,isSaved:boolean,acceptedSession:ProjectFileSession=fileSession.current)=>{
   // Keep untrusted extensions out of the live registry until the file was
   // validated, checksummed, and the asynchronous import accepted by this editor.
   const validated=validateProject(next);
   activateProjectExtensions(validated);
-  const clean=history.current.reset(validated);currentRef.current=clean;setProject(clean);
-  setRevision(fileSession.current.revision);setFileName(fileSession.current.name);
+  // A failed validation or capacity check must leave the old project's file
+  // handle attached; switch sessions only after the new project is accepted.
+  const clean=history.current.reset(validated);
+  fileSession.current=acceptedSession;
+  currentRef.current=clean;setProject(clean);
+  setRevision(acceptedSession.revision);setFileName(acceptedSession.name);
   savedSignature.current=isSaved?JSON.stringify(clean):null;pristine.current=isSaved?null:JSON.stringify(clean);
   setSaveState(isSaved?'saved':'unsaved');setSaveError('');setAutosave(false);
   setSelected(null);setCableStart(null);setPlacing(null);setMode('select');setListOpen(false);setGeneration(x=>x+1);
@@ -148,7 +152,7 @@ export function useWorkbench(){
   if(currentRef.current!==previous||savePromise.current){
    setNotice('The project changed while the file picker was open. Reopen the file after retaining your new edits.');return;
   }
-  fileSession.current=candidate;adopt(parsed.project,true);
+  adopt(parsed.project,true,candidate);
   setNotice(`Opened ${parsed.name}. Changes remain in memory until saved back to the file.`);
  };
  const openFile=async(file:File)=>{
@@ -159,7 +163,7 @@ export function useWorkbench(){
   if(currentRef.current!==previous||savePromise.current){
    setNotice('The project changed during file reading. Import was cancelled to preserve newer edits.');return;
   }
-  fileSession.current=candidate;adopt(parsed.project,true);
+  adopt(parsed.project,true,candidate);
   setNotice(`Opened ${parsed.name}. Save As will select a writable file where supported; otherwise a new JSON download is required.`);
  };
  const openList=()=>{setBackups(fileSession.current.backups);setListOpen(true);};
