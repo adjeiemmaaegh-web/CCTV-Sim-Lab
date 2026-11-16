@@ -70,3 +70,14 @@ test('empty inspector provides actual room and wiring actions',async({page})=>{
  await inspector.getByRole('button',{name:'Draw a room'}).click();
  await expect(page.getByRole('button',{name:'Room',exact:true})).toHaveAttribute('aria-pressed','true');
 });
+
+test('guide can be reopened after the learner has placed equipment',async({page})=>{
+ await page.goto('/');
+ const intro=page.getByRole('complementary',{name:'Getting started'});
+ await intro.getByRole('button',{name:'Start designing'}).click();
+ await page.locator('.catalog-scroll button.equipment').first().click();
+ await page.locator('svg[role=application]').click({position:{x:120,y:75}});
+ await expect(page.locator('svg[role=application] g[data-device]')).toHaveCount(1);
+ await page.getByRole('button',{name:'Show getting started'}).click();
+ await expect(intro).toBeVisible();
+});
