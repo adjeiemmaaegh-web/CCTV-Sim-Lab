@@ -32,7 +32,7 @@
 | A8 — unsaved tab close | NOT RUN | Confirm leave warning on dirty project, none for untouched |
 | B1 — installed service worker | PARTIAL | Remote live origin has activated controlling SW and seven cached URLs; repeat on owner Windows setup |
 | B2 — installable PWA window | NOT RUN | Install in Chrome/Edge on target Windows, verify icon/window |
-| B3 — physical offline cold restart | NOT RUN | Linux WebKit service worker passed a stopped-origin reload in QA automation; physical Wi-Fi-off closed-app restart remains untested |
+| B3 — physical offline cold restart | PARTIAL | Chromium process-level cold restart with persistent profile, stopped HTTP origin and offline project export passed on Linux/Windows CI (runs 43977943909/43977943898); physical Wi-Fi-off installed-PWA cold restart NOT RUN |
 | B4 — safe PWA update negotiation | PARTIAL | Linux/Windows Chromium controlled localhost staging/refusal/verified-save update test passed (QA runs 43971845610/43971845666). Actual installed-PWA update on owner device NOT RUN; separate approved nonproduction changed-build deployment required |
 | C1 — real cross-browser flows | PARTIAL | Firefox 38/38 and Linux WebKit 38/38 automated checks passed in QA run 43950976466; Chromium 69/69. Physical Edge/Firefox/Safari manual acceptance remains outstanding |
 | C2 — low-spec responsiveness | NOT RUN | 8 GB Windows 11 integrated GPU, 40 devices + 60 walls, actual drag-frame measurement under 100ms |
@@ -66,9 +66,17 @@ For every gate, record: gate ID, date and timezone, tester/reviewer, exact `main
 - This is evidence for the update **handshake in automated browsers only**. No genuine physical Windows 11 picker, installed Windows or iPad PWA update, lost-network cold restart, changed app asset bundle, or complete native-device B4 behavior was exercised. [Detailed update test report](QA_PWA_UPDATE_2026-11-17.md) records all constraints.
 - **B4 stays PARTIAL (manual NOT RUN); real-world A/B/C/D acceptance and E owner signoff remain NO-GO.** [Owner acceptance issue #12](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/12) remains open.
 
+## PWA cold browser restart QA continuation — 17 November 2026
+
+- QA PR [#15](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/pull/15) extends only browser tests and the evidence register from `main` `8c65e66e38725ecdc102f34cd4ab5ae263b191f8`. The new process-restart test originated at commit `24b37503f0d8c9ebc61c3459b015cbf27dd9acc7`.
+- [Linux CI 43977943909](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43977943909): **171/171 unit, 72/72 Chromium PASS**. [Windows Server 2025 QA 43977943898](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43977943898): **171/171 unit, 72/72 Chromium PASS** and unsigned package integrity verified.
+- The test uses a **persistent browser profile**, completely closes the first Chromium browser process, stops the server, opens a fresh Chromium process on the same profile, and requires service-worker-originated HTTP 200 navigation plus functional offline worked-example and valid JSON backup export. [Detailed reproducible evidence report](QA_PWA_COLD_RELAUNCH_2026-11-17.md).
+- **B3 is PARTIAL automated support only.** No physical Windows 11/Wi-Fi-off restart, installed PWA window, physical machine reboot, smartphone/tablet or real-device file picker was tested. Earlier same-tab WebKit stopped-origin fallback remains supporting but is not a full browser-process restart. B1/B2 and the physical A/C/D/E acceptance remain unverified. [Owner acceptance issue #12](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/12) remains OPEN.
+- No runtime application code was changed, and the simulator's virtual camera and recording behavior is educational, not live equipment confirmation. Overall professional release **NO-GO**.
+
 ## Open risks and decisions
 
 - Browser Web Locks serialize cooperating tabs on the same origin and browser profile only; they are not OS file locks. External file editors and other origins/profiles can still race. Demonstrate the single-writer policy and recovery using A4.
-- Real offline service-worker cold restart is not established by seeing an activated SW or cached assets while online.
+- Real installed-PWA cold restart on a physical Wi-Fi-disconnected target device is **not** established by a controlling service worker, cache presence or a hosted-runner browser-process restart; complete the owner B3 procedure.
 - The software's calculated security-system behavior and training scores are educational simulations, not real camera/network/electrical measurements or professional certification.
 - Full completion and release approval remain **NO-GO** until physical gates, accessibility review, professional content review and owner sign-off have verifiable evidence.
