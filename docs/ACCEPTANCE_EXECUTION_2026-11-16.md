@@ -33,7 +33,7 @@
 | B1 — installed service worker | PARTIAL | Remote live origin has activated controlling SW and seven cached URLs; repeat on owner Windows setup |
 | B2 — installable PWA window | NOT RUN | Install in Chrome/Edge on target Windows, verify icon/window |
 | B3 — physical offline cold restart | NOT RUN | Linux WebKit service worker passed a stopped-origin reload in QA automation; physical Wi-Fi-off closed-app restart remains untested |
-| B4 — safe PWA update negotiation | NOT RUN | Use separate approved test deployment/version; never overwrite unsaved work |
+| B4 — safe PWA update negotiation | PARTIAL | Linux/Windows Chromium controlled localhost staging/refusal/verified-save update test passed (QA runs 43971845610/43971845666). Actual installed-PWA update on owner device NOT RUN; separate approved nonproduction changed-build deployment required |
 | C1 — real cross-browser flows | PARTIAL | Firefox 38/38 and Linux WebKit 38/38 automated checks passed in QA run 43950976466; Chromium 69/69. Physical Edge/Firefox/Safari manual acceptance remains outstanding |
 | C2 — low-spec responsiveness | NOT RUN | 8 GB Windows 11 integrated GPU, 40 devices + 60 walls, actual drag-frame measurement under 100ms |
 | C3 — actual tablet/phone touch | NOT RUN | Android and iPad Safari/Chrome place/move/zoom/Tools |
@@ -57,6 +57,14 @@ For every gate, record: gate ID, date and timezone, tester/reviewer, exact `main
 - [QA cross-browser run 43950976466](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43950976466) on that same head: **PASS 76/76** — Firefox **38/38**, Linux WebKit **38/38**. Both browsers passed their respective service-worker/offline tests. No retries/skips were needed in this final run.
 - This confirms **limited engine-level offline shell fallback** in a Linux runner, using a genuinely stopped origin; it does **not** exercise real Wi-Fi disconnect, iPad/Safari installation, closed-browser PWA reopening, physical laptop files, or OS-level concurrent writes. B3 and physical C1 remain **NOT RUN/PARTIAL** per the original acceptance rules.
 - The real-device follow-up remains tracked in [SecurityLab issue #10](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/10). Do not close that acceptance gap based solely on this automated success.
+
+## PWA update QA continuation — 17 November 2026
+
+- Source from `main` `7ccc22b14483780d0c590f936daad134dd2e7064` was extended **only in tests and documentation**, PR [#14](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/pull/14), code-bearing head `9f1133a06d04e94be09ea3b8f9006dd73d0c5ef0`.
+- [Linux run 43971845610](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43971845610): **171/171 unit, 71/71 Chromium PASS**. [Windows Server run 43971845666](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43971845666): **171/171 unit, 71/71 Chromium PASS**, static package integrity checked. [Firefox/WebKit run 43971845716](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43971845716): **76/76 existing browser-engine tests PASS**, not including the new Chromium-only update case.
+- Controlled PWA update test confirmed a changed service worker **waits without activating**, **cannot force the update after a download-only unverified save**, preserves the in-memory edit, then activates/reloads only following a confirmed OPFS-backed file write/readback. Saved revision and checksum were checked independently.
+- This is evidence for the update **handshake in automated browsers only**. No genuine physical Windows 11 picker, installed Windows or iPad PWA update, lost-network cold restart, changed app asset bundle, or complete native-device B4 behavior was exercised. [Detailed update test report](QA_PWA_UPDATE_2026-11-17.md) records all constraints.
+- **B4 stays PARTIAL (manual NOT RUN); real-world A/B/C/D acceptance and E owner signoff remain NO-GO.** [Owner acceptance issue #12](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/12) remains open.
 
 ## Open risks and decisions
 
