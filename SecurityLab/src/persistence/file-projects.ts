@@ -134,8 +134,17 @@ export class ProjectFileSession{
   const handle=handles[0],text=await readHandle(handle);
   return this.ingest(text,handle.name,handle);
  }
- /** Compare before write; this is NOT an atomic filesystem lock across processes. */
+ /** Hold an origin-wide exclusive Web Lock across the entire read/compare/write/readback
+  * sequence. This serializes cooperating SecurityLab tabs and installed PWA windows
+  * on the same origin, but cannot lock OS processes, other browser profiles/origins,
+  * or external file editors. No filesystem-level compare-and-swap is claimed.
+  */
  private async writeToHandle(handle:NativeFileHandle,project:Project,forceNew:boolean):Promise<SaveOutcome>{
+  if(typeof navigator==='undefined'||!navigator.locks?.request)
+   throw new Error('Exclusive browser file-write lock unavailable. Export a backup and use a supported browser; the project was not overwritten.');
+  return navigator.locks.request('securitylab:project-file-writer',{mode:'exclusive'},()=>this.writeToHandleLocked(handle,project,forceNew));
+ }
+ private async writeToHandleLocked(handle:NativeFileHandle,project:Project,forceNew:boolean):Promise<SaveOutcome>{
   // Save As must never silently replace a different existing project. A user
   // can save changes to an already-open project using ordinary Save, where
   // the content is compared against the last confirmed revision.
@@ -150,7 +159,12 @@ export class ProjectFileSession{
   const trimmed=history.filter((c,i,a)=>a.findIndex(x=>x.revision===c.revision)===i&&c.revision<nextRevision).slice(-MAX_BACKUPS);
   const content=serializeProject(project,nextRevision,trimmed);
   const writable=await handle.createWritable();
-  try{await writable.write(content);await writable.close();}catch(error){try{await writable.abort?.();}catch{}throw error;}
+  try{
+   // A second check narrows the external-editor race after the writable staging
+   // stream opens. It still cannot guarantee atomicity against non-cooperating writers.
+   if(await readHandle(handle)!==textBefore)throw new FileConflictError('Project changed while preparing the write. No changes were committed; export a separate backup or reopen the file.');
+   await writable.write(content);await writable.close();
+  }catch(error){try{await writable.abort?.();}catch{}throw error;}
   const after=await readHandle(handle);
   if(after!==content)throw new Error('Save readback mismatch: export a separate copy before continuing.');
   const confirmed=parseProjectText(after,handle.name);
