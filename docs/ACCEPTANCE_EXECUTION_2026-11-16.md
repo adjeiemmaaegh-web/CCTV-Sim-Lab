@@ -32,9 +32,9 @@
 | A8 — unsaved tab close | NOT RUN | Confirm leave warning on dirty project, none for untouched |
 | B1 — installed service worker | PARTIAL | Remote live origin has activated controlling SW and seven cached URLs; repeat on owner Windows setup |
 | B2 — installable PWA window | NOT RUN | Install in Chrome/Edge on target Windows, verify icon/window |
-| B3 — physical offline cold restart | NOT RUN | Disable Wi-Fi, fully close/reopen PWA, exercise tools and file backup |
+| B3 — physical offline cold restart | NOT RUN | Linux WebKit service worker passed a stopped-origin reload in QA automation; physical Wi-Fi-off closed-app restart remains untested |
 | B4 — safe PWA update negotiation | NOT RUN | Use separate approved test deployment/version; never overwrite unsaved work |
-| C1 — real cross-browser flows | PARTIAL | Existing Chromium CI and live smoke; Firefox/WebKit automation in the QA workflow; actual Edge/Firefox/Safari manual testing still required |
+| C1 — real cross-browser flows | PARTIAL | Firefox 38/38 and Linux WebKit 38/38 automated checks passed in QA run 43950976466; Chromium 69/69. Physical Edge/Firefox/Safari manual acceptance remains outstanding |
 | C2 — low-spec responsiveness | NOT RUN | 8 GB Windows 11 integrated GPU, 40 devices + 60 walls, actual drag-frame measurement under 100ms |
 | C3 — actual tablet/phone touch | NOT RUN | Android and iPad Safari/Chrome place/move/zoom/Tools |
 | C4 — NVDA/VoiceOver + French | NOT RUN | Screen-reader keyboard/tab/speech/locale checks with evidence |
@@ -47,6 +47,16 @@
 **Owner/tester: Windows 11 laptop** — complete A1–A8 and the A4 extension first, recording OS/browser version, filename, file SHA-256 before/after, screenshots and all result messages. Use a separate disposable `.securitylab.json` test project. **Never test intentional corruption or overwrite against valuable originals**. Next, complete B1–B4 using an installed test PWA on the approved test site; B4 requires a *controlled nonproduction update* and user-saved backup. Then C1–C5 on named physical browsers/devices; use automated Firefox/WebKit results only as supporting evidence, **not** a substitute for Safari, iPad, or Edge. Finally conduct qualified human content review D and an explicit owner package/release decision E.
 
 For every gate, record: gate ID, date and timezone, tester/reviewer, exact `main` SHA, browser/OS/device, source project file hash (if applicable), steps attempted, expected result, observed result, screenshot/log location, defect ticket, and PASS/FAIL. Any missing evidence remains NOT RUN/PARTIAL. The QA workflow itself is the source of truth for its own cross-browser engine results; this register must be updated with the exact run ID and counts before claiming the automated job passed.
+
+## QA continuation — 2026-11-17 (Dubai local date)
+
+**Accepted source remains main `2ad0a41a1c83b438efe2643666732d5fd3cbb397`.** This is a QA-only branch; no product code was merged for the cross-browser check. The final QA test implementation at branch commit `055c24889d3e238c66039cee4ced4d5d29a6c56f` replaced **only WebKit's offline-emulation method** with an independent static file server. The test first loads the real built app, waits for a controlling service worker, confirms a populated cache containing `/index.html`, **stops the local HTTP server entirely**, then requires a successful HTTP 200 navigation response **from the service worker**, with the full application workspace visible. Firefox and Chromium continue their `context.setOffline(true)` checks.
+
+- Initial [Firefox/WebKit run 43880503877](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43880503877), including a single rerun, **FAILED 75/76 twice**: WebKit failed `page.reload()` with an internal browser error only when Playwright marked its context offline. This reproduces the category of upstream [Playwright WebKit issue #42775](https://github.com/microsoft/playwright/issues/42775); it is not evidence that actual Safari on a physical device works or fails.
+- [QA standard CI 43950976430](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43950976430) on `055c24889d3e238c66039cee4ced4d5d29a6c56f`: **PASS** — 171/171 Vitest, 69/69 Chromium E2E, typecheck/build and dependency audit with 0 vulnerabilities reported.
+- [QA cross-browser run 43950976466](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43950976466) on that same head: **PASS 76/76** — Firefox **38/38**, Linux WebKit **38/38**. Both browsers passed their respective service-worker/offline tests. No retries/skips were needed in this final run.
+- This confirms **limited engine-level offline shell fallback** in a Linux runner, using a genuinely stopped origin; it does **not** exercise real Wi-Fi disconnect, iPad/Safari installation, closed-browser PWA reopening, physical laptop files, or OS-level concurrent writes. B3 and physical C1 remain **NOT RUN/PARTIAL** per the original acceptance rules.
+- The real-device follow-up remains tracked in [SecurityLab issue #10](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/10). Do not close that acceptance gap based solely on this automated success.
 
 ## Open risks and decisions
 
