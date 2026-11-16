@@ -5,7 +5,7 @@ import {simulate,triggerMotion,advanceRecording} from '../src/engine/simulator.j
 import {commandAlarm,triggerAlarmStimulus,advanceAlarmTime} from '../src/engine/alarm.js';
 import {presentAccessToken} from '../src/engine/access.js';
 import {createDevice,profile} from '../src/domain/catalog.js';
-import {validateProject} from '../src/persistence/validation.js';
+import {validateProject,activateProjectExtensions} from '../src/persistence/validation.js';
 import {LESSONS,lessonProgress,lessonById} from '../src/tools/lessons.js';
 import {generateFaults,applicableFaults,submitGuess,reveal,rng,FAULT_KINDS} from '../src/tools/faultGen.js';
 import {recordAudit,summarizeChange,auditStats,MAX_AUDIT} from '../src/tools/audit.js';
@@ -167,6 +167,8 @@ describe('instructor scenario packs (feature 10)',()=>{
   const idx=SCENARIOS.findIndex(s=>s.id===sc.id);SCENARIOS.splice(idx,1);
   expect(sourceOf(sc.id)).toBeTruthy();
   expect(()=>validateProject(structuredClone(p))).not.toThrow();
+  expect(SCENARIOS.some(s=>s.id===sc.id)).toBe(false); // pure validation
+  activateProjectExtensions(p); // accepting the project activates its scenario
   expect(SCENARIOS.some(s=>s.id===sc.id)).toBe(true);
  });
  it('equipment lock: allowed kinds are enforced by the scenario',()=>{

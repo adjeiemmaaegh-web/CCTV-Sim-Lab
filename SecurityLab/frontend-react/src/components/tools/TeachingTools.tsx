@@ -122,7 +122,7 @@ export function ReportPanel({w}:{w:Workbench}){
  const [note,setNote]=useState('');
  const html=()=>planReportHtml(w.project,w.result);
  const safeName=w.project.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,60)||'project';
- const open=()=>{try{const url=URL.createObjectURL(new Blob([html()],{type:'text/html;charset=utf-8'}));const win=window.open(url,'_blank','noopener');if(!win)setNote('Pop-up blocked: use Download instead, then open the file and print it.');else{setNote('Report opened in a new tab. Use Print, then choose Save as PDF.');setTimeout(()=>URL.revokeObjectURL(url),60_000);}}catch(e){setNote(`Could not build the report: ${(e as Error).message}`);}};
+ const open=()=>{try{const url=URL.createObjectURL(new Blob([html()],{type:'text/html;charset=utf-8'}));const win=window.open(url,'_blank','noopener');if(!win){URL.revokeObjectURL(url);setNote('Pop-up blocked: use Download instead, then open the file and print it.');}else{setNote('Report opened in a new tab. Use Print, then choose Save as PDF.');setTimeout(()=>URL.revokeObjectURL(url),60_000);}}catch(e){setNote(`Could not build the report: ${(e as Error).message}`);}};
  return <section className="tool-panel" aria-label="Printable report">
   <p>Creates a standalone report with the floor plan(s), equipment list, estimate, good-practice review and diagnostics.</p>
   <div className="tool-row"><button onClick={open}>Open printable report</button><button onClick={()=>{try{downloadText(html(),`${safeName}-report.html`,'text/html;charset=utf-8');setNote('Report downloaded. Open it and use Print → Save as PDF.');}catch(e){setNote(`Could not build the report: ${(e as Error).message}`);}}}>Download report (HTML)</button></div>
