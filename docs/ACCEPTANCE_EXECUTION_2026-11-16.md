@@ -33,7 +33,7 @@
 | B1 — installed service worker | PARTIAL | Remote live origin has activated controlling SW and seven cached URLs; repeat on owner Windows setup |
 | B2 — installable PWA window | NOT RUN | Install in Chrome/Edge on target Windows, verify icon/window |
 | B3 — physical offline cold restart | PARTIAL | Chromium process-level cold restart with persistent profile, stopped HTTP origin and offline project export passed on Linux/Windows CI (runs 43977943909/43977943898); physical Wi-Fi-off installed-PWA cold restart NOT RUN |
-| B4 — safe PWA update negotiation | PARTIAL | Linux/Windows Chromium controlled localhost staging/refusal/verified-save update test passed (QA runs 43971845610/43971845666). Actual installed-PWA update on owner device NOT RUN; separate approved nonproduction changed-build deployment required |
+| B4 — safe PWA update negotiation | PARTIAL | Single-tab staged update + new two-tab SW consent guard tested with OPFS and localhost on Linux/Windows Chromium (runs 43971845610/43971845666 and 43990143551/43990143513); real Windows installed-PWA two-tab update NOT RUN |
 | C1 — real cross-browser flows | PARTIAL | Firefox 38/38 and Linux WebKit 38/38 automated checks passed in QA run 43950976466; Chromium 69/69. Physical Edge/Firefox/Safari manual acceptance remains outstanding |
 | C2 — low-spec responsiveness | NOT RUN | 8 GB Windows 11 integrated GPU, 40 devices + 60 walls, actual drag-frame measurement under 100ms |
 | C3 — actual tablet/phone touch | NOT RUN | Android and iPad Safari/Chrome place/move/zoom/Tools |
@@ -73,6 +73,13 @@ For every gate, record: gate ID, date and timezone, tester/reviewer, exact `main
 - The test uses a **persistent browser profile**, completely closes the first Chromium browser process, stops the server, opens a fresh Chromium process on the same profile, and requires service-worker-originated HTTP 200 navigation plus functional offline worked-example and valid JSON backup export. [Detailed reproducible evidence report](QA_PWA_COLD_RELAUNCH_2026-11-17.md).
 - **B3 is PARTIAL automated support only.** No physical Windows 11/Wi-Fi-off restart, installed PWA window, physical machine reboot, smartphone/tablet or real-device file picker was tested. Earlier same-tab WebKit stopped-origin fallback remains supporting but is not a full browser-process restart. B1/B2 and the physical A/C/D/E acceptance remain unverified. [Owner acceptance issue #12](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/issues/12) remains OPEN.
 - No runtime application code was changed, and the simulator's virtual camera and recording behavior is educational, not live equipment confirmation. Overall professional release **NO-GO**.
+
+## Multi-tab PWA update safety fix — 17 November 2026
+
+- [PR #16](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/pull/16) fixes an identifiable source gap: the requesting tab's previously confirmed save could activate a waiting service worker **without checking another open SecurityLab tab's unsaved state**.
+- The updated generated SW asks all currently scoped window clients over MessageChannels for explicit read-only safety status; a missing, timed-out, saving, blocked or unsaved client **prevents activation**. The initiating editor reloads only after its local verified-save and worker consent. Other tabs are not automatically saved.
+- At branch test-bearing commit `593e1a2835af3417ac1039431e1065e43caec777`, [Linux CI 43990143551](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43990143551) passed **171/171 unit and 73/73 Chromium tests**, including a real two-tab browser regression. [Windows Server 2025 43990143513](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43990143513) likewise passed **171/171 unit, 73/73 Chromium**, including verified portable package SHA-256. [Detailed source evidence and limitations](QA_PWA_MULTITAB_UPDATE_2026-11-17.md).
+- This is a **cooperative origin-level consent check**, not OS-level file locking, other-profile coordination or a guarantee against edits initiated after a peer replies. All automated file handles are OPFS-backed. B4 remains **PARTIAL in CI; physical installed-Windows-11 PWA update NOT RUN**. Full A/B/C/D/E release remains **NO-GO**.
 
 ## Open risks and decisions
 
