@@ -15,6 +15,7 @@ import type {WorkflowStep} from './components/WorkflowStrip.js';
 export function SecurityLab(){
  const w=useWorkbench();
  const [panel,setPanel]=useState<Panel>(null);
+ const [mobileSection,setMobileSection]=useState<'plan'|'devices'|'properties'|'simulation'>('plan');
  const [focusCanvas,setFocusCanvas]=useState(false);
  const [catalogVisible,setCatalogVisible]=useState(true);
  const [inspectorVisible,setInspectorVisible]=useState(true);
@@ -56,6 +57,12 @@ export function SecurityLab(){
  const handle=(task:()=>void|Promise<unknown>)=>{try{Promise.resolve(task()).catch(e=>w.setNotice(`Operation failed: ${String(e)}`));}catch(e){w.setNotice(`Operation failed: ${String(e)}`);}};
 
  const revealPanels=()=>{setFocusCanvas(false);setCatalogVisible(true);setInspectorVisible(true);setConsoleVisible(true);};
+ const jumpMobile=(section:'plan'|'devices'|'properties'|'simulation')=>{
+  setMobileSection(section);
+  revealPanels();
+  const selector={plan:'.canvas-panel',devices:'.catalog',properties:'.inspector',simulation:'.console'}[section];
+  window.requestAnimationFrame(()=>document.querySelector(selector)?.scrollIntoView({behavior:'smooth',block:'start'}));
+ };
  const chooseWorkflow=(step:WorkflowStep)=>{
   if(step==='save'){handle(()=>w.saveCurrent(false));return;}
   setFocusCanvas(false);
@@ -81,13 +88,19 @@ export function SecurityLab(){
  return <main className="workstation shell"><a className="skip-link" href="#securitylab-workspace">Skip to engineering workspace</a><TopBar w={w} onRevealPanels={revealPanels}/>
  <div className={`shell-body ${focusCanvas?'canvas-focus-mode':''} ${consoleVisible?'':'console-collapsed'}`}><NavRail w={w} openPanel={setPanel} onView={w.setView} onRevealPanels={revealPanels}/>
  <div className={`main-grid ${catalogVisible?'':'catalog-collapsed'} ${inspectorVisible?'':'inspector-collapsed'}`} style={{'--catalog-width':`${catalogWidth}px`,'--inspector-width':`${inspectorWidth}px`} as React.CSSProperties}>
-  <Catalog w={w}/>
+  <Catalog w={w} onChoose={()=>{if(window.matchMedia('(max-width:900px)').matches)jumpMobile('plan');}}/>
   <Canvas w={w} focusMode={focusCanvas} onToggleFocus={()=>setFocusCanvas(v=>!v)} onWorkflow={chooseWorkflow}
    layout={{catalogVisible,inspectorVisible,consoleVisible,catalogWidth,inspectorWidth,
     toggleCatalog:()=>setCatalogVisible(v=>!v),toggleInspector:()=>setInspectorVisible(v=>!v),toggleConsole:()=>setConsoleVisible(v=>!v),
     setCatalogWidth,setInspectorWidth,reset:()=>{revealPanels();setCatalogWidth(280);setInspectorWidth(300);}}}/>
   <Inspector w={w}/></div>
  <Console w={w}/></div>
+ <nav className="mobile-workspace-nav" aria-label="Mobile workspace navigation">
+  <button type="button" aria-current={mobileSection==='plan'} onClick={()=>jumpMobile('plan')}><Icon name="floorplan" size={19}/>Plan</button>
+  <button type="button" aria-current={mobileSection==='devices'} onClick={()=>jumpMobile('devices')}><Icon name="equipment" size={19}/>Devices</button>
+  <button type="button" aria-current={mobileSection==='properties'} onClick={()=>jumpMobile('properties')}><Icon name="settings" size={19}/>Properties</button>
+  <button type="button" aria-current={mobileSection==='simulation'} onClick={()=>jumpMobile('simulation')}><Icon name="realtime" size={19}/>Simulation</button>
+ </nav>
  <footer className="status-footer"><span className="footer-note"><Icon name="info" size={16}/>SecurityLab &ndash; Educational simulation only. Manufacturer profiles are simulated or based on documented references. Not real device firmware, and no manufacturer certification is implied.</span>
  <span className={`save ${w.saveState}`} title={w.fileName} role="status" aria-label="Project save status">Project: {w.saveState==='saved'?`Saved \u00b7 revision ${w.revision}`:w.saveState==='saving'?'Writing file\u2026':w.saveState==='blocked'?'File save blocked':'Unsaved changes'}</span></footer>
  {w.notice&&<div className="toast" role="status">{w.notice}<button aria-label="Dismiss notification" onClick={()=>w.setNotice('')}>×</button></div>}
