@@ -52,7 +52,7 @@ test('equipment selection reveals edit context and direct placement without over
 test('keyboard zoom is reversible, while save/undo shortcuts remain delegated to app',async({page})=>{
  await page.goto('/');
  await page.getByRole('complementary',{name:'Getting started'}).getByRole('button',{name:'Start designing'}).click();
- await page.locator('svg[role=application]').click({position:{x:500,y:320}});
+ await page.locator('svg[role=application]').focus();
  await page.evaluate(()=>{(document.activeElement as HTMLElement|null)?.blur?.();});
  const readout=page.locator('.zoom-readout');
  await expect(readout).toHaveText('100%');
@@ -79,7 +79,7 @@ test.describe('dedicated mobile navigation',()=>{
   await expect(nav.getByRole('button',{name:'Devices'})).toHaveAttribute('aria-current','true');
   await expect(page.locator('.catalog')).toBeVisible();
   await nav.getByRole('button',{name:'Plan'}).tap();
-  await expect(page.locator('.canvas-body svg')).toBeVisible();
+  await expect(page.locator('svg[role=application]')).toBeVisible();
   await nav.getByRole('button',{name:'Properties'}).tap();
   await expect(page.locator('.inspector')).toBeVisible();
   await nav.getByRole('button',{name:'Simulation'}).tap();
