@@ -874,3 +874,10 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
  .scenario-progress>div{background:Highlight}
 }
 
+
+/* First-use challenge selector shares the form control system. */
+.intro-scenario{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#c3f1e4;margin:9px 0}
+.intro-scenario select{width:100%;min-height:38px;border:1px solid #507d8c;background:#102a3e;color:#eff8fb;border-radius:8px}
+.scenario-panel>.muted{line-height:1.6;margin:4px 0 12px}
+.scenario-panel .scenario-next-actions button{background:#1a4150;border-color:#4d7887;color:#e4f7f5}
+@media(max-width:500px){.scenario-next-actions button{width:100%}}
