@@ -22,7 +22,7 @@ const specLine=(p:(typeof PROFILES)[number])=>{
  return bits.join(' · ');
 };
 
-export function Catalog({w}:{w:Workbench}){
+export function Catalog({w,onChoose}:{w:Workbench;onChoose?:()=>void}){
  const [query,setQuery]=useState('');
  const [maker,setMaker]=useState('all');
  const [family,setFamily]=useState<'all'|'generic'|'manufacturer'>('all');
@@ -33,7 +33,7 @@ export function Catalog({w}:{w:Workbench}){
  const items=(kinds:string[])=>PROFILES.filter(p=>kinds.includes(p.kind)&&w.isAllowedProfile(p.id)&&(maker==='all'||p.manufacturer===maker)&&(family==='all'||(family==='manufacturer')===!!p.manufacturerSpec)&&`${p.name} ${p.model} ${p.manufacturer} ${p.protocols.join(' ')}`.toLowerCase().includes(q));
  const choose=(p:(typeof PROFILES)[number])=>{
   if(p.manufacturerSpec?.status==='reference-only'){setInspectedId(p.id);w.setNotice(`${p.name}: reference only. Review official source and limitations in Filters; wireless Jeweller pairing is not simulated.`);return;}
-  w.setPlacing(p.id);w.setMode('place');w.setNotice(`Click the floor plan to place ${p.name}`);
+  w.setPlacing(p.id);w.setMode('place');onChoose?.();w.setNotice(`Click the floor plan to place ${p.name}`);
  };
  const rigs=[
   {id:'alarm-panel-8',label:'Install wired alarm practice rig',done:w.project.devices.some(d=>PROFILES.find(p=>p.id===d.profileId)?.kind==='alarm-panel'),run:w.loadAlarmRig},
