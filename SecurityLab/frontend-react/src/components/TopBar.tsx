@@ -20,6 +20,9 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
  };
  const armed=Object.values(w.result.alarm?.panels||{}).filter(p=>p.mode!=='disarmed').length;
  const mode=w.mode==='test'?'test':'design';
+ const diagnosticCount=w.result.network?.diagnostics.length??0;
+ const simulationLabel=w.project.devices.length===0?'No equipment yet':diagnosticCount?`${diagnosticCount} diagnostic issue${diagnosticCount===1?'':'s'}`:'Model active';
+ const simulationTone=w.project.devices.length===0?'':diagnosticCount?'warn':'good';
  const item=(label:string,icon:string,on:()=>void,disabled=false,hint?:string)=><button role="menuitem" disabled={disabled} onClick={on} title={hint}><Icon name={icon} size={16}/>{label}</button>;
  return <header className="topbar">
   <div className="brand"><Icon name="shield" size={30}/><span><strong>SecurityLab</strong><small className={`brand-mobile-state ${w.saveState}`}>{w.saveState==='blocked'?'Save blocked':w.saveState==='saved'?'Project saved':w.saveState==='saving'?'Saving file…':'Unsaved draft'} · Virtual lab</small></span></div>
@@ -27,7 +30,7 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
   <label className="pill scenario-pill"><Icon name="folder" size={18}/><select aria-label="Scenario" value={w.project.scenarioId} onChange={e=>{const id=e.currentTarget.value;handle(()=>w.switchScenario(id));}}>{w.SCENARIOS.map(s=><option value={s.id} key={s.id}>{s.title}</option>)}</select></label>
   <label className="pill mode-pill-select"><Icon name="play" size={16}/><select aria-label="Mode" value={mode} onChange={e=>{w.setMode(e.currentTarget.value==='test'?'test':'select');}}><option value="design">Design / Plan</option><option value="test">Test motion</option></select></label>
   <div className="status-chips" role="status" aria-label="Live status">
-   <span className="chip good"><i className="dot"/>Simulation Ready</span>
+   <span className={"chip "+simulationTone}><i className="dot" aria-hidden="true"/>{simulationLabel}</span>
    <span className="chip"><Icon name="camera" size={16}/>{w.result.recordingCameras} recording</span>
    <span className="chip"><Icon name="alarm" size={16}/>{armed} alarm{armed===1?'':'s'}</span>
    <span className="chip"><Icon name="power" size={16}/>{(w.result.power?.totalLoadW||0).toFixed(0)} W</span>
