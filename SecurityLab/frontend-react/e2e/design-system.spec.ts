@@ -70,6 +70,11 @@ test.describe('dedicated mobile navigation',()=>{
   await page.goto('/');
   const nav=page.getByRole('navigation',{name:'Mobile workspace navigation'});
   await expect(nav).toBeVisible();
+  const quick=page.getByRole('toolbar',{name:'Quick touch tools'});
+  await expect(quick).toBeVisible();
+  await quick.getByRole('button',{name:'Pan tool (mobile)'}).tap();
+  await expect(quick.getByRole('button',{name:'Pan tool (mobile)'})).toHaveAttribute('aria-pressed','true');
+  await quick.getByRole('button',{name:'Select tool (mobile)'}).tap();
   await nav.getByRole('button',{name:'Devices'}).tap();
   await expect(nav.getByRole('button',{name:'Devices'})).toHaveAttribute('aria-current','true');
   await expect(page.locator('.catalog')).toBeVisible();
