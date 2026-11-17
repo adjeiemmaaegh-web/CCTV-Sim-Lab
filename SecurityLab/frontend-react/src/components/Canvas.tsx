@@ -247,27 +247,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
     <button type="button" aria-label="Cable tool (mobile)" aria-pressed={w.mode==='cable'} disabled={w.blocked} onClick={()=>changeMode('cable')}><Icon name="cable" size={19}/>Wire</button>
     <button type="button" aria-label="Fit plan (mobile)" onClick={fit}><Icon name="focus" size={19}/>Fit plan</button>
    </div>
-   {contextActive&&<div className="selection-context" role="region" aria-label="Active workspace tool">
-    {w.placing?<>
-     <span className="selection-context-name">Placing equipment</span>
-     <span className="selection-context-hint">Tap or click the plan to position the selected device.</span>
-     {view==='floor'&&<button className="selection-context-cta" disabled={w.blocked} onClick={()=>w.install(w.placing!,snapped(bounded(center),true))}>Place at view center</button>}
-     <button onClick={()=>{w.setPlacing(null);w.setMode('select');}}>Cancel placement</button>
-    </>:w.mode==='cable'?<>
-     <span className="selection-context-name">{w.cableStart?'Second endpoint needed':'Connect equipment'}</span>
-     <span className="selection-context-hint">{w.cableStart?'Select a different device to complete the cable.':'Select two devices; the simulation will check port and cable compatibility.'}</span>
-     <button onClick={()=>{w.setCableStart(null);w.setMode('select');}}>Exit cable tool</button>
-    </>:w.selected?<>
-     <span className="selection-context-name">Selected: {selectedLabel}</span>
-     <span className="selection-context-hint">Edit settings in Properties, or move with arrow keys (Shift = 10 units).</span>
-     <button className="selection-context-cta" onClick={()=>{
-      if(focusMode)onToggleFocus();
-      if(!layout.inspectorVisible)layout.toggleInspector();
-      if(window.matchMedia('(max-width:900px)').matches)window.requestAnimationFrame(()=>document.querySelector('.inspector')?.scrollIntoView({behavior:'smooth',block:'start'}));
-     }}>Show properties</button>
-     <button onClick={()=>w.setSelected(null)}>Clear selection</button>
-    </>:null}
-   </div>}
+
   {showLayout&&<div id="workspace-layout-controls" className="workspace-layout-controls" role="group" aria-label="Workspace panel controls">
    <div className="workspace-layout-heading"><strong>Customize workspace</strong><span>Show only the panels you need.</span><button type="button" onClick={layout.reset}>Reset layout</button></div>
    <div className="workspace-layout-grid">
@@ -301,7 +281,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
   </div>}
   {hasFloors(wb.project)&&<FloorBar w={wb}/>}
   <div className="canvas-body" onDragOver={e=>{if(view==='floor')e.preventDefault();}} onDrop={onDrop}>
-   <svg ref={svg} viewBox={viewBox} role="application" aria-label="Engineering plan. Choose a device with Navigate elements under Layers and tools; use arrows to reposition it. Plus and minus zoom, 0 fits, Space drag pans." onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={e=>{gesture.current=null;setPreview(null);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);}}>
+   <svg ref={svg} viewBox={viewBox} tabIndex={0} role="application" aria-label="Engineering plan. Choose a device with Navigate elements under Layers and tools; use arrows to reposition it. Plus and minus zoom, 0 fits, Space drag pans." onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={e=>{gesture.current=null;setPreview(null);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);}}>
     <defs><pattern id="sl-grid-s" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0L0 0 0 10" fill="none" stroke="#35546c" strokeWidth=".55"/></pattern><pattern id="sl-grid-l" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0L0 0 0 100" fill="none" stroke="#60849a" strokeWidth=".85"/></pattern></defs>
     <rect x="-2000" y="-2000" width="5000" height="5000" fill="#112a3e"/>
     {layers.grid&&view==='floor'&&<g pointerEvents="none"><rect x="0" y="0" width="1000" height="650" fill="url(#sl-grid-s)"/><rect x="0" y="0" width="1000" height="650" fill="url(#sl-grid-l)"/></g>}
@@ -372,6 +352,27 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
      {w.project.devices.filter(d=>!isAlarm(d)&&!profile(d.profileId).kind.startsWith('power-')).map(d=>{const kind=profile(d.profileId).kind,{x,y}=topologyPosition(d),addr=w.result.network?.addresses[d.id];return <g key={d.id} data-device={d.id} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Select network device ${d.name}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}><rect x="-66" y="-36" width="132" height="72" rx="8" fill="#173650" stroke={w.selected?.kind==='device'&&w.selected.id===d.id?'#ffe18a':w.result.devices[d.id]?.networkOk?'#25daba':'#e1aa64'} strokeWidth="2"/><text y="-14" textAnchor="middle" fill="#d0eef3" fontSize="12" pointerEvents="none">{kind==='camera'?(signalOf(d)==='analog'?'ANALOG CAM':'IP CAMERA'):kind==='switch'?'SWITCH':kind==='router'?'ROUTER':kind==='ap'?'Wi-Fi AP':kind==='server'?'SERVER':kind==='dvr'?'DVR':'NVR'}</text><text y="4" textAnchor="middle" fill="#9bbed0" fontSize="11" pointerEvents="none">{d.name.slice(0,19)}</text><text y="22" textAnchor="middle" fill="#6bd8ce" fontSize="10" pointerEvents="none">{addr?.ip?`${addr.ip} · V${addr.vlanId}`:`VLAN ${addr?.vlanId??10}`}</text></g>;})}
     </>}
    </svg>
+   {contextActive&&<div className="selection-context" role="region" aria-label="Active workspace tool">
+    {w.placing?<>
+     <span className="selection-context-name">Placing equipment</span>
+     <span className="selection-context-hint">Tap or click the plan to position the selected device.</span>
+     {view==='floor'&&<button className="selection-context-cta" disabled={w.blocked} onClick={()=>w.install(w.placing!,snapped(bounded(center),true))}>Place at view center</button>}
+     <button onClick={()=>{w.setPlacing(null);w.setMode('select');}}>Cancel placement</button>
+    </>:w.mode==='cable'?<>
+     <span className="selection-context-name">{w.cableStart?'Second endpoint needed':'Connect equipment'}</span>
+     <span className="selection-context-hint">{w.cableStart?'Select a different device to complete the cable.':'Select two devices; the simulation will check port and cable compatibility.'}</span>
+     <button onClick={()=>{w.setCableStart(null);w.setMode('select');}}>Exit cable tool</button>
+    </>:w.selected?<>
+     <span className="selection-context-name">Selected: {selectedLabel}</span>
+     <span className="selection-context-hint">Edit settings in Properties, or move with arrow keys (Shift = 10 units).</span>
+     <button className="selection-context-cta" onClick={()=>{
+      if(focusMode)onToggleFocus();
+      if(!layout.inspectorVisible)layout.toggleInspector();
+      if(window.matchMedia('(max-width:900px)').matches)window.requestAnimationFrame(()=>document.querySelector('.inspector')?.scrollIntoView({behavior:'smooth',block:'start'}));
+     }}>Show properties</button>
+     <button onClick={()=>w.setSelected(null)}>Clear selection</button>
+    </>:null}
+   </div>}
    <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>
    {showWelcome&&!wb.placing&&(w.mode==='select'||guideReopened)&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
    <div className="canvas-overlay" role="group" aria-label="Zoom">
