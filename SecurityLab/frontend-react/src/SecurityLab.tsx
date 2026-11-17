@@ -27,6 +27,11 @@ export function SecurityLab(){
   const active=currentWorkbench.current;
   if(!active.loaded||active.blocked)return false;
   try{await active.flush();return true;}catch(e){active.setNotice(`Update deferred: ${String(e)}`);return false;}
+ },()=>{
+  const active=currentWorkbench.current;
+  // A peer tab can only consent when its draft is already confirmed saved.
+  // Do not invoke a picker or autosave on behalf of another tab.
+  return active.loaded&&!active.blocked&&active.saveState!=='saving'&&!active.hasUnsavedWork();
  }),[]);
  useEffect(()=>{const check=(e:BeforeUnloadEvent)=>{
   const current=currentWorkbench.current;
