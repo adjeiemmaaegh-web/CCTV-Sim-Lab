@@ -881,3 +881,12 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
 .scenario-panel>.muted{line-height:1.6;margin:4px 0 12px}
 .scenario-panel .scenario-next-actions button{background:#1a4150;border-color:#4d7887;color:#e4f7f5}
 @media(max-width:500px){.scenario-next-actions button{width:100%}}
+
+/* Compact plan controls: persistent shortcuts, no replacement of the full toolbar. */
+.mobile-canvas-actions{display:none}
+@media(max-width:900px){
+ .mobile-canvas-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:6px 8px;background:#102c40;border-bottom:1px solid #416579}
+ .mobile-canvas-actions button{display:flex;gap:5px;align-items:center;justify-content:center;min-width:0;min-height:44px;padding:5px 2px;background:#18384d;border:1px solid #496a80;border-radius:9px;font-size:12px}
+ .mobile-canvas-actions button[aria-pressed="true"]{color:#c5fff0;background:#24544e;border-color:#6cccb9}
+}
+@media(max-width:440px){.mobile-canvas-actions button{gap:3px;font-size:11px}.mobile-canvas-actions .ico{width:16px;height:16px}}
