@@ -33,7 +33,7 @@
 | B1 — installed service worker | PARTIAL | Remote live origin has activated controlling SW and seven cached URLs; repeat on owner Windows setup |
 | B2 — installable PWA window | NOT RUN | Install in Chrome/Edge on target Windows, verify icon/window |
 | B3 — physical offline cold restart | PARTIAL | Chromium process-level cold restart with persistent profile, stopped HTTP origin and offline project export passed on Linux/Windows CI (runs 43977943909/43977943898); physical Wi-Fi-off installed-PWA cold restart NOT RUN |
-| B4 — safe PWA update negotiation | PARTIAL | Single-tab staged update + new two-tab SW consent guard tested with OPFS and localhost on Linux/Windows Chromium (runs 43971845610/43971845666 and 43990143551/43990143513); real Windows installed-PWA two-tab update NOT RUN |
+| B4 — safe PWA update negotiation | PARTIAL | Staged update, multi-tab consent and second-pass peer/client-set revalidation passed Linux/Windows Chromium CI (latest 43994845809/43994845853); Windows 11 installed-PWA two-tab native-file update NOT RUN |
 | C1 — real cross-browser flows | PARTIAL | Firefox 38/38 and Linux WebKit 38/38 automated checks passed in QA run 43950976466; Chromium 69/69. Physical Edge/Firefox/Safari manual acceptance remains outstanding |
 | C2 — low-spec responsiveness | NOT RUN | 8 GB Windows 11 integrated GPU, 40 devices + 60 walls, actual drag-frame measurement under 100ms |
 | C3 — actual tablet/phone touch | NOT RUN | Android and iPad Safari/Chrome place/move/zoom/Tools |
@@ -80,6 +80,12 @@ For every gate, record: gate ID, date and timezone, tester/reviewer, exact `main
 - The updated generated SW asks all currently scoped window clients over MessageChannels for explicit read-only safety status; a missing, timed-out, saving, blocked or unsaved client **prevents activation**. The initiating editor reloads only after its local verified-save and worker consent. Other tabs are not automatically saved.
 - At branch test-bearing commit `593e1a2835af3417ac1039431e1065e43caec777`, [Linux CI 43990143551](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43990143551) passed **171/171 unit and 73/73 Chromium tests**, including a real two-tab browser regression. [Windows Server 2025 43990143513](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43990143513) likewise passed **171/171 unit, 73/73 Chromium**, including verified portable package SHA-256. [Detailed source evidence and limitations](QA_PWA_MULTITAB_UPDATE_2026-11-17.md).
 - This is a **cooperative origin-level consent check**, not OS-level file locking, other-profile coordination or a guarantee against edits initiated after a peer replies. All automated file handles are OPFS-backed. B4 remains **PARTIAL in CI; physical installed-Windows-11 PWA update NOT RUN**. Full A/B/C/D/E release remains **NO-GO**.
+
+## PWA update safety revalidation — 17 November 2026
+
+- [PR #17](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/pull/17) improves the prior peer-consent protocol by **re-querying every current tab and verifying that the set of client IDs remains stable** immediately before attempting service-worker activation. Any newly dirty, nonresponding, opened, or closed client blocks the update.
+- Exact test-bearing source `1660148c817258fb0a01d1a11d89bdf929140096` passed [Linux CI 43994845809](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43994845809) (**171 unit + 75 Chromium**) and [Windows Server 2025 QA 43994845853](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43994845853) (**171 unit + 75 Chromium**, portable ZIP hash verified). The two new races deliberately add a dirty edit or a new tab **after first-pass approval**. [Source evidence and test limits](QA_PWA_REVALIDATION_2026-11-17.md).
+- This is **two-phase cooperative revalidation, not a transactional freeze**. Edits could occur after the final reply; browser profiles, real OS file editing, physical Windows 11 installed-PWA updates and full updated-asset transitions are unverified. **B4 physical remains NOT RUN and full release remains NO-GO.**
 
 ## Open risks and decisions
 
