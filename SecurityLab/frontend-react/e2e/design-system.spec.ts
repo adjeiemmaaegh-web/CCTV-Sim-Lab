@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {readFileSync} from 'node:fs';
+import AxeBuilder from '@axe-core/playwright';
 
 test('one active CSS entry retains the historic cascade and exposes design tokens',async({page})=>{
  const main=readFileSync(new URL('../src/main.tsx',import.meta.url),'utf8');
@@ -66,6 +67,19 @@ test('keyboard zoom is reversible, while save/undo shortcuts remain delegated to
 
 test.describe('dedicated mobile navigation',()=>{
  test.use({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ test('mobile first-use and placement context have no serious/critical WCAG A/AA violations',async({page})=>{
+  await page.goto('/');
+  const axe=async()=>{
+   const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();
+   return result.violations.filter(v=>['serious','critical'].includes(v.impact||'')).map(v=>v.id);
+  };
+  await expect.poll(axe).toEqual([]);
+  await page.getByRole('complementary',{name:'Getting started'}).getByRole('button',{name:'Start designing'}).tap();
+  await page.getByRole('navigation',{name:'Mobile workspace navigation'}).getByRole('button',{name:'Devices'}).tap();
+  await page.locator('.catalog-scroll button.equipment').first().tap();
+  await expect(page.getByRole('region',{name:'Active workspace tool'})).toContainText('Placing equipment');
+  await expect.poll(axe).toEqual([]);
+ });
  test('switches between the same live panels and maintains a touch-accessible plan',async({page})=>{
   await page.goto('/');
   const nav=page.getByRole('navigation',{name:'Mobile workspace navigation'});
