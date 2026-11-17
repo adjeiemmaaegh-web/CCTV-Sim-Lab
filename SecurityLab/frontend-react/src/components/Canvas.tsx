@@ -241,6 +241,12 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
   <WorkflowStrip w={wb} onChoose={onWorkflow}/>
+   <div className="mobile-canvas-actions" role="toolbar" aria-label="Quick touch tools">
+    <button type="button" aria-label="Select tool (mobile)" aria-pressed={w.mode==='select'} onClick={()=>changeMode('select')}><Icon name="select" size={19}/>Select</button>
+    <button type="button" aria-label="Pan tool (mobile)" aria-pressed={w.mode==='pan'} onClick={()=>changeMode('pan')}><Icon name="pan" size={19}/>Pan</button>
+    <button type="button" aria-label="Cable tool (mobile)" aria-pressed={w.mode==='cable'} disabled={w.blocked} onClick={()=>changeMode('cable')}><Icon name="cable" size={19}/>Wire</button>
+    <button type="button" aria-label="Fit plan (mobile)" onClick={fit}><Icon name="focus" size={19}/>Fit plan</button>
+   </div>
    {contextActive&&<div className="selection-context" role="region" aria-label="Active workspace tool">
     {w.placing?<>
      <span className="selection-context-name">Placing equipment</span>
