@@ -937,3 +937,19 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
  }
  .shell .canvas-body .selection-context.placing .selection-context-cta{display:none}
 }
+
+/* Single-line desktop placement lane: all actions remain available and
+   pointer-tested coordinates below 54px never hit the control strip. */
+@media(min-width:901px){
+ .shell .canvas-body .selection-context.placing{
+  height:46px;min-height:46px;max-height:46px;
+  flex-wrap:nowrap;align-items:center;overflow-x:auto;overflow-y:hidden;
+  justify-content:flex-start;scrollbar-width:thin;
+ }
+ .shell .canvas-body .selection-context.placing .selection-context-hint{display:none}
+ .shell .canvas-body .selection-context.placing .selection-context-name{flex:0 0 auto;white-space:nowrap}
+ .shell .canvas-body .selection-context.placing button{
+  margin-left:0;flex:0 0 auto;white-space:nowrap;
+ }
+ .shell .canvas-body .selection-context.placing .selection-context-cta{display:inline-flex}
+}
