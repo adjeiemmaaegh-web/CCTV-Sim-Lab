@@ -86,3 +86,61 @@ test('late peer edit after first consent prevents pending update activation',asy
   await b.close();
  }
 });
+
+
+test('tab opened after first consent invalidates the update client snapshot',async({context})=>{
+ test.setTimeout(90_000);
+ const origin=await disposableUpdatePreview({pauseAfterFirstPass:true});
+ const a=await context.newPage();
+ const b=await context.newPage();
+ let c:typeof a|null=null;
+ const errors:string[]=[];
+ const watch=(p:typeof a)=>p.on('pageerror',e=>errors.push(String(e)));
+ watch(a);watch(b);
+ try{
+  await a.goto(origin.url);
+  await a.evaluate(async()=>{await navigator.serviceWorker.ready;});
+  await a.reload();
+  await expect.poll(()=>a.evaluate(()=>!!navigator.serviceWorker.controller)).toBe(true);
+  await b.goto(origin.url);
+  await b.evaluate(()=>{
+   (window as any).__slFirstPass=false;
+   navigator.serviceWorker.addEventListener('message',event=>{
+    if(event.data?.type==='SECURITYLAB_QA_FIRST_PASS_DONE')
+     (window as any).__slFirstPass=true;
+   });
+  });
+  origin.publishUpdate();
+  await a.evaluate(async()=>{
+   const reg=await navigator.serviceWorker.getRegistration();
+   if(!reg)throw new Error('Missing SW registration');
+   await reg.update();
+  });
+  const banner=a.locator('#securitylab-update-ready');
+  await expect(banner).toContainText('A new SecurityLab build is available');
+  const button=banner.getByRole('button',{name:'Save & update'});
+
+  const click=button.click({noWaitAfter:true});
+  await expect.poll(()=>b.evaluate(()=>(window as any).__slFirstPass),{timeout:10_000}).toBe(true);
+  c=await context.newPage();watch(c);
+  await c.goto(origin.url);
+  await expect(c.getByLabel('Installation workspace')).toBeVisible();
+  await click;
+  // No client is dirty, but a new client appeared after the first snapshot.
+  // No first-round consent was collected from this new editor, so fail closed.
+  await expect(banner).toContainText('another open SecurityLab tab',{timeout:15_000});
+  await expect.poll(()=>a.evaluate(async()=>(await navigator.serviceWorker.getRegistration())?.waiting?.state)).toBe('installed');
+  await expect(c.getByLabel('Installation workspace')).toBeVisible();
+
+  // A retry takes a new stable snapshot of all three tabs and may proceed.
+  const load=a.waitForEvent('load',{timeout:25_000});
+  await button.click();
+  await load;
+  await expect(a.getByLabel('Installation workspace')).toBeVisible();
+  await expect(c.getByLabel('Installation workspace')).toBeVisible();
+  expect(errors).toEqual([]);
+ }finally{
+  await origin.stop();
+  await a.close();await b.close();if(c)await c.close();
+ }
+});
