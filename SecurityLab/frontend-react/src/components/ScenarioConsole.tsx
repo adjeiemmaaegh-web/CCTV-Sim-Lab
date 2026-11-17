@@ -16,7 +16,7 @@ export function ScenarioConsole({w}:{w:Workbench}){
    <button type="button" onClick={()=>w.setTab('diagnostics')}>Troubleshoot installation</button>
    <button type="button" disabled={w.blocked} onClick={w.runAssessment}>Record scored assessment</button>
   </div>
-  <p className="muted">Progress and the provisional score update from modeled device, network, recording and challenge evidence. A passing result requires critical objectives and an explicit recorded assessment; saving your work is a separate project-file action.</p>
+  <p className="muted">Progress and the provisional score update from modeled device, network, recording and challenge evidence. Critical objectives affect the live pass criteria. Record an assessment to keep a dated score and evidence; save your project separately to retain the installation.</p>
   <div className="scenario-cols"><div><h4>Practical assignment</h4><ol>{s.instructions.map((line,i)=><li key={i}>{line}</li>)}</ol><p className="muted">Scenario budget: GHS {s.budgetGhs.toLocaleString()} (illustrative generic equipment prices; manufacturer quotations entered separately)</p>
    <p className="muted">Recommended starters: {s.starterProfiles.map(x=>x.replace(/-/g,' ')).join(' · ')}</p>
    {e.unpermittedDevices>0&&<p className="warning-line">{e.unpermittedDevices} installed devices are outside the permitted scenario equipment list. Remove them before assessment.</p>}
