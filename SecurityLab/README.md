@@ -28,7 +28,7 @@
 > The original Stage 15 source notes below are retained for provenance, not
 > as the up-to-date verification status.
 
-# SecurityLab â€” Stage 15 Integrated Source
+# SecurityLab — active integrated source
 
 **Development source consolidated through stages 1â€“15. This is not a validated production release.**
 
@@ -41,7 +41,7 @@ SecurityLab is a browser-based virtual electronic-security engineering workstati
 | `SecurityLab/frontend-react/` | Active React 19 / TypeScript / Vite workstation, interactive SVG property editor and console panels |
 | `SecurityLab/src/domain/` | Versioned device data types, generic catalogue, and manufacturer-reference profiles |
 | `SecurityLab/src/engine/` | Deterministic geometry/CCTV, network, alarm, access, power, assessment, reporting and Stage 15 integrated-health rules |
-| `SecurityLab/src/scenarios/` | Ten practical assignment definitions and objective evaluation |
+| `SecurityLab/src/scenarios/` | Fifteen practical assignment definitions and objective evaluation |
 | `SecurityLab/src/property/` | 2D geometry, room and wall editing, openings and templates |
 | `SecurityLab/src/persistence/` | Local JSON project opening/saving/validation, checkpoints, image imports |
 | `SecurityLab/src/state/` | Reversible project change history |
@@ -84,7 +84,7 @@ Do not import code from `source-history/` into the active application; it contai
 
 ## Remaining acceptance gates
 
-Stage 15 source integration is a **development deliverable**, not commercial or production acceptance. The following remain open: authentic dependency installation and React/Vite build, application-origin save/reopen and offline-PWA behaviour, multi-browser and 8 GB Windows performance, correct operation and troubleshooting of all ten scenarios, accessibility and security checks, real technician/learner field validation, and explicit owner release authorization.
+Stage 15 source integration is a **development deliverable**, not commercial or production acceptance. The following remain open: physical-device save/reopen and offline-PWA behaviour, 8 GB Windows performance, correct operation and troubleshooting of all fifteen scenarios with real learners, accessibility and security checks, real technician/learner field validation, and explicit owner release authorization.
 
 No tests or user studies were performed as part of this Stage 15 **source-only** handoff. Compiler-only source checks and ZIP-file integrity verification do not replace functional acceptance.
 
@@ -98,7 +98,7 @@ This cumulative source revision repairs two defects discovered when the Stage 15
 
 Previous Stage 15 files are preserved under `source-history/stage-15-original/`. Earlier historical stage snapshots are unchanged. The current source stays file-based with no active database, authentication or cloud dependency.
 
-A focused Node execution review covered all ten scenarios, project JSON round-trips, alarm/access/power behaviour and critical networking faults. **The React/Vite production build and native-origin browser acceptance remain unverified.** This is a development correction, not a release certification.
+A focused Node execution review covered the then-current scenario set, project JSON round-trips, alarm/access/power behaviour and critical networking faults. Automated React/Vite and browser checks now exist; **native Windows, installed-PWA and physical-device acceptance remain unverified.** This is a development correction, not a release certification.
 
 ## Local-file integrity and cancellation hardening (acceptance continuation)
 
@@ -106,7 +106,7 @@ New SecurityLab JSON saves use **file version 2** and a SHA-256 corruption indic
 
 Cancelling a Save As picker preserves the original saved/unsaved state instead of marking an unchanged, previously saved project as unsaved. Cancelling a project or scenario switch reaffirms that the original project remains selected. Native write/readback confirmation and the browser-download fallback retain their existing distinct status semantics.
 
-This continuation has not established a real React/Vite production build or browser-origin acceptance. A developer must complete a genuine dependency installation, browser tests, and 8 GB Windows evaluation before production approval.
+This continuation predates the automated React/Vite and browser checks now recorded in the repository. Physical Windows, installed-PWA and 8 GB hardware evaluation remain necessary before production approval.
 
 ## Stage 15 source integration continuation (15 November 2026)
 
