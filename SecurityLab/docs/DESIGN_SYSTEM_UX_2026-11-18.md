@@ -60,7 +60,7 @@ Keyboard: **Ctrl/Cmd+S** save; **Ctrl/Cmd+Shift+S** Save As; **Ctrl/Cmd+Z/Y** un
 
 ## Mobile / touch
 
-At widths **900px and below**, panels remain mounted (preserving device/edit state); a fixed bottom navigation jumps among **Plan, Devices, Properties, Simulation**. The plan comes first, device choice returns to it, and zoom controls, Pan mode and explicit “Place at view center” are touch-accessible. No gesture is repurposed as a hidden save. Safe-area padding prevents the fixed nav from covering final footer actions. Existing touch-target minimums apply; coarse pointers use minimum 40–48px targets. Motion is suppressed under `prefers-reduced-motion`; forced-color outlines are retained. At larger widths the desktop grid, adjustable panels and focus mode remain active.
+At widths **900px and below**, panels remain mounted (preserving device/edit state); a fixed bottom navigation jumps among **Plan, Devices, Properties, Simulation**. The plan comes first, device choice returns to it, and an always-visible touch tool strip (Select, Pan, Wire, Fit), zoom controls and explicit “Place at view center” are touch-accessible. No gesture is repurposed as a hidden save. Safe-area padding prevents the fixed nav from covering final footer actions. Existing touch-target minimums apply; coarse pointers use minimum 40–48px targets. Motion is suppressed under `prefers-reduced-motion`; forced-color outlines are retained. At larger widths the desktop grid, adjustable panels and focus mode remain active.
 
 ## QA and acceptance gates
 
