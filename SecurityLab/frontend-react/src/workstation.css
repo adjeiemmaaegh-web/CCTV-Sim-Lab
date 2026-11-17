@@ -915,3 +915,8 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
 @media(max-width:500px){
  .shell .canvas-body .selection-context{font-size:11px}
 }
+
+/* The explanatory overlay must not capture SVG placement/drag gestures.
+   Actual action buttons remain clickable, focusable and operable. */
+.shell .canvas-body .selection-context{pointer-events:none}
+.shell .canvas-body .selection-context button{pointer-events:auto}
