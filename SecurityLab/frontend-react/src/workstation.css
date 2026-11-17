@@ -920,3 +920,20 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
    Actual action buttons remain clickable, focusable and operable. */
 .shell .canvas-body .selection-context{pointer-events:none}
 .shell .canvas-body .selection-context button{pointer-events:auto}
+
+/* Keep all pointer action targets in the right-hand context lane.
+   The center-placement alternative remains in Layers & tools on desktop;
+   its direct shortcut appears on touch screens. */
+@media(min-width:901px){
+ .shell .canvas-body .selection-context.placing{
+  width:calc(100% - 16px);
+  justify-content:flex-end;
+ }
+ .shell .canvas-body .selection-context.placing .selection-context-hint{
+  flex:1 1 160px;
+ }
+ .shell .canvas-body .selection-context.placing button{
+  margin-left:auto;
+ }
+ .shell .canvas-body .selection-context.placing .selection-context-cta{display:none}
+}
