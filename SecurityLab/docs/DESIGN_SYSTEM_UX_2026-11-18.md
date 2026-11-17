@@ -55,7 +55,7 @@ Keyboard: **Ctrl/Cmd+S** save; **Ctrl/Cmd+Shift+S** Save As; **Ctrl/Cmd+Z/Y** un
 - Learners can select the current training challenge, start designing, browse its brief, create a blank project, load a worked example, or open a saved local file.
 - The challenge panel explains: read brief → install → diagnose → assess → save.
 - Progress measures completed objectives against total, and the provisional score is explicitly *not* a certified grade.
-- Scored assessment is recorded only on user action, requires the existing critical-objective gate, and can be reviewed in assessment history.
+- A dated scored assessment is recorded on explicit user action (including unsuccessful attempts) and can be reviewed in assessment history. Practical pass criteria use the existing critical objectives.
 - Saving is distinct from assessment. Project JSON files are local; the guide references Project → Save As / Export Backup.
 
 ## Mobile / touch
