@@ -6,7 +6,8 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  dependency-audit:
+    name: Dependency vulnerability gate (independent of functional QA)
     runs-on: ubuntu-24.04
     defaults:
       run:
@@ -21,6 +22,20 @@ jobs:
       - run: npm ci
       - name: Audit all dependencies (including build and test tools)
         run: npm audit --audit-level=moderate
+
+  build:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: SecurityLab/frontend-react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: SecurityLab/frontend-react/package-lock.json
+      - run: npm ci
       - run: npm run check
       - run: npm test
       - run: npm run build
