@@ -9,7 +9,7 @@ import {resolve,extname,sep} from 'node:path';
  * version changes only its service-worker script and cache identity. This is a
  * controlled, nonproduction update, never the Vercel production alias.
  */
-export async function disposableUpdatePreview():Promise<{
+export async function disposableUpdatePreview(options:{pauseAfterFirstPass?:boolean}={}):Promise<{
  url:string;
  publishUpdate:()=>void;
  stop:()=>Promise<void>;
@@ -30,8 +30,17 @@ export async function disposableUpdatePreview():Promise<{
    let content:Buffer=await readFile(file);
    if(pathname==='/service-worker.js'&&version===2){
     const original=content.toString('utf8');
-    const modified=original.replace(/securitylab-react-[0-9a-f]{16}/,'securitylab-react-qa-update-v2');
+    let modified=original.replace(/securitylab-react-[0-9a-f]{16}/,'securitylab-react-qa-update-v2');
     if(modified===original)throw new Error('Cannot locate the deterministic production SW cache version');
+    if(options.pauseAfterFirstPass){
+     // Test-only protocol hook: signal the first approval has completed,
+     // then widen the tiny inter-pass gap. Never shipped by the production build.
+     const marker='await new Promise(resolve=>setTimeout(resolve,125));';
+     if(!modified.includes(marker))throw new Error('Cannot find the SW revalidation boundary');
+     modified=modified.replace(marker,
+      `for(const peer of await self.clients.matchAll({type:'window',includeUncontrolled:true})){peer.postMessage({type:'SECURITYLAB_QA_FIRST_PASS_DONE'});}
+      await new Promise(resolve=>setTimeout(resolve,1200));`);
+    }
     content=Buffer.from(modified+'\n// SecurityLab QA update version 2; never published to production.\n');
    }
    res.writeHead(200,{
