@@ -1,6 +1,6 @@
-# SecurityLab roadmap and acceptance status (16 November 2026)
+# SecurityLab roadmap and acceptance status (18 November 2026)
 
-**Authoritative production-source baseline (as verified 17 November 2026):** `main` commit `2ad0a41a1c83b438efe2643666732d5fd3cbb397`, incorporating reliability PR #8. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
+**Authoritative production-source baseline (as verified 18 November 2026):** `main` commit `3bf0bda3ef11702285e9506e9ba38ef9ad9df9b3`, including reliability hardening and PWA update-consent safeguards. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
 
 | Workstream / stage label | Verified engineering evidence | Acceptance status |
 |---|---|---|
