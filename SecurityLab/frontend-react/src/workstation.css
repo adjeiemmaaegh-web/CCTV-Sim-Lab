@@ -890,3 +890,28 @@ body{background:var(--bg);color:var(--text);font-size:var(--type-md)}
  .mobile-canvas-actions button[aria-pressed="true"]{color:#c5fff0;background:#24544e;border-color:#6cccb9}
 }
 @media(max-width:440px){.mobile-canvas-actions button{gap:3px;font-size:11px}.mobile-canvas-actions .ico{width:16px;height:16px}}
+
+/* Regression hardening: contextual guidance floats above the SVG, rather than
+   shortening the drawing surface or allowing the dock to intercept placement. */
+.shell .canvas-body .selection-context{
+ position:absolute;top:8px;left:8px;right:8px;z-index:5;width:max-content;
+ max-width:calc(100% - 16px);min-height:40px;max-height:90px;overflow:auto;
+ border:1px solid #49778d;border-radius:9px;padding:5px 8px;
+ box-shadow:0 6px 18px #04132280;
+}
+.shell .canvas-body .selection-context .selection-context-hint{max-width:50ch}
+/* Both axes must be explicitly reset: the inherited left/bottom positions
+   otherwise stretch this panel across the plan and swallow touch placement. */
+@media(max-width:900px){
+ .shell .canvas-body .canvas-overlay{
+  left:auto;bottom:auto;top:8px;right:8px;width:max-content;height:auto;
+  max-width:calc(100% - 16px);
+ }
+ .shell .canvas-body .selection-context{
+  top:auto;bottom:70px;left:8px;right:8px;max-height:98px;
+ }
+ .shell .canvas-body .selection-context .selection-context-hint{display:none}
+}
+@media(max-width:500px){
+ .shell .canvas-body .selection-context{font-size:11px}
+}
