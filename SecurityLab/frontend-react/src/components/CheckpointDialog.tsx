@@ -30,7 +30,7 @@ export function CheckpointDialog({w}:{w:Workbench}){
    <p id="checkpoint-description">Checkpoints belong to the currently opened project JSON file. They are not stored in a database. Save your project file to retain new revisions.</p>
    {w.backups.length?w.backups.map((b,i)=><div key={`${b.revision}-${i}`} className="saved-project">
     <span>Revision {b.revision} · {b.at}</span>
-    <button onClick={()=>{try{w.restoreBackup(i);}catch(error){w.setNotice(`Checkpoint recovery failed: ${String(error)}`);}}}>Restore as new unsaved project</button>
+    <button onClick={async()=>{try{w.setListOpen(false);await w.restoreBackup(i);}catch(error){w.setNotice(`Checkpoint recovery failed: ${String(error)}`);}}}>Restore as new unsaved project</button>
    </div>):<p>No older checkpoints in this file. Create another verified save to preserve a previous revision.</p>}
   </section>
  </div>;

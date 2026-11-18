@@ -17,6 +17,8 @@ test('guided troubleshooting identifies disconnected cable, opens it and updates
  await expect(inspector.getByRole('region',{name:'Connection setup'})).toBeVisible();
  await inspector.getByLabel('Cable connected').check();
  await expect(guide.locator('.guided-finding').filter({hasText:'Cable disconnected'})).toHaveCount(0);
+ await guide.getByRole('button',{name:'Rerun selected check'}).click();
+ await expect(guide).toContainText('Original finding cleared');
  await expect(guide).toContainText('simulation');
 });
 

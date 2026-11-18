@@ -157,4 +157,24 @@ test('an interrupted staged write preserves the saved file and permits a separat
  const exported=JSON.parse(fs.readFileSync((await dl.path())!,'utf8'));
  expect(exported.project.night).toBe(true);
  expect(exported.revision).toBe(1);
+ // A recovered fork contains user work and must retain discard/leave-page protection.
+ await page.getByRole('button',{name:'Fork draft',exact:true}).click();
+ await project(page,'New');
+ const protection=page.getByRole('dialog',{name:'Protect unsaved work'});
+ await expect(protection).toBeVisible();
+ await protection.getByRole('button',{name:'Cancel',exact:true}).click();
+ await expect(page.getByLabel('Night',{exact:true})).toBeChecked();
+ const prevented=await page.evaluate(()=>{const event=new Event('beforeunload',{cancelable:true});window.dispatchEvent(event);return event.defaultPrevented;});
+ expect(prevented).toBe(true);
+});
+
+
+test('autosave cannot start a write while an asynchronous discard confirmation is open',async({page})=>{
+ await boot(page);await project(page,'Save As');await expect(notice(page)).toContainText('revision 1');
+ await settings(page);await page.getByLabel('Autosave to file').check();await page.keyboard.press('Escape');
+ await page.getByLabel('Night',{exact:true}).check();await project(page,'New');
+ const protection=page.getByRole('dialog',{name:'Protect unsaved work'});await expect(protection).toBeVisible();await page.waitForTimeout(2200);
+ expect(JSON.parse(await read(page,'a.securitylab.json')).revision).toBe(1);
+ await protection.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Night',{exact:true})).toBeChecked();
+ await project(page,'Save Project');await expect(notice(page)).toContainText('revision 2');expect(JSON.parse(await read(page,'a.securitylab.json')).project.night).toBe(true);
 });

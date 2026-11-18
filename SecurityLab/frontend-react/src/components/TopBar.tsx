@@ -7,7 +7,7 @@ import {useLocale} from './Speak.js';
 import {Icon} from './icons.js';
 
 /** Top bar: logo, scenario, mode, live status chips and the Project menu (all file actions). */
-export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void}){
+export function TopBar({w,onRevealPanels,onProjectCenter}:{w:Workbench;onRevealPanels:()=>void;onProjectCenter:()=>void}){
  useLocale();
  const openFile=useRef<HTMLInputElement>(null),importFile=useRef<HTMLInputElement>(null),imageFile=useRef<HTMLInputElement>(null);
  const [menu,setMenu]=useState(false);const menuRef=useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
   <label className="pill scenario-pill"><Icon name="folder" size={18}/><select aria-label="Scenario" value={w.project.scenarioId} onChange={e=>{const id=e.currentTarget.value;handle(()=>w.switchScenario(id));}}>{w.SCENARIOS.map(s=><option value={s.id} key={s.id}>{s.title}</option>)}</select></label>
   <label className="pill mode-pill-select"><Icon name="play" size={16}/><select aria-label="Mode" value={mode} onChange={e=>{w.setMode(e.currentTarget.value==='test'?'test':'select');}}><option value="design">Design / Plan</option><option value="test">Test motion</option></select></label>
   <div className="status-chips" role="status" aria-label="Live status">
-   <span className="chip good"><i className="dot"/>Simulation Ready</span>
+   <span className={w.result.issues.length?"chip warn":"chip good"}><i className="dot"/>{w.result.issues.length?`${w.result.issues.length} simulated issues`:'Model evaluated'}</span>
    <span className="chip"><Icon name="camera" size={16}/>{w.result.recordingCameras} recording</span>
    <span className="chip"><Icon name="alarm" size={16}/>{armed} alarm{armed===1?'':'s'}</span>
    <span className="chip"><Icon name="power" size={16}/>{(w.result.power?.totalLoadW||0).toFixed(0)} W</span>
@@ -35,9 +35,11 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
   </div>
   <span className="topbar-spacer"/>
   <button className="primary assess-btn" onClick={()=>{onRevealPanels();w.runAssessment();}} disabled={w.blocked}><Icon name="assessment" size={16}/>{t('top.assess')}</button>
+  <button className="project-center-button" onClick={onProjectCenter}>Project Center</button>
   <div className="project-menu" ref={menuRef}>
    <button aria-haspopup="menu" aria-expanded={menu} onClick={()=>setMenu(m=>!m)}><Icon name="file" size={16}/>Project<Icon name="chevron" size={14}/></button>
    {menu&&<div className="menu" role="menu" aria-label="Project">
+    {item('Project Center','folder',()=>handle(onProjectCenter))}
     {item(t('top.new'),'file',()=>handle(w.newBlank))}
     {item(t('top.open'),'folder',()=>handle(()=>canOpenNativeFile()?w.openNative():openFile.current?.click()))}
     {item(t('top.save'),'file',()=>handle(()=>w.saveCurrent(false)),w.saveState==='saving')}

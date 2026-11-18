@@ -11,6 +11,8 @@ const PRIMARY=['Realtime','Events','Diagnostics','Power','Access','Console','Too
 /** Select a bottom-dock tab; secondary tabs live under More. */
 export async function dock(page:Page,name:string,tap=false){
  const act=async(l:ReturnType<Page['locator']>)=>{await (tap?l.tap():l.click());};
+ const group=['Realtime','Events','Recordings','Alarm','Access'].includes(name)?'Simulate':name==='Diagnostics'?'Troubleshoot':name==='Assessment'||name==='Field-review'?'Assess':name==='Scenario'?'Design':'Connect';
+ await act(page.getByRole('navigation',{name:'Primary activities'}).getByRole('button',{name:group,exact:true}));
  if(PRIMARY.includes(name)){await act(page.locator('.dock-tabs').getByRole('tab').filter({hasText:name}).first());return;}
  await act(page.locator('.dock-more > button'));
  await act(page.getByRole('menuitem',{name,exact:true}));

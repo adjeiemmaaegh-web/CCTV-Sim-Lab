@@ -44,21 +44,24 @@ test('five-step practical workflow: place, connect, configure, diagnose, save an
  await expect(devices).toHaveCount(2);
 
  // 2. Connect camera and switch. This is a virtual link, not network traffic.
+ await page.getByRole('navigation',{name:'Primary activities'}).getByRole('button',{name:'Connect',exact:true}).click();
  await page.getByRole('button',{name:'Cable',exact:true}).click();
  await devices.first().click();
  await devices.nth(1).click();
+ await page.getByRole('button',{name:'Install reviewed connection'}).click();
  await expect(page.locator('svg[role=application] g[data-cable]')).toHaveCount(1);
 
  // 3. Configure the camera through its contextual network properties.
  await page.getByRole('button',{name:'Select',exact:true}).click();
  await devices.first().click();
  const props=page.getByRole('complementary',{name:'Properties'});
+ await props.getByRole('button',{name:'Advanced',exact:true}).click();
  await props.getByRole('tab',{name:'Network'}).click();
  await props.getByLabel('IP Address',{exact:true}).fill('192.168.10.44');
  await expect(props.getByLabel('IP Address',{exact:true})).toHaveValue('192.168.10.44');
 
  // 4. Inject a simulated wire fault and inspect the resulting diagnosis.
- await page.getByRole('tab',{name:'Diagnostics',exact:true}).click();
+ await page.getByRole('navigation',{name:'Primary activities'}).getByRole('button',{name:'Troubleshoot',exact:true}).click();
  await page.getByLabel('Fault type').selectOption('disconnect');
  await page.getByRole('button',{name:'Inject Fault'}).click();
  await expect(page.locator('.log-lines')).toContainText(/Cable disconnected|No usable Ethernet cable/);
@@ -85,17 +88,17 @@ test('five-step practical workflow: place, connect, configure, diagnose, save an
 
 test('focus canvas cannot silently hide results of a left-rail command or assessment',async({page})=>{
  const errors=spy(page);await page.goto('/');
- const nav=page.getByRole('navigation',{name:'Sections'});
+ const nav=page.getByRole('navigation',{name:'Primary activities'});
  await page.getByRole('button',{name:'Focus canvas'}).click();
  await expect(page.locator('.catalog')).toBeHidden();
 
  // These commands are not useful if their panels stay hidden in Focus mode.
- await nav.getByRole('button',{name:'Equipment'}).click();
+ await nav.getByRole('button',{name:'Design'}).click();
  await expect(page.locator('.catalog')).toBeVisible();
  await expect(page.locator('.console')).toBeVisible();
 
  await page.getByRole('button',{name:'Focus canvas'}).click();
- await nav.getByRole('button',{name:'Network'}).click();
+ await nav.getByRole('button',{name:'Connect'}).click();
  await expect(page.locator('.console')).toBeVisible();
  await expect(page.getByText('SIMULATED IPV4 CONNECTIVITY PROBE')).toBeVisible();
  await expect(page.getByRole('button',{name:'Network Topology'})).toHaveAttribute('aria-pressed','true');
@@ -114,6 +117,7 @@ test('cable affordance guides each endpoint and Escape cancels the gesture',asyn
  await page.getByRole('button',{name:/Network Devices/}).click();
  await page.locator('.catalog-scroll button.equipment').filter({hasText:'4-Port PoE+ Switch'}).first().click();
  await page.locator('svg[role=application]').click({position:{x:480,y:220}});
+ await page.getByRole('navigation',{name:'Primary activities'}).getByRole('button',{name:'Connect',exact:true}).click();
  await page.getByRole('button',{name:'Cable',exact:true}).click();
  await expect(page.locator('.canvas-hint')).toContainText('click the first device');
  await page.locator('svg[role=application] g[data-device]').first().click();

@@ -4,15 +4,16 @@ import {LOCALES,t} from '../../../src/i18n/index.js';
 import {LanguageSelect,useLocale} from './Speak.js';
 import {Icon} from './icons.js';
 
-function Modal({title,onClose,children}:{title:string;onClose:()=>void;children:React.ReactNode}){
- const ref=useRef<HTMLDivElement>(null);
+export function Modal({title,onClose,children}:{title:string;onClose:()=>void;children:React.ReactNode}){
+ const ref=useRef<HTMLDivElement>(null);const closeRef=useRef(onClose);closeRef.current=onClose;
  useEffect(()=>{
-  const prev=document.activeElement as HTMLElement|null;ref.current?.focus();
-  const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){e.stopPropagation();onClose();}
+  const prev=document.activeElement as HTMLElement|null;
+  const backdrop=ref.current?.parentElement;const siblings=backdrop?.parentElement?[...backdrop.parentElement.children].filter(el=>el!==backdrop) as HTMLElement[]:[];const previous=siblings.map(el=>el.inert);siblings.forEach(el=>el.inert=true);(ref.current?.querySelector('button') as HTMLElement|null)?.focus();
+  const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeRef.current();}
    if(e.key==='Tab'&&ref.current){const f=[...ref.current.querySelectorAll<HTMLElement>('button,select,input,a[href]')].filter(x=>!x.hasAttribute('disabled'));if(!f.length)return;const first=f[0],last=f[f.length-1];
     if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
-  document.addEventListener('keydown',key,true);return()=>{document.removeEventListener('keydown',key,true);prev?.focus?.();};
- },[onClose]);
+  document.addEventListener('keydown',key,true);return()=>{document.removeEventListener('keydown',key,true);siblings.forEach((el,i)=>el.inert=previous[i]);prev?.focus?.();};
+ },[]);
  return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}>
   <div className="modal" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={ref}>
    <header><h2>{title}</h2><button aria-label="Close" onClick={onClose}><Icon name="close" size={18}/></button></header>

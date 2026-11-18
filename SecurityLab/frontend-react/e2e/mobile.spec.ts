@@ -24,8 +24,10 @@ test('touch: tap a catalogue item then tap the plan to place it; svg ignores pag
 
 test('touch targets on coarse pointers are at least 40px',async({page})=>{
  await page.goto('/');
- const small=await page.evaluate(()=>[...document.querySelectorAll('.topbar button, .nav-rail button, .dock-tabs > button')].filter(b=>{const r=b.getBoundingClientRect();return r.height<40||r.width<40;}).length);
+ const small=await page.evaluate(()=>[...document.querySelectorAll('.topbar button, .nav-rail button, .dock-tabs > button')].filter(b=>{const r=b.getBoundingClientRect();return r.height>0&&r.width>0&&(r.height<40||r.width<40);}).length);
  expect(small).toBe(0);
+ const cards=await page.locator('.rt-cards .stat').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right};}));
+ for(const card of cards){expect(card.left).toBeGreaterThanOrEqual(0);expect(card.right).toBeLessThanOrEqual(391);}
 });
 
 test('tools open on a phone and the printable report downloads',async({page})=>{
