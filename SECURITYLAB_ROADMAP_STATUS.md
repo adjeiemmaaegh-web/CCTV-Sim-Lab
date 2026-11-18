@@ -1,6 +1,6 @@
-# SecurityLab roadmap and acceptance status (16 November 2026)
+# SecurityLab roadmap and acceptance status (18 November 2026)
 
-**Authoritative production-source baseline (as verified 17 November 2026):** `main` commit `2ad0a41a1c83b438efe2643666732d5fd3cbb397`, incorporating reliability PR #8. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
+**Authoritative production-source baseline (as verified 18 November 2026):** `main` commit `3bf0bda3ef11702285e9506e9ba38ef9ad9df9b3`, including reliability hardening and PWA update-consent safeguards. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
 
 | Workstream / stage label | Verified engineering evidence | Acceptance status |
 |---|---|---|
@@ -19,7 +19,7 @@
 
 1. Preserve project JSON compatibility and independently verify corrupted/imported/duplicate pack behavior without registry side effects.
 2. Browser file saves: run native physical-drive and two-editor collision/recovery checks; the Web Locks API only serializes **cooperating same-origin editors**, not different origins, profiles, applications or OS processes.
-3. Execute all `docs/MANUAL_ACCEPTANCE.md` criteria: Windows A1–A8; installed/offline PWA B1–B4; cross-browser, phones, low-memory hardware and accessibility C1–C5; professional content/French review D; and owner release/packaging approval E.
+3. Execute the active V1 criteria in `docs/MANUAL_ACCEPTANCE.md`: Windows A1–A8; installed/offline PWA B1–B4; cross-browser, phones, low-memory hardware and English accessibility C1–C5; qualified technical/instructional review D; and owner release/packaging approval E. French localization review and a source-licensing decision are deferred.
 4. Keep qualifying screenshots, device specifications, checked files/hashes, dates, browser versions, logs, and reviewer identities; failures become traceable defects.
 5. Re-run the exact final-source CI and independently assess accepted use before authorizing a full release or professional-training claims.
 
