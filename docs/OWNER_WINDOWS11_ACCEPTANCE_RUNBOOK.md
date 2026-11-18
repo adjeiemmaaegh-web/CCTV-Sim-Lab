@@ -56,7 +56,7 @@ If B3 fails, capture whether the OS displays a network error, a blank screen, mi
 
 ## Part C — other devices and professional reviews
 
-The [master manual checklist](MANUAL_ACCEPTANCE.md) also requires: **C1** physical Edge/Firefox/Safari core flows, **C2** 40 devices and 60 walls on an **8 GB Windows 11 machine** (drag frame under 100 ms), **C3** real Android/iPad touch, **C4** NVDA/VoiceOver with French announcements, **C5** Windows contrast/motion preferences; **D** qualified installer/instructor and native French-language content review; and **E** an explicit owner signing/packaging/release decision.
+The [master manual checklist](MANUAL_ACCEPTANCE.md) also requires: **C1** physical Edge/Firefox/Safari core flows, **C2** 40 devices and 60 walls on an **8 GB Windows 11 machine** (drag frame under 100 ms), **C3** real Android/iPad touch, **C4** NVDA/VoiceOver, **C5** Windows contrast/motion preferences; **D** qualified installer/instructor review; and **E** an explicit owner signing/packaging/release decision. French localization review and source licensing are deferred.
 
 A Windows Server 2025 GitHub runner is useful evidence for cross-OS JavaScript/build behavior, but it does **not** have the required Windows 11 personal-machine environment, true native OS picker user interaction, low-RAM graphics profile, or human screen-reader and professional reviewers.
 
