@@ -103,7 +103,8 @@ export type Device = {
   accessController?:AccessControllerConfig;accessReader?:AccessReaderConfig;accessLock?:AccessLockConfig;
   powerConfig?:PowerConfig;
 };
-export type Cable = {id:string; a:string; b:string; connected:boolean; lengthMeters:number; medium?:CableMedia; aPort?:number; bPort?:number; speedMbps?:number;powerMaxAmps?:number};
+/** `termination` is a learner-operated virtual cable tester result, not a measurement. */
+export type Cable = {id:string; a:string; b:string; connected:boolean; lengthMeters:number; medium?:CableMedia; aPort?:number; bPort?:number; speedMbps?:number;powerMaxAmps?:number;termination?:'pass'|'open'|'short'|'split-pair'};
 export type LabEvent = {id:string; at:string; kind:'info'|'motion'|'recorded'|'fault'|'warning'; message:string; x?:number; y?:number; deviceId?:string; recorded:boolean};
 export type ScenarioFocus='cctv'|'network'|'alarm'|'access'|'power'|'mixed';
 export type ScenarioMetric='camera-count'|'camera-powered'|'camera-online'|'camera-recording'|'target-coverage'|'night-coverage'|'recorded-event'|'technical-health'|'within-budget'|'resolved-challenges'|'alarm-panel'|'alarm-sensors'|'alarm-keypad'|'alarm-armed'|'alarm-triggered'|'alarm-output'|'alarm-beam'|'router-ready'|'dhcp-lease'|'intervlan-route'|'access-controller'|'access-readers'|'access-lock'|'access-door'|'access-granted'|'access-denied'|'access-exit'|'power-wired'|'solar-generation'|'battery-ready'|'backup-outage'|'fire-detectors'|'fire-callpoint'|'fire-sounder'|'fire-24h'|'fire-alarm';
