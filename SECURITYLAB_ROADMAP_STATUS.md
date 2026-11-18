@@ -19,7 +19,7 @@
 
 1. Preserve project JSON compatibility and independently verify corrupted/imported/duplicate pack behavior without registry side effects.
 2. Browser file saves: run native physical-drive and two-editor collision/recovery checks; the Web Locks API only serializes **cooperating same-origin editors**, not different origins, profiles, applications or OS processes.
-3. Execute all `docs/MANUAL_ACCEPTANCE.md` criteria: Windows A1–A8; installed/offline PWA B1–B4; cross-browser, phones, low-memory hardware and accessibility C1–C5; professional content/French review D; and owner release/packaging approval E.
+3. Execute the active V1 criteria in `docs/MANUAL_ACCEPTANCE.md`: Windows A1–A8; installed/offline PWA B1–B4; cross-browser, phones, low-memory hardware and English accessibility C1–C5; qualified technical/instructional review D; and owner release/packaging approval E. French localization review and a source-licensing decision are deferred.
 4. Keep qualifying screenshots, device specifications, checked files/hashes, dates, browser versions, logs, and reviewer identities; failures become traceable defects.
 5. Re-run the exact final-source CI and independently assess accepted use before authorizing a full release or professional-training claims.
 
