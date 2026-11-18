@@ -1,3 +1,4 @@
+import {SafeNumber} from './SafeNumber.js';
 import React from 'react';
 import type {Device,DhcpPool,PortConfig,RouterInterface,StaticRoute} from '../../../src/domain/types.js';
 import {profile} from '../../../src/domain/catalog.js';
@@ -6,12 +7,12 @@ import type {Workbench} from '../hooks/useWorkbench.js';
 const num=(value:string)=>Number(value);
 const vlanOptions=(n:number)=>Math.min(4094,Math.max(1,Math.trunc(n)||10));
 function Field({label,value,save,disabled,type='text',min,max}:{label:string;value:string|number;save:(v:string)=>void;disabled:boolean;type?:string;min?:number;max?:number}){
- return <label className="prop-field"><span>{label}</span><input disabled={disabled} type={type} min={min} max={max} value={value} onChange={e=>save(e.currentTarget.value)}/></label>;
+ return <label className="prop-field"><span>{label}</span>{type==='number'?<SafeNumber label={label} disabled={disabled} min={min} max={max} value={Number(value)} onApply={n=>save(String(n))}/>:<input disabled={disabled} type={type} value={value} onChange={e=>save(e.currentTarget.value)}/>}</label>;
 }
 export function NetworkSettings({w,d}:{w:Workbench;d:Device}){
  const p=profile(d.profileId),disabled=w.blocked,update=(fields:Partial<Device>)=>w.update(d.id,fields);
  const address=w.result.network?.addresses[d.id],wireless=w.result.network?.wireless[d.id];
- const ipEligible=p.kind!=='switch'&&!(p.kind==='camera'&&p.signal==='analog');
+ const ipEligible=['camera','nvr','router','server','ap'].includes(p.kind)&&!(p.kind==='camera'&&p.signal==='analog');
  const ports=d.portConfigs||[];
  const editPort=(index:number,partial:Partial<PortConfig>)=>{
   const current=ports.find(x=>x.number===index)||{number:index,mode:'access' as const,accessVlan:10,nativeVlan:10,allowedVlans:[10],speedMbps:p.portSpeedMbps||1000};
@@ -23,9 +24,13 @@ export function NetworkSettings({w,d}:{w:Workbench;d:Device}){
  const editPool=(index:number,fields:Partial<DhcpPool>)=>update({dhcpPools:pools.map((v,i)=>i===index?{...v,...fields}:v)});
  const routes=d.routes||[];
  const editRoute=(index:number,fields:Partial<StaticRoute>)=>update({routes:routes.map((v,i)=>i===index?{...v,...fields}:v)});
+ if(!ipEligible&&p.ethernetPorts===0)return <p className="editor-muted">This profile uses dedicated circuits and has no modeled IP interfaces. Configure its wiring in Essential settings.</p>;
  return <div className="network-settings">
   <div className="section-heading">STAGE 5 · NETWORK CONFIGURATION</div>
   {ipEligible&&<div className="fields">
+   <Field label="IP Address" value={d.ip||''} save={ip=>update({ip})} disabled={disabled}/>
+   <Field label="Subnet Mask" value={d.mask||''} save={mask=>update({mask})} disabled={disabled}/>
+   <Field label="Gateway" value={d.gateway||''} save={gateway=>update({gateway})} disabled={disabled}/>
    <label className="prop-field"><span>Address assignment</span><select disabled={disabled} value={d.addressMode||'static'} onChange={e=>update({addressMode:e.currentTarget.value as 'static'|'dhcp'})}><option value="static">Static IPv4</option><option value="dhcp">DHCP client</option></select></label>
    <Field label="Access VLAN (1–4094)" value={d.vlanId??10} save={v=>update({vlanId:vlanOptions(num(v))})} disabled={disabled} type="number" min={1} max={4094}/>
    <Field label="DNS server (IPv4)" value={d.dns||''} save={v=>update({dns:v})} disabled={disabled}/>

@@ -1,3 +1,4 @@
+import {EquipmentCompare} from './EquipmentCompare.js';
 import React,{useState} from 'react';
 import {PROFILES} from '../../../src/domain/catalog.js';
 import {MANUFACTURERS} from '../../../src/domain/manufacturers/index.js';
@@ -47,6 +48,7 @@ export function Catalog({w}:{w:Workbench}){
    <div className="catalog-filters"><label>Library <select aria-label="Equipment family" value={family} onChange={e=>setFamily(e.target.value as 'all'|'generic'|'manufacturer')}><option value="all">All models</option><option value="generic">Generic training</option><option value="manufacturer">Manufacturer profiles</option></select></label><label>Manufacturer <select aria-label="Manufacturer" value={maker} onChange={e=>setMaker(e.target.value)}><option value="all">All manufacturers</option>{MANUFACTURERS.map(name=><option value={name} key={name}>{name}</option>)}</select></label><small>Manufacturer models are documented references, not real firmware or product endorsements. GHS prices require your own quotations.</small></div>
    <div className="vendor-browser"><label>Manufacturer specification sheet<select aria-label="Browse documented manufacturer models" value={inspectedId} onChange={e=>setInspectedId(e.target.value)}><option value="">Select a device model to inspect…</option>{PROFILES.filter(p=>p.manufacturerSpec).map(p=><option key={p.id} value={p.id}>{p.manufacturer} · {p.model}</option>)}</select></label>{inspected?.manufacturerSpec&&<section className="vendor-detail" aria-label="Documented virtual device specification"><strong>{inspected.name}</strong><small>{inspected.manufacturerSpec.variant} · Profile {inspected.manufacturerSpec.edition} · {inspected.manufacturerSpec.status==='reference-only'?'REFERENCE ONLY — NOT PLACEABLE':'VIRTUAL SIMULATION PROFILE'}</small><ul>{inspected.manufacturerSpec.sourcedFacts.map((fact,i)=><li key={i}>{fact}</li>)}</ul><p><b>SecurityLab limitations:</b> {inspected.manufacturerSpec.limitations.join(' · ')}</p><a href={inspected.manufacturerSpec.sourceUrl} target="_blank" rel="noopener noreferrer">Open official reference documentation</a></section>}</div>
   </details>
+  <EquipmentCompare w={w}/>
   <div className="catalog-scroll">
    {CATEGORIES.map(cat=>{
     const list=items(cat.kinds),isOpen=q?list.length>0:!!open[cat.id];

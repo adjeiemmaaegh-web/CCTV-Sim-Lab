@@ -71,6 +71,7 @@ test('teaching tools: lesson progress, fault exercise, quote, audit, instructor 
  await page.getByLabel('Instructor mode').locator('input[type=file]').nth(0).setInputFiles({name:'pack.json',mimeType:'application/json',buffer:Buffer.from(pack)});
  await expect(page.getByText(/Loaded 1 custom scenario/)).toBeVisible();
  await page.getByRole('button',{name:'Open',exact:true}).click();
+ await page.getByRole('dialog',{name:'Protect unsaved work'}).getByRole('button',{name:'Discard draft and continue'}).click();
  await expect(page.getByLabel('Scenario',{exact:true})).toHaveValue('custom-e2e-kiosk');
  // a bad pack is rejected and does not register anything
  await page.getByLabel('Instructor mode').locator('input[type=file]').nth(0).setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"format":"nope"}')});

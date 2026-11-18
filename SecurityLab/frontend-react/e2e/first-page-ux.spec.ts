@@ -3,9 +3,9 @@ import {test,expect} from '@playwright/test';
 test('first-time guide helps create a project without blocking the floor plan',async({page})=>{
  await page.goto('/');
  const intro=page.getByRole('complementary',{name:'Getting started'});
- await expect(intro).toBeVisible();
+ await expect(page.getByRole('region',{name:'Contextual learning guide'})).toBeVisible();
  await expect(page.locator('svg[role=application]')).toBeVisible();
- await intro.getByRole('button',{name:'Start designing'}).click();
+ await expect(intro).toHaveCount(0);
  await expect(intro).toHaveCount(0);
  await expect(page.locator('.catalog')).toBeVisible();
  await page.getByRole('button',{name:'Show getting started'}).click();
@@ -74,7 +74,7 @@ test('empty inspector provides actual room and wiring actions',async({page})=>{
 test('guide can be reopened after the learner has placed equipment',async({page})=>{
  await page.goto('/');
  const intro=page.getByRole('complementary',{name:'Getting started'});
- await intro.getByRole('button',{name:'Start designing'}).click();
+ await page.getByRole('region',{name:'Contextual learning guide'}).getByRole('button',{name:'Show me where'}).click();
  await page.locator('.catalog-scroll button.equipment').first().click();
  await page.locator('svg[role=application]').click({position:{x:120,y:75}});
  await expect(page.locator('svg[role=application] g[data-device]')).toHaveCount(1);

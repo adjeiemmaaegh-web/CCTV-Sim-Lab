@@ -16,6 +16,7 @@ test('learner workflow exposes real placement, wiring, property and diagnostic a
  await expect(page.getByRole('button',{name:'Cable',exact:true})).toHaveAttribute('aria-pressed','true');
  await page.locator('svg[role=application] g[data-device]').first().click();
  await page.locator('svg[role=application] g[data-device]').nth(1).click();
+ await page.getByRole('button',{name:'Install reviewed connection'}).click();
  await expect(guide).toContainText('2/5');
  await guide.getByRole('button',{name:'Configure installation step'}).click();
  await expect(page.getByRole('complementary',{name:'Properties'})).toContainText('Device Properties');
