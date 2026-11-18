@@ -48,6 +48,9 @@ export function analyseCables(project:Project,units=project.unitsPerMeter??10):C
   const length=Math.max(c.lengthMeters||0,straight);
   const medium=c.medium??'ethernet',messages:string[]=[];let ok=true,pdVolts:number|undefined;
   if(!c.connected){ok=false;messages.push('Cable is disconnected');}
+  if(c.termination==='open'){ok=false;messages.push('Continuity tester: open conductor');}
+  if(c.termination==='short'){ok=false;messages.push('Continuity tester: short circuit');}
+  if(c.termination==='split-pair'&&medium==='ethernet'){ok=false;messages.push('Wire-map tester: split pair');}
   if(medium==='ethernet'){
    if(length>ETHERNET_MAX_M){ok=false;messages.push(`Length ${length.toFixed(0)} m exceeds the ${ETHERNET_MAX_M} m Ethernet limit`);}
    const load=poeLoad(a,b);
