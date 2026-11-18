@@ -51,6 +51,7 @@ export function ConnectionGuide({w,cable}:{w:Workbench;cable:Cable}){
     const sw=profile(d.profileId),poe=w.result.poe[d.id];return <p className="editor-muted" key={d.id}>{d.name}: {sw.poePorts} modeled PoE outputs, {poe?.consumedW.toFixed(1)||'0'} / {poe?.budgetW.toFixed(1)||sw.poeBudgetW.toFixed(1)} W allocated. Port and power eligibility are checked separately.</p>;
    })}
   </div>}
+  {(ethernet||medium==='coax')&&<label className="prop-field"><span>Virtual termination / tester result</span><select aria-label="Cable termination result" disabled={w.blocked} value={cable.termination||'pass'} onChange={e=>update({termination:e.currentTarget.value as Cable['termination']},'Virtual cable tester result updated')}><option value="pass">PASS — continuity and wire map</option><option value="open">FAIL — open conductor</option><option value="short">FAIL — short circuit</option>{ethernet&&<option value="split-pair">FAIL — split pair</option>}</select><small className="editor-muted">Use this training fault to practise inspection and repair; it does not represent a physical cable measurement.</small></label>}
   <p className="connection-tip"><strong>Recommended check:</strong> {help}</p>
   <p className="editor-muted">All ports, link status and electrical behavior here are training models. They do not certify a real installation or manufacturer interoperability.</p>
  </section>;
