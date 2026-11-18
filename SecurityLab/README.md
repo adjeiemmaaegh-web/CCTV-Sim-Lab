@@ -22,7 +22,8 @@
 > **Release remains NO-GO for professional use.** Follow
 > `../docs/MANUAL_ACCEPTANCE.md` for Windows native save/recovery, installed/offline
 > PWA restart, browsers, phones, screen readers, low-memory performance and
-> qualified technician/French-review gates. A hosted preview or green CI is
+> qualified technician-review gates. French localization review and a source-
+> licensing decision are deferred from the current V1 completion target. A hosted preview or green CI is
 > **not** evidence of real-world installation approval or professional competency.
 >
 > The original Stage 15 source notes below are retained for provenance, not
