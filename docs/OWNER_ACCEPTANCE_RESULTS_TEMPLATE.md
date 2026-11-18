@@ -42,9 +42,9 @@
 | C1 Firefox/Safari/Edge manual flows | NOT RUN | | |
 | C2 8GB Windows, 40 devices+60 walls, 100 ms drag-frame limit | NOT RUN | | |
 | C3 real Android/iPad touch | NOT RUN | | |
-| C4 NVDA/VoiceOver + French spoken labels | NOT RUN | | |
+| C4 NVDA/VoiceOver in the active English interface | NOT RUN | | |
 | C5 Windows high-contrast/reduced-motion | NOT RUN | | |
-| D Ghana/security installation + French content signoff | NOT RUN | | |
+| D Ghana/security installation and instructional-content signoff | NOT RUN | | |
 | E package/signing/distribution owner decision | NOT RUN | | |
 
 ## Defect record (copy for each failure)
@@ -71,4 +71,4 @@
 
 Reviewer signature/date: ___________________________________
 
-> A passed GitHub Actions run may be linked as *supporting automated evidence* in this form, but does not automatically change any physical gate from NOT RUN or PARTIAL to PASS.
+> French localization review and source licensing are deferred from the current V1 completion target. A passed GitHub Actions run may be linked as *supporting automated evidence* in this form, but does not automatically change any physical gate from NOT RUN or PARTIAL to PASS.
