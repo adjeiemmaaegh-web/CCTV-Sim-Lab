@@ -62,6 +62,9 @@ export function simulate(projectInput:Project):SimResult {
   let reason='';
   if(!a||!b||c.a===c.b)reason='Invalid cable endpoint';
   else if(!c.connected)reason='Cable disconnected';
+  else if(c.termination==='open')reason='Cable continuity test failed: open conductor';
+  else if(c.termination==='short')reason='Cable continuity test failed: short circuit';
+  else if(c.termination==='split-pair'&&medium==='ethernet')reason='Cable wire-map failed: split pair';
   else if(!Number.isFinite(c.lengthMeters)||c.lengthMeters<=0||c.lengthMeters+cableRiseM(a,b)>(medium==='coax'?300:100))reason=`${medium==='coax'?'Coaxial':'Ethernet'} run exceeds simulated maximum length`;
   else if(medium==='coax'){
    const cam=isCamera(a)?a:isCamera(b)?b:null,rec=isDvr(a)?a:isDvr(b)?b:null;
