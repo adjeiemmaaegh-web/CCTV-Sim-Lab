@@ -3,6 +3,8 @@ name: Windows hosted-runner QA (not Windows 11 acceptance)
 # windows-2025 is a Windows Server image, NOT a physical Windows 11 laptop.
 # Native file pickers are stubbed with browser OPFS in Playwright tests.
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
