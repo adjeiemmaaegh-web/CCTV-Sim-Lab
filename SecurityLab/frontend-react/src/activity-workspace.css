@@ -1,0 +1,57 @@
+/* Activity controls stay outside the drawing surface; expanded drawers are temporary. */
+.canvas-context{position:relative;display:flex;align-items:center;gap:6px;min-height:34px;flex:none;z-index:5;border-bottom:1px solid #365064;padding:2px 8px;background:#102839}
+.floor-breadcrumb{max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px;color:#a9c4d3;padding:2px}
+.scene-navigator{flex:0 0 112px;font-size:11px;color:#d8e9ef;padding:4px 0}
+.scene-navigator summary{cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:112px}
+.scene-navigator[open]{position:absolute;left:0;right:0;top:100%;background:#112d41;border:1px solid #496d83;padding:10px;max-height:300px;overflow:auto;z-index:6}
+.scene-navigator[open] summary{max-width:none;margin-bottom:8px}
+.scene-navigator small,.equipment-compare small{display:block;color:#a9c4d3;margin-top:6px;font-size:11px}
+.scene-results{max-height:180px;overflow:auto}
+.scene-row{display:flex;gap:4px;margin:4px 0;align-items:center}
+.scene-row>button:first-child{flex:1;text-align:left;min-width:80px}
+.scene-row button{font-size:11px;padding:4px;min-height:32px}
+.learning-guide{display:flex;flex:1;min-width:0;align-items:center;gap:4px;padding:2px;font-size:10px;color:#d8e9ef}
+.learning-guide>div{flex:1;display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
+.learning-guide strong{font-size:10px;text-transform:capitalize;white-space:nowrap}
+.learning-guide button{font-size:9px;min-height:26px;padding:4px;white-space:nowrap}
+.learning-guide>p{position:absolute;top:100%;left:0;right:0;background:#132f43;border:1px solid #496d83;padding:10px;margin:0;z-index:5;font-size:12px;line-height:1.5;max-height:160px;overflow:auto}
+.learning-guide>small{display:none}
+.instructor-highlight{outline:3px solid #68e0ca;outline-offset:-4px}
+.scene-minimap,.canvas-body>svg.scene-minimap{position:absolute;right:12px;top:12px;width:140px;height:91px;min-height:0;flex:none;border:1px solid #8ba8b8;border-radius:6px;cursor:crosshair;box-shadow:0 3px 15px #0007;z-index:2}
+.equipment-compare{padding:10px 14px;border-bottom:1px solid #365264;background:#142e41;color:#d8e9ef;font-size:12px;flex-shrink:0;max-height:40vh;overflow:auto}
+.equipment-compare summary{cursor:pointer}
+.compare-selectors{display:grid;gap:8px;margin:8px 0}
+.compare-selectors select{width:100%;max-width:100%;min-height:32px}
+.compare-scroll{overflow:auto}
+.compare-scroll table{min-width:360px}
+.compare-scroll th,.compare-scroll td,.event-timeline td,.event-timeline th{padding:6px;text-align:left;border:1px solid #456073}
+.safe-number{display:block;min-width:0;width:100%}
+.safe-number input{width:100%!important;box-sizing:border-box}
+.safe-number small{display:block;color:#ffd09b;font-size:11px}
+.safe-number [aria-invalid=true]{border-color:#f1a76b}
+.number-actions,.center-actions,.assessment-actions,.settings-level{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.number-actions button,.settings-level button,.assessment-actions button,.center-actions button{min-height:32px}
+.settings-level button[aria-pressed=true]{border-color:#5bd8bf;background:#1b4c56}
+.project-facts{display:grid;grid-template-columns:110px 1fr;gap:8px}
+.project-facts dt{font-weight:600}
+.project-facts dd{margin:0;overflow-wrap:anywhere}
+.timeline-events{padding-left:22px;max-height:150px;overflow:auto}
+.timeline-events li{padding:6px;border-left:2px solid #54c4b6}
+.event-timeline input[type=range]{width:100%}
+.event-timeline table{width:100%;border-collapse:collapse}
+.modal .connection-guide{max-height:48vh;overflow:auto}
+.modal-body{overflow:auto;max-height:75vh}
+.canvas-panel{min-height:0}
+.console:has(.event-timeline){min-height:320px}
+.settings-level~.fields .prop-field{align-items:start}
+.nav-rail>button{min-height:52px}
+.project-center-button{white-space:nowrap}
+.fault-trace-readout{position:absolute;bottom:52px;left:12px;right:12px;pointer-events:none;background:#122f43e8;border:1px solid #bc8072;color:#f2d1b8;font-size:11px;padding:6px 9px;border-radius:6px}
+.fault-trace-readout span{display:block}
+@media(max-width:1400px){.canvas-context .floor-breadcrumb{display:none}.learning-guide>div button{padding:3px}.canvas-context{gap:4px}.scene-navigator{flex-basis:95px}.scene-navigator summary{max-width:95px}}
+@media(min-width:901px) and (max-height:800px){.shell .canvas-body{min-height:240px}.shell .console:not(.console-expanded){height:132px}}
+@media(min-width:901px){.shell .console.diagnostics-expanded:not(.diagnostics-full){height:min(25vh,200px)}}
+@media(max-width:900px){.shell .topbar .project-center-button{display:none}.shell .topbar{row-gap:5px}.scene-navigator{flex-basis:90px}.learning-guide strong{font-size:9px}.learning-guide>div{gap:3px}}
+@media(max-width:760px){.scene-minimap,.canvas-body>svg.scene-minimap{width:100px;height:65px}.scene-row{flex-wrap:wrap}.project-facts{grid-template-columns:1fr}.nav-rail button span{font-size:10px}}
+@media(pointer:coarse){.learning-guide button,.scene-navigator summary,.scene-row button,.number-actions button,.settings-level button,.equipment-compare summary,.center-actions button,.assessment-actions button{min-height:44px;min-width:44px}.learning-guide button{font-size:10px}.learning-guide>div{flex-wrap:wrap}}
+@media(max-width:900px){.shell .realtime{flex-direction:column;align-items:stretch}.shell .rt-run{border-right:0;padding-right:0}.shell .rt-cards{flex:none;width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}.shell .stat{padding:10px 8px;gap:8px}.shell .stat .ico{width:24px;height:24px;flex-shrink:0}.shell .stat>div{min-width:0;overflow-wrap:anywhere}}

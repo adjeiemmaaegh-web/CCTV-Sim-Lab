@@ -1,8 +1,11 @@
+import {SceneNavigator} from './SceneNavigator.js';
+import {ACTIVITIES} from '../workspace/activities.js';
+import {LearningGuide} from './LearningGuide.js';
 import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {profile} from '../../../src/domain/catalog.js';
 import {coveragePolygon} from '../../../src/engine/geometry.js';
 import {adjustDevice} from '../../../src/engine/environment.js';
-import {floorView,hasFloors} from '../../../src/tools/floors.js';
+import {floorView,hasFloors,floorList,floorOf} from '../../../src/tools/floors.js';
 import {FloorBar} from './FloorBar.js';
 import {WorkflowStrip,type WorkflowStep} from './WorkflowStrip.js';
 import {GettingStarted} from './GettingStarted.js';
@@ -34,11 +37,20 @@ const pointEqual=(a:Point,b:Point)=>Math.abs(a.x-b.x)<1&&Math.abs(a.y-b.y)<1;
 const kinds:PropertyTemplate[]=['residential','apartment','retail','office','warehouse'];
 
 export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workbench;focusMode:boolean;onToggleFocus:()=>void;onWorkflow:(step:WorkflowStep)=>void;layout:WorkspaceLayout}){
- const viewProject=useMemo(()=>floorView(wb.project,wb.floor),[wb.project,wb.floor]);
- const w:Workbench=viewProject===wb.project?wb:{...wb,project:viewProject};
+ const [hidden,setHidden]=useState<Set<string>>(new Set());
+ const locked=wb.canvasLocks,setLocked=wb.setCanvasLocks;
+ const [isolated,setIsolated]=useState<string|null>(null);
+ const toggleSet=(setter:React.Dispatch<React.SetStateAction<Set<string>>>,id:string)=>setter(old=>{const next=new Set(old);if(next.has(id))next.delete(id);else next.add(id);return next;});
+ useEffect(()=>{setHidden(new Set());setLocked(new Set());setIsolated(null);},[wb.project.id]);
+ const floorProject=useMemo(()=>floorView(wb.project,wb.floor),[wb.project,wb.floor]);
+ const visible=(id:string)=>!hidden.has(id)&&(!isolated||id===isolated||wb.project.cables.some(c=>c.id===isolated&&(c.a===id||c.b===id)));
+ const viewProject={...floorProject,devices:floorProject.devices.filter(d=>visible(d.id)),cables:floorProject.cables.filter(c=>visible(c.id)&&!hidden.has(c.a)&&!hidden.has(c.b)),rooms:floorProject.rooms.filter(d=>visible(d.id)),walls:floorProject.walls.filter(d=>visible(d.id)),targets:floorProject.targets.filter(d=>visible(d.id)),siteElements:floorProject.siteElements?.filter(d=>visible(d.id))};
+ const w:Workbench={...wb,project:viewProject};
  const svg=useRef<SVGSVGElement>(null),gesture=useRef<Gesture|null>(null);
  const [preview,setPreview]=useState<Point|null>(null);
  const view:View=wb.view,setView=wb.setView;
+ const [showMinimap,setShowMinimap]=useState(true);
+ useEffect(()=>setShowMinimap(view==='floor'),[view]);
  const [layers,setLayers]=useState(DEFAULT_LAYERS),[snap,setSnap]=useState(true);
  const [zoom,setZoom]=useState(1),[center,setCenter]=useState<Point>({x:500,y:325});
  const [template,setTemplate]=useState<PropertyTemplate>('residential');
@@ -46,7 +58,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  const [spaceDown,setSpaceDown]=useState(false);
  const [showOpts,setShowOpts]=useState(false);
  const [showLayout,setShowLayout]=useState(false);
- const [showWelcome,setShowWelcome]=useState(true);
+ const [showWelcome,setShowWelcome]=useState(false);
  const [guideReopened,setGuideReopened]=useState(false);
  const [intensity,setIntensity]=useState(75);
  useEffect(()=>{
@@ -81,7 +93,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  };
  const fromEvent=(e:React.PointerEvent<SVGSVGElement>)=>pointFrom(e.clientX,e.clientY);
  const editable=(point:Point)=>snapped(point,snap&&!spaceDown&&view==='floor');
- const begin=(op:Gesture,e:React.PointerEvent<SVGSVGElement>)=>{gesture.current=op;setPreview(op.kind==='pan'?null:op.start);e.currentTarget.setPointerCapture(e.pointerId);};
+ const begin=(op:Gesture,e:React.PointerEvent<SVGSVGElement>)=>{if('id' in op&&locked.has(op.id)){wb.setNotice('Canvas component is locked. Unlock it in Find and organize components.');return;}gesture.current=op;setPreview(op.kind==='pan'?null:op.start);e.currentTarget.setPointerCapture(e.pointerId);};
  const onDown=(e:React.PointerEvent<SVGSVGElement>)=>{
   if(e.button!==0&&e.button!==1)return;
   const point=fromEvent(e);
@@ -190,9 +202,9 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
   const p=pointFrom(e.clientX,e.clientY);
   w.install(id,editable(p));
  };
- const applyTemplate=()=>{
+ const applyTemplate=async()=>{
   if(w.blocked)return;
-  if(w.project.rooms.length+w.project.walls.length>0&&!window.confirm('Replace existing rooms, walls and site markers with this template? Installed equipment, cables and assessment targets will be kept.'))return;
+  if(wb.project.rooms.length+wb.project.walls.length>0&&await wb.ask('Replace existing rooms, walls and site markers with this template? Installed equipment, cables and assessment targets will be kept.')===null)return;
   w.applyPropertyTemplate(template);fit();
  };
  const active=gesture.current,dx=preview&&active&&active.kind!=='pan'?preview.x-active.start.x:0,dy=preview&&active&&active.kind!=='pan'?preview.y-active.start.y:0;
@@ -214,10 +226,29 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  const isAlarm=(d:Device)=>profile(d.profileId).kind.startsWith('alarm-')||profile(d.profileId).kind.startsWith('access-');
  const topologyGroup=(d:Device)=>{const kind=profile(d.profileId).kind;return kind==='nvr'||kind==='dvr'||kind==='server'?'recorder':kind==='router'||kind==='ap'||kind==='switch'?'switch':kind;};
  const topologyPosition=(d:Device)=>{const group=topologyGroup(d),all=w.project.devices.filter(x=>!isAlarm(x)&&topologyGroup(x)===group),i=all.findIndex(x=>x.id===d.id);return{x:group==='camera'?160:group==='switch'?500:830,y:145+i*380/Math.max(1,all.length-1)};};
+ useEffect(()=>{
+  const entity=wb.focusRequest?.entity;if(!entity)return;
+  const collections={device:wb.project.devices,room:wb.project.rooms,wall:wb.project.walls,target:wb.project.targets,site:wb.project.siteElements||[],cable:wb.project.cables,reference:[]};
+  const item=collections[entity.kind].find(i=>i.id===entity.id);
+  if(!item)return;
+  setHidden(old=>{const next=new Set(old);next.delete(entity.id);if(entity.kind==='cable'){const c=wb.project.cables.find(c=>c.id===entity.id);if(c){next.delete(c.a);next.delete(c.b);}}return next;});setIsolated(null);
+  const cable=entity.kind==='cable'?wb.project.cables.find(c=>c.id===entity.id):undefined;
+  const d=cable?wb.project.devices.find(d=>d.id===cable.a):entity.kind==='device'?wb.project.devices.find(d=>d.id===entity.id):undefined;
+  wb.setFloor(floorOf(d??('floor' in item?item:{})));
+  // Locate in physical plan; graph positions are independent of physical coordinates.
+  wb.setView('floor');
+  const point=d?{x:d.x,y:d.y}:'x' in item?{x:item.x,y:item.y}:'x1' in item?{x:(item.x1+item.x2)/2,y:(item.y1+item.y2)/2}:null;
+  if(point){setCenter(point);setZoom(1.5);}
+ },[wb.focusRequest]);
+ const selectedDevice=wb.selected?.kind==='device'?wb.selected.id:undefined;
+ const networkTraces=Object.entries(wb.result.network?.traces||{}).filter(([key])=>selectedDevice&&key.startsWith(selectedDevice+'→'));
+ const traceIds=new Set(networkTraces.flatMap(([,value])=>value.links));
+ const trace=wb.project.cables.filter(c=>traceIds.has(c.id)||c.id===wb.selected?.id||selectedDevice&&(c.a===selectedDevice||c.b===selectedDevice));
  const worldScale=scaleOf(w.project);
- const selectedDevice=w.selected?.kind==='device'?w.project.devices.find(d=>d.id===w.selected?.id):undefined;
- const selectedLabel=selectedDevice?.name||(w.selected?.kind==='room'?w.project.rooms.find(r=>r.id===w.selected?.id)?.name:undefined)||(w.selected?w.selected.kind.replace('-', ' '):'');
- const contextActive=!!(w.placing||w.mode==='cable'||w.selected);
+  const selectedEntity=w.selected;
+  const selectedInfo=selectedEntity?.kind==='device'?w.project.devices.find(d=>d.id===selectedEntity.id):undefined;
+  const selectedLabel=selectedInfo?.name||(selectedEntity?.kind==='room'?w.project.rooms.find(r=>r.id===selectedEntity.id)?.name:undefined)||(selectedEntity?selectedEntity.kind.replace('-', ' '):'');
+  const contextActive=!!(w.placing||w.mode==='cable'||w.selected);
  return <section className="canvas-panel panel" id="securitylab-workspace" aria-label="Installation workspace">
   <div className="canvas-toolbar">
    <div className="view-tabs" role="group" aria-label="Plan view">
@@ -228,15 +259,16 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
    <button className={`tool-btn text-btn ${showLayout?'active':''}`} aria-label="Workspace panels" aria-expanded={showLayout} aria-controls="workspace-layout-controls" onClick={()=>setShowLayout(v=>!v)}><Icon name="settings" size={18}/><span>Panels</span></button>
    <button className="tool-btn" aria-label="Show getting started" title="Getting started" onClick={()=>{setGuideReopened(true);setShowWelcome(true);}}><Icon name="help" size={18}/></button>
    <span className="tb-sep"/>
-   <div className="toolgroup" role="toolbar" aria-label="Editing tools">{(['select','pan','room','wall','door','window','cable','measure','test'] as Mode[]).map(modeButton)}</div>
+   <div className="toolgroup" role="toolbar" aria-label="Editing tools">{ACTIVITIES.find(a=>a.id===wb.activity)!.tools.map(modeButton)}</div>
    <span className="tb-sep"/>
    <button className="tool-btn" aria-label="Undo" title="Undo" onClick={w.undo} disabled={!w.canUndo||w.blocked}><Icon name="undo" size={19}/></button>
    <button className="tool-btn" aria-label="Redo" title="Redo" onClick={w.redo} disabled={!w.canRedo||w.blocked}><Icon name="redo" size={19}/></button>
-   <button className="tool-btn danger-tool" aria-label="Delete selected" title="Delete selected" onClick={w.removeSelection} disabled={w.blocked||!w.selected||w.selected.kind==='target'}><Icon name="trash" size={19}/></button>
+   <button className="tool-btn danger-tool" aria-label="Delete selected" title="Delete selected" onClick={w.removeSelection} disabled={w.blocked||!w.selected||w.selected.kind==='target'||locked.has(w.selected.id)}><Icon name="trash" size={19}/></button>
    <span className="tb-sep"/>
    <label className="compact-check"><input checked={snap} onChange={e=>setSnap(e.target.checked)} type="checkbox"/> Snap to grid</label>
-   <label className="compact-check"><input type="checkbox" checked={w.project.night} disabled={w.blocked} onChange={e=>w.commit({...w.project,night:e.currentTarget.checked})}/> Night</label>
-   <label className="compact-check"><input type="checkbox" checked={w.project.mainsOn} disabled={w.blocked} onChange={e=>w.commit({...w.project,mainsOn:e.currentTarget.checked})}/> AC power</label>
+   <label className="compact-check"><input type="checkbox" checked={w.project.night} disabled={w.blocked} onChange={e=>wb.commit({...wb.project,night:e.currentTarget.checked})}/> Night</label>
+   <label className="compact-check"><input type="checkbox" checked={w.project.mainsOn} disabled={w.blocked} onChange={e=>wb.commit({...wb.project,mainsOn:e.currentTarget.checked})}/> AC power</label>
+   <button className="tool-btn text-btn" aria-label={showMinimap?'Hide minimap':'Show minimap'} aria-pressed={showMinimap} onClick={()=>setShowMinimap(v=>!v)}><Icon name="floorplan" size={16}/></button>
    <span className="toolbar-spacer"/>
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
@@ -247,6 +279,10 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
     <button type="button" aria-label="Cable tool (mobile)" aria-pressed={w.mode==='cable'} disabled={w.blocked} onClick={()=>changeMode('cable')}><Icon name="cable" size={19}/>Wire</button>
     <button type="button" aria-label="Fit plan (mobile)" onClick={fit}><Icon name="focus" size={19}/>Fit plan</button>
    </div>
+   <div className="canvas-context">  <div className="floor-breadcrumb" role="navigation" aria-label="Floor breadcrumbs"><span>{wb.project.title}</span><span> / {floorList(wb.project).find(f=>f.id===wb.floor)?.name??'Ground floor'}</span></div>
+  <SceneNavigator w={wb} hidden={hidden} locked={locked} isolated={isolated} onHide={id=>toggleSet(setHidden,id)} onLock={id=>toggleSet(setLocked,id)} onIsolate={id=>setIsolated(old=>old===id?null:id)} onReset={()=>{setHidden(new Set());setLocked(new Set());setIsolated(null);}}/>
+  <LearningGuide w={wb} onChoose={onWorkflow}/>
+</div>
 
   {showLayout&&<div id="workspace-layout-controls" className="workspace-layout-controls" role="group" aria-label="Workspace panel controls">
    <div className="workspace-layout-heading"><strong>Customize workspace</strong><span>Show only the panels you need.</span><button type="button" onClick={layout.reset}>Reset layout</button></div>
@@ -351,6 +387,7 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
      })}
      {w.project.devices.filter(d=>!isAlarm(d)&&!profile(d.profileId).kind.startsWith('power-')).map(d=>{const kind=profile(d.profileId).kind,{x,y}=topologyPosition(d),addr=w.result.network?.addresses[d.id];return <g key={d.id} data-device={d.id} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Select network device ${d.name}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}><rect x="-66" y="-36" width="132" height="72" rx="8" fill="#173650" stroke={w.selected?.kind==='device'&&w.selected.id===d.id?'#ffe18a':w.result.devices[d.id]?.networkOk?'#25daba':'#e1aa64'} strokeWidth="2"/><text y="-14" textAnchor="middle" fill="#d0eef3" fontSize="12" pointerEvents="none">{kind==='camera'?(signalOf(d)==='analog'?'ANALOG CAM':'IP CAMERA'):kind==='switch'?'SWITCH':kind==='router'?'ROUTER':kind==='ap'?'Wi-Fi AP':kind==='server'?'SERVER':kind==='dvr'?'DVR':'NVR'}</text><text y="4" textAnchor="middle" fill="#9bbed0" fontSize="11" pointerEvents="none">{d.name.slice(0,19)}</text><text y="22" textAnchor="middle" fill="#6bd8ce" fontSize="10" pointerEvents="none">{addr?.ip?`${addr.ip} · V${addr.vlanId}`:`VLAN ${addr?.vlanId??10}`}</text></g>;})}
     </>}
+   <g pointerEvents="none" role="group" aria-label="Selected component connection path">{trace.map(c=>{const a=deviceById.get(c.a),b=deviceById.get(c.b);if(!a||!b)return null;const p1=view==='floor'?a:topologyPosition(a),p2=view==='floor'?b:topologyPosition(b);return <g key={c.id}><line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={wb.result.cables[c.id]?.up?'#61e1c2':'#ff8491'} strokeWidth="7" strokeDasharray="7 5" opacity=".8"/><title>{wb.result.cables[c.id]?.reason}</title></g>;})}</g>
    </svg>
    {contextActive&&<div className={`selection-context ${w.placing?'placing':w.mode==='cable'?'wiring':'inspecting'}`} role="region" aria-label="Active workspace tool">
     {w.placing?<>
@@ -373,13 +410,15 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
      <button onClick={()=>w.setSelected(null)}>Clear selection</button>
     </>:null}
    </div>}
+   {showMinimap&&<svg className="scene-minimap" viewBox="0 0 1000 650" role="img" aria-label="Canvas minimap; click to navigate" onClick={e=>{const rect=e.currentTarget.getBoundingClientRect();setCenter({x:(e.clientX-rect.left)/rect.width*1000,y:(e.clientY-rect.top)/rect.height*650});}}><rect width="1000" height="650" fill="#102637"/>{w.project.rooms.map(r=><rect key={r.id} x={r.x} y={r.y} width={r.w} height={r.h} fill="none" stroke="#63849a" strokeWidth="5"/>)}{w.project.devices.map(d=>{const pt=view==='floor'?d:topologyPosition(d);return <circle key={d.id} cx={pt.x} cy={pt.y} r="12" fill={wb.selected?.id===d.id?'#fff':'#4edcba'}/>;})}<rect x={center.x-viewWidth/2} y={center.y-viewHeight/2} width={viewWidth} height={viewHeight} fill="#45cbb31a" stroke="#fff" strokeWidth="6"/></svg>}
+   {wb.activity==='troubleshoot'&&networkTraces.length>0&&<div className="fault-trace-readout" role="status">{networkTraces.map(([key,trace])=><span key={key}>Network trace: {trace.ok?'Reachable':trace.reason} · {trace.links.length} traversed links. Red overlays show failing physical links.</span>)}</div>}
    <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>
    {showWelcome&&!wb.placing&&(w.mode==='select'||guideReopened)&&(guideReopened||wb.project.devices.length===0)&&<GettingStarted w={wb} onBegin={()=>onWorkflow('place')} onDismiss={()=>setShowWelcome(false)}/>}
    <div className="canvas-overlay" role="group" aria-label="Zoom">
     <button onClick={fit} aria-label="Fit" title="Fit to view"><Icon name="floorplan" size={18}/></button>
     <button onClick={()=>zoomTo(zoom*0.8)} aria-label="Zoom out">&minus;</button><span className="zoom-readout">{Math.round(zoom*100)}%</span><button onClick={()=>zoomTo(zoom*1.25)} aria-label="Zoom in">+</button>
    </div>
-   <div className={`canvas-hint ${w.mode==='select'&&view==='floor'?'quiet':''}`}>{view==='topology'?'Network topology: select devices or use Cable mode to connect endpoints':w.mode==='door'||w.mode==='window'?'Click a long solid wall to create a genuine opening':w.mode==='measure'?'Drag between two points to measure distance':w.mode==='pan'||spaceDown?'Drag to pan; use the mouse wheel to zoom':w.mode==='room'?'Drag to create a room with four physical walls':w.mode==='wall'?'Drag to draw a visibility-blocking wall':w.mode==='cable'?(w.cableStart?'First cable endpoint selected — click a different device to connect, or press Esc to cancel':'Cable: click the first device, then the second. Cable type and compatibility are checked by this training simulator'):w.placing?'Click to place equipment':'Select and drag rooms, device icons, endpoints or markers · Resize rooms with the corner handle'}</div>
+   <div className={`canvas-hint ${w.mode==='select'&&view==='floor'?'quiet':''}`}>{view==='topology'&&w.mode!=='cable'?'Network topology: select devices or use Cable mode to connect endpoints':w.mode==='door'||w.mode==='window'?'Click a long solid wall to create a genuine opening':w.mode==='measure'?'Drag between two points to measure distance':w.mode==='pan'||spaceDown?'Drag to pan; use the mouse wheel to zoom':w.mode==='room'?'Drag to create a room with four physical walls':w.mode==='wall'?'Drag to draw a visibility-blocking wall':w.mode==='cable'?(w.cableStart?'First cable endpoint selected — click a different device to connect, or press Esc to cancel':'Cable: click the first device, then the second. Cable type and compatibility are checked by this training simulator'):w.placing?'Click to place equipment':'Select and drag rooms, device icons, endpoints or markers · Resize rooms with the corner handle'}</div>
   </div>
   <div className="canvas-status"><span>ROOMS {w.project.rooms.length}</span><span>WALLS {w.project.walls.filter(r=>r.kind==='wall').length}</span><span>OPENINGS {w.project.walls.filter(r=>r.kind!=='wall').length}</span><span>CAMERAS {w.result.requiredCameras}</span><span>ONLINE {w.result.onlineCameras}</span><span>RECORDING {w.result.recordingCameras}</span><span>ALARM PANELS {Object.keys(w.result.alarm?.panels||{}).length} · SIRENS {w.result.alarm?.activeSirenCount||0}</span><span>ACCESS CONTROLLERS {Object.keys(w.result.access?.controllers||{}).length} · DOOR ALERTS {Object.values(w.result.access?.doors||{}).filter(d=>d.alarm).length}</span><span>LINKS: <b style={{color:'#2fb9ef'}}>Ethernet</b> · <b style={{color:'#f8b85c'}}>Coax</b> · <b style={{color:'#bd91fb'}}>Alarm</b> · <b style={{color:'#efc56c'}}>Access</b> · <b style={{color:'#f0d26e'}}>AC</b> · <b style={{color:'#ff9465'}}>DC</b> · <b style={{color:'#7be7a9'}}>PV</b></span><span>POWER {(w.result.power?.totalLoadW||0).toFixed(0)} W · {(w.result.power?.gridDrawW||0).toFixed(0)} W GRID</span><span>DHCP LEASES {Object.keys(w.result.network?.dhcpLeases||{}).length}</span><span>WI-FI CLIENTS {Object.values(w.result.network?.wireless||{}).filter(w=>w.connected).length}</span><span>TARGETS {w.result.coverage.filter(r=>r.covered).length}/{w.result.coverage.length}</span><span className="good">{w.project.night?'NIGHT':'DAY'} · {w.project.mainsOn?'AC ONLINE':'AC OFF'}</span></div>
  </section>;

@@ -1,3 +1,4 @@
+import {ACTIVITIES} from '../workspace/activities.js';
 import React,{useEffect,useRef,useState} from 'react';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import {Icon} from './icons.js';
@@ -25,15 +26,18 @@ export function DockTabs({w}:{w:Workbench}){
  useEffect(()=>{if(!more)return;const close=(e:MouseEvent)=>{if(!ref.current?.contains(e.target as Node))setMore(false);};const key=(e:KeyboardEvent)=>{if(e.key==='Escape')setMore(false);};
   document.addEventListener('mousedown',close);document.addEventListener('keydown',key);return()=>{document.removeEventListener('mousedown',close);document.removeEventListener('keydown',key);};},[more]);
  const events=w.project.events.length;
+ const allowed=ACTIVITIES.find(a=>a.id===w.activity)!.tabs;
+ const primary=PRIMARY.filter(t=>allowed.includes(t.tab));
+ const moreItems=MORE.filter(t=>allowed.includes(t.tab));
  const isActive=(t:typeof PRIMARY[number])=>t.tab===w.tab&&(t.id==='console'?w.toolId==='cli':t.id==='tools'?w.toolId!=='cli':true);
- const inMore=MORE.some(m=>m.tab===w.tab);
+ const inMore=moreItems.some(m=>m.tab===w.tab);
  return <div className="dock-tabs" role="tablist" aria-label="Simulation console">
-  {PRIMARY.map(t=><button key={t.id} role="tab" aria-selected={isActive(t)} className={isActive(t)?'active':''} onClick={()=>{if(t.tool)w.setToolId(t.tool);else if(t.id==='tools'&&w.toolId==='cli')w.setToolId('trace');w.setTab(t.tab);}}>
+  {primary.map(t=><button key={t.id} role="tab" aria-selected={isActive(t)} className={isActive(t)?'active':''} onClick={()=>{if(t.tool)w.setToolId(t.tool);else if(t.id==='tools'&&w.toolId==='cli')w.setToolId('trace');w.setTab(t.tab);w.setActivity(w.activity);}}>
    <Icon name={t.icon} size={18}/><span>{t.label}{t.id==='events'?` (${events})`:''}</span></button>)}
-  <div className="dock-more" ref={ref}>
-   <button role="tab" aria-selected={inMore} aria-haspopup="menu" aria-expanded={more} className={inMore?'active':''} onClick={()=>setMore(m=>!m)}><Icon name="more" size={18}/><span>{inMore?MORE.find(m=>m.tab===w.tab)!.label:'More'}</span></button>
-   {more&&<div className="menu dock-menu" role="menu">{MORE.map(m=><button key={m.tab} role="menuitem" onClick={()=>{w.setTab(m.tab);setMore(false);}}>{m.label}</button>)}</div>}
-  </div>
+  {moreItems.length>0&&<div className="dock-more" ref={ref}>
+   <button role="tab" aria-selected={inMore} aria-haspopup="menu" aria-expanded={more} className={inMore?'active':''} onClick={()=>setMore(m=>!m)}><Icon name="more" size={18}/><span>{inMore?moreItems.find(m=>m.tab===w.tab)!.label:'More'}</span></button>
+   {more&&<div className="menu dock-menu" role="menu">{moreItems.map(m=><button key={m.tab} role="menuitem" onClick={()=>{w.setTab(m.tab);w.setActivity(w.activity);setMore(false);}}>{m.label}</button>)}</div>}
+  </div>}
  </div>;
 }
 

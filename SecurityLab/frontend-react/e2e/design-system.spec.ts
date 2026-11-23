@@ -5,7 +5,7 @@ import AxeBuilder from '@axe-core/playwright';
 test('one active CSS entry retains the historic cascade and exposes design tokens',async({page})=>{
  const main=readFileSync(new URL('../src/main.tsx',import.meta.url),'utf8');
  const css=readFileSync(new URL('../src/workstation.css',import.meta.url),'utf8');
- expect(main.match(/import '\.\/[^']+\.css';/g)).toEqual(["import './workstation.css';"]);
+ expect(main.match(/import '\.\/[^']+\.css';/g)).toEqual(["import './workstation.css';","import './activity-workspace.css';"]);
  expect(css).toContain('=== Legacy foundation ===');
  expect(css).toContain('=== Former UI layer');
  expect(css).toContain('=== Former workspace layer');

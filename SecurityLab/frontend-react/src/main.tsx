@@ -7,3 +7,5 @@ loadSavedLocale();
 const root=document.getElementById('root');
 if(!root) throw new Error('Missing React mount element');
 createRoot(root).render(<SecurityLab/>);
+
+import './activity-workspace.css';

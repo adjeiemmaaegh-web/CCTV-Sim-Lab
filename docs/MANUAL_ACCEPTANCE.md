@@ -33,12 +33,12 @@ After A4's external-edit conflict check, repeat with **two actual Chrome/Edge ed
 | C1 | Firefox, Safari and Edge: run the 10 core flows (place, cable, scenario, save/download, open) |
 | C2 | 8 GB Windows 11 laptop, integrated graphics: 40 devices + 60 walls stays responsive (< 100 ms per drag frame) |
 | C3 | Android and iPad Safari/Chrome: place, move, zoom and open Tools by touch |
-| C4 | Screen reader (NVDA or VoiceOver): reach every tool tab, hear lesson steps, French labels are announced in French |
+| C4 | Screen reader (NVDA or VoiceOver): reach every tool tab and hear lesson steps in the active English interface |
 | C5 | Windows high-contrast / reduced-motion modes remain usable |
 
 ## D. Content review (people)
 Qualified installers/instructors must review: scenario briefs (especially the Ghana-context ones), the good-practice
-rules, lens/PoE/RAID formulas, fire-detector radii, and the French strings. Record reviewer, date and corrections.
+rules, lens/PoE/RAID formulas and fire-detector radii. Record reviewer, date and corrections. French localization review is deferred.
 
 ## E. Packaging and signing (owner decision)
 `npm run package` produces an **unsigned, reproducible** static zip with SHA256SUMS. A signed installer needs a

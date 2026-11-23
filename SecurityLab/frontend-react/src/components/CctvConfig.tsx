@@ -1,3 +1,4 @@
+import {SafeNumber} from './SafeNumber.js';
 import React from 'react';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import type {Device, MotionZone, PTZPreset,RecordingMode} from '../../../src/domain/types.js';
@@ -6,7 +7,7 @@ import {bitrateOf,clockLabel,fovOf,modeOf,ptzPresetFields,recorderBandwidth,sign
 
 type SetNumber=(value:number)=>void;
 function NumberSetting({name,value,onChange,disabled,min=0,max=9999,step=1}:{name:string;value:number;onChange:SetNumber;disabled:boolean;min?:number;max?:number;step?:number}){
- return <label className="prop-field"><span>{name}</span><input type="number" min={min} max={max} step={step} disabled={disabled} value={value} onChange={e=>{const next=e.currentTarget.valueAsNumber;if(Number.isFinite(next))onChange(Math.min(max,Math.max(min,next)));}}/></label>;
+ return <label className="prop-field"><span>{name}</span><SafeNumber label={name} value={value} onApply={onChange} disabled={disabled} min={min} max={max} step={step}/></label>;
 }
 function CheckSetting({name,checked,onChange,disabled}:{name:string;checked:boolean;onChange:(value:boolean)=>void;disabled:boolean}){
  return <label className="checkfield"><span>{name}</span><input type="checkbox" checked={checked} disabled={disabled} onChange={e=>onChange(e.currentTarget.checked)}/></label>;

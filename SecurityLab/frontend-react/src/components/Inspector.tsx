@@ -1,3 +1,4 @@
+import {SafeNumber} from './SafeNumber.js';
 import {PowerConfigPanel} from './PowerConfig.js';
 import React from 'react';
 import {Icon,kindIcon} from './icons.js';
@@ -12,13 +13,13 @@ import {ConnectionGuide} from './ConnectionGuide.js';
 import {AlarmConfig} from './AlarmConfig.js';
 import {AccessConfig} from './AccessConfig.js';
 
-const parse=(s:string)=>Number.isFinite(Number(s))?Number(s):0;
 function DeviceField({w,device,label,keyName,type='text',min,max}:{w:Workbench;device:Device;label:string;keyName:keyof Device;type?:string;min?:number;max?:number}){
- return <label className="prop-field"><span>{label}</span><input disabled={w.blocked} type={type} min={min} max={max} value={String(device[keyName]??'')} onChange={e=>w.update(device.id,{[keyName]:type==='number'?parse(e.currentTarget.value):e.currentTarget.value})}/></label>;
+ return <label className="prop-field"><span>{label}</span>{type==='number'?<SafeNumber key={device.id+keyName} label={label} disabled={w.blocked} min={min} max={max} value={Number(device[keyName]??0)} onApply={n=>w.update(device.id,{[keyName]:n})}/>:<input disabled={w.blocked} value={String(device[keyName]??'')} onChange={e=>w.update(device.id,{[keyName]:e.target.value})}/>}</label>;
 }
 function Numeric({name,value,onChange,disabled,min=0,max=1000,step=1}:{name:string;value:number;onChange:(n:number)=>void;disabled:boolean;min?:number;max?:number;step?:number}){
- return <label className="prop-field"><span>{name}</span><input disabled={disabled} type="number" min={min} max={max} step={step} value={value} onChange={e=>onChange(parse(e.currentTarget.value))}/></label>;
+ return <label className="prop-field"><span>{name}</span><SafeNumber label={name} value={value} onApply={onChange} disabled={disabled} min={min} max={max} step={step}/></label>;
 }
+
 function RoomFields({w,room}:{w:Workbench;room:Room}){
  const m=scaleOf(w.project);
  return <><div className="section-heading">PROPERTY GEOMETRY — ROOM</div><div className="fields"><label className="prop-field"><span>Room name</span><input disabled={w.blocked} value={room.name} maxLength={120} onChange={e=>w.updateRoom(room.id,{name:e.currentTarget.value})}/></label>
@@ -46,6 +47,7 @@ function ReferenceFields({w}:{w:Workbench}){
 }
 export function Inspector({w}:{w:Workbench}){
  const s=w.selected;
+ const [advanced,setAdvanced]=React.useState(false);
  const [tab,setTab]=React.useState<'general'|'coverage'|'network'>('general');
  const device=s?.kind==='device'?w.project.devices.find(d=>d.id===s.id):undefined;
  const room=s?.kind==='room'?w.project.rooms.find(r=>r.id===s.id):undefined;
@@ -56,25 +58,25 @@ export function Inspector({w}:{w:Workbench}){
  const reference=s?.kind==='reference'&&Boolean(w.project.floorplanImage);
  const dProfile=device?profile(device.profileId):undefined,health=device?w.result.devices[device.id]:undefined;
  return <aside className="inspector panel" aria-label="Properties"><div className="panel-heading prop-heading"><h2><Icon name={dProfile?kindIcon(dProfile.kind):'settings'} size={20}/> {device?'Device Properties':room?'Room Properties':wall?'Wall Properties':cable?'Cable Properties':'Properties'}</h2>{s&&<button className="icon-btn" aria-label="Close properties" onClick={()=>w.setSelected(null)}><Icon name="close" size={18}/></button>}</div>
- <div className="inspector-scroll">
+ <div className="inspector-scroll" key={s?.id??'empty'}><div className="settings-level" role="group" aria-label="Settings detail"><button aria-pressed={!advanced} onClick={()=>setAdvanced(false)}>Essential</button><button aria-pressed={advanced} onClick={()=>setAdvanced(true)}>Advanced</button></div>
  {device&&dProfile?<>
   <div className="device-summary"><span className="big-icon"><Icon name={kindIcon(dProfile.kind)} size={34}/></span><div><strong>{dProfile.name}</strong><small>{device.name}</small></div><span className={health?.powered?'badge good':'badge warn'}><i className="dot"/>{health?.powered?(health.networkOk||!dProfile.kind.match(/camera|nvr|dvr/)?'Online':'Powered'):'Offline'}</span></div>
   <div className="device-quick-actions" role="group" aria-label="Selected device actions">
-   <button disabled={w.blocked||w.project.devices.length<2} onClick={()=>{w.setPlacing(null);w.setCableStart(device.id);w.setMode('cable');w.setNotice('Connect '+device.name+': select its second endpoint on the canvas.');}}>Connect this device</button>
+   <button disabled={w.blocked||w.project.devices.length<2} onClick={()=>{w.setTab('network');w.setActivity('connect');w.setPlacing(null);w.setCableStart(device.id);w.setMode('cable');w.setNotice('Connect '+device.name+': select its second endpoint on the canvas.');}}>Connect this device</button>
    <button onClick={()=>w.setTab('diagnostics')}>Check simulation faults</button>
   </div>
-  <div className="prop-tabs" role="tablist" aria-label="Device property groups">{([["general","General"],["coverage","Coverage"],["network","Network"]] as const).map(([id,lbl])=><button key={id} role="tab" aria-selected={tab===id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{lbl}</button>)}</div>
-  {tab==="general"&&<>
+  {advanced&&<div className="prop-tabs" role="tablist" aria-label="Device property groups">{([["general","General"],["coverage","Coverage"],["network","Network"]] as const).map(([id,lbl])=><button key={id} role="tab" aria-selected={tab===id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{lbl}</button>)}</div>}
+  {(!advanced||tab==="general")&&<>
   <div className="section-heading">IDENTITY & POSITION</div><div className="fields"><DeviceField w={w} device={device} label="Name" keyName="name"/>
   <Numeric name="X (plan units)" value={device.x} disabled={w.blocked} onChange={x=>w.moveDevice(device.id,{x,y:device.y})}/>
   <Numeric name="Y (plan units)" value={device.y} max={650} disabled={w.blocked} onChange={y=>w.moveDevice(device.id,{x:device.x,y})}/>
   {dProfile.kind==='switch'&&<DeviceField w={w} device={device} label="PoE budget (W)" keyName="poeBudgetW" type="number" min={0} max={dProfile.manufacturerSpec?dProfile.poeBudgetW:500}/>}
   {(dProfile.kind==='camera'?['enabled','motionEnabled'] as const:['enabled'] as const).map(k=><label key={k} className="checkfield"><span>{k==='enabled'?'Device enabled':k==='motionEnabled'?'Motion detection':'Recording enabled'}</span><input disabled={w.blocked} type="checkbox" checked={device[k]} onChange={e=>w.update(device.id,{[k]:e.target.checked})}/></label>)}
-  </div>{dProfile.kind==='camera'&&<CameraSettings w={w} camera={device}/>}
+  </div>{advanced&&dProfile.kind==='camera'&&<CameraSettings w={w} camera={device}/>}
   {dProfile.kind.startsWith('alarm-')&&<AlarmConfig w={w} device={device}/>}
   {dProfile.kind.startsWith('access-')&&<AccessConfig w={w} device={device}/>} 
   {dProfile.kind.startsWith('power-')&&<PowerConfigPanel w={w} device={device}/>} 
-  {(dProfile.kind==='nvr'||dProfile.kind==='dvr')&&<RecorderSettings w={w} device={device}/>}
+  {advanced&&(dProfile.kind==='nvr'||dProfile.kind==='dvr')&&<RecorderSettings w={w} device={device}/>}
   <div className="section-heading">LIVE SIMULATION HEALTH</div><div className="health">{(dProfile.kind.startsWith('alarm-')||dProfile.kind.startsWith('access-')||dProfile.kind.startsWith('power-')?['powered','connected'] as const:['powered','connected','networkOk','recordingReady'] as const).map(k=><div key={k}><span>{k.replace(/([A-Z])/g,' $1')}</span><strong className={health?.[k]?'good':'warn'}>{health?.[k]?'✓ OK':'● Not ready'}</strong></div>)}{(health?.faults||[]).map(x=><div key={x} className="warning-line">⚠ {x}</div>)}</div>
   <div className="section-heading">{dProfile.manufacturerSpec?'DOCUMENTED MANUFACTURER PROFILE':'SIMULATED TRAINING PROFILE'}</div><div className="specs"><p>Manufacturer: {dProfile.manufacturer}</p><p>Model: {dProfile.model}</p><p>Power: {dProfile.powerW} W</p><p>Ethernet ports: {dProfile.ethernetPorts}</p>
   {dProfile.kind==='switch'&&<p>PoE: {dProfile.poePorts} output ports · {dProfile.poeBudgetW} W shared · {dProfile.maxPortW} W per port</p>}
@@ -87,8 +89,9 @@ export function Inspector({w}:{w:Workbench}){
    </>:<p>Catalogue training estimate: GHS {dProfile.costGhs}</p>}
   <p>Virtual rules only — NOT actual manufacturer firmware, security approval or certified interoperability.</p></div>
   </>}
-  {tab==="coverage"&&(dProfile.kind==='camera'?<><div className="section-heading">CAMERA COVERAGE</div><div className="fields"><><DeviceField w={w} device={device} label="Orientation (°)" keyName="heading" type="number" min={0} max={360}/><DeviceField w={w} device={device} label="Field of View (°)" keyName="fov" type="number" min={1} max={180}/><DeviceField w={w} device={device} label="Range (units)" keyName="range" type="number" min={0} max={1000}/></></div><p className="editor-muted">The shaded area on the plan follows these values, walls and the day/night and weather settings. Open Tools &gt; Lens calculator or Camera view for pixel density and a simulated view.</p></>:<p className="editor-muted">Coverage fields apply to cameras. Detector heading and range for alarm sensors are in the General tab.</p>)}
-  {tab==="network"&&((dProfile.kind==='nvr'||dProfile.kind==='router'||dProfile.kind==='server'||dProfile.kind==='ap'||(dProfile.kind==='camera'&&signalOf(device)==='ip'))?<><div className="section-heading">IP NETWORK SETTINGS</div><div className="fields"><><DeviceField w={w} device={device} label="IP Address" keyName="ip"/><DeviceField w={w} device={device} label="Subnet Mask" keyName="mask"/><DeviceField w={w} device={device} label="Gateway" keyName="gateway"/></></div><p className="editor-muted">VLANs, ports, DHCP and routing: use Tools &gt; Network CLI or the Network tab of the dock.</p></>:<p className="editor-muted">This device has no IP settings. Wired alarm, access and power devices connect through their own circuits.</p>)}
+  {advanced&&tab==="coverage"&&(dProfile.kind==='camera'?<><div className="section-heading">CAMERA COVERAGE</div><div className="fields"><><DeviceField w={w} device={device} label="Orientation (°)" keyName="heading" type="number" min={-360} max={360}/><DeviceField w={w} device={device} label="Field of View (°)" keyName="fov" type="number" min={1} max={180}/><DeviceField w={w} device={device} label="Range (units)" keyName="range" type="number" min={0} max={1000}/></></div><p className="editor-muted">The shaded area on the plan follows these values, walls and the day/night and weather settings. Open Tools &gt; Lens calculator or Camera view for pixel density and a simulated view.</p></>:<p className="editor-muted">Coverage fields apply to cameras. Detector heading and range for alarm sensors are in the General tab.</p>)}
+  {advanced&&tab==="network"&&<NetworkSettings w={w} d={device}/>}
+
  </>:room?<RoomFields w={w} room={room}/>:wall?<WallFields w={w} wall={wall}/>:cable?<div className="fields"><h3>{cable.medium?.startsWith('power-')?`Electrical ${cable.medium.slice(6).toUpperCase()} circuit`:cable.medium==='alarm'?'Wired alarm circuit':cable.medium==='access'?'Dedicated access-control wiring':cable.medium==='coax'?'Coaxial video cable':'Ethernet cable'}</h3>
   <ConnectionGuide w={w} cable={cable}/>
   {cable.medium!=='coax'&&cable.medium!=='alarm'&&cable.medium!=='access'&&!cable.medium?.startsWith('power-')&&<Numeric name="Link maximum (Mb/s)" value={cable.speedMbps||1000} min={1} max={10000} disabled={w.blocked} onChange={speedMbps=>w.commit({...w.project,cables:w.project.cables.map(c=>c.id===cable.id?{...c,speedMbps}:c)},'Link bandwidth updated')}/>}

@@ -7,7 +7,7 @@ import {useLocale} from './Speak.js';
 import {Icon} from './icons.js';
 
 /** Top bar: logo, scenario, mode, live status chips and the Project menu (all file actions). */
-export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void}){
+export function TopBar({w,onRevealPanels,onProjectCenter}:{w:Workbench;onRevealPanels:()=>void;onProjectCenter:()=>void}){
  useLocale();
  const openFile=useRef<HTMLInputElement>(null),importFile=useRef<HTMLInputElement>(null),imageFile=useRef<HTMLInputElement>(null);
  const [menu,setMenu]=useState(false);const menuRef=useRef<HTMLDivElement>(null);
@@ -20,8 +20,8 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
  };
  const armed=Object.values(w.result.alarm?.panels||{}).filter(p=>p.mode!=='disarmed').length;
  const mode=w.mode==='test'?'test':'design';
- const diagnosticCount=w.result.network?.diagnostics.length??0;
- const simulationLabel=w.project.devices.length===0?'No equipment yet':diagnosticCount?`${diagnosticCount} diagnostic issue${diagnosticCount===1?'':'s'}`:'Model active';
+ const diagnosticCount=w.result.issues.length;
+ const simulationLabel=w.project.devices.length===0?'No equipment yet':diagnosticCount?`${diagnosticCount} simulated issues`:'Model evaluated';
  const simulationTone=w.project.devices.length===0?'':diagnosticCount?'warn':'good';
  const item=(label:string,icon:string,on:()=>void,disabled=false,hint?:string)=><button role="menuitem" disabled={disabled} onClick={on} title={hint}><Icon name={icon} size={16}/>{label}</button>;
  return <header className="topbar">
@@ -38,9 +38,11 @@ export function TopBar({w,onRevealPanels}:{w:Workbench;onRevealPanels:()=>void})
   </div>
   <span className="topbar-spacer"/>
   <button className="primary assess-btn" onClick={()=>{onRevealPanels();w.runAssessment();}} disabled={w.blocked}><Icon name="assessment" size={16}/>{t('top.assess')}</button>
+  <button className="project-center-button" onClick={onProjectCenter}>Project Center</button>
   <div className="project-menu" ref={menuRef}>
    <button aria-haspopup="menu" aria-expanded={menu} onClick={()=>setMenu(m=>!m)}><Icon name="file" size={16}/>Project<Icon name="chevron" size={14}/></button>
    {menu&&<div className="menu" role="menu" aria-label="Project">
+    {item('Project Center','folder',()=>handle(onProjectCenter))}
     {item(t('top.new'),'file',()=>handle(w.newBlank))}
     {item(t('top.open'),'folder',()=>handle(()=>canOpenNativeFile()?w.openNative():openFile.current?.click()))}
     {item(t('top.save'),'file',()=>handle(()=>w.saveCurrent(false)),w.saveState==='saving')}

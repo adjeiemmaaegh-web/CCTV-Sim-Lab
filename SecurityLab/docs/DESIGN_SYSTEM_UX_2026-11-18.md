@@ -4,7 +4,7 @@
 
 ## Source of truth and backwards compatibility
 
-`frontend-react/src/main.tsx` imports exactly one stylesheet: `workstation.css`. The legacy workstation, Stage 18 UI and workspace-upgrade rules are inlined **unchanged and in the same order** at the top of that file, followed by the new design-system overrides. The former `ui2.css` and `workspace-upgrade.css` are not loaded by the app; their originals remain in the repository for provenance. Do not re-import these files. The engine, project JSON schema, device profiles, simulation scoring and file-save APIs are not changed.
+`frontend-react/src/main.tsx` imports the consolidated foundation `workstation.css` plus the newer `activity-workspace.css` layer. The legacy workstation, Stage 18 UI and workspace-upgrade rules are inlined **unchanged and in the same order** at the top of that file, followed by the new design-system overrides. The former `ui2.css` and `workspace-upgrade.css` are not loaded separately; their originals remain in the repository for provenance. Do not re-import those former CSS layers. The newer activity-workspace layer from PR #21 remains imported. The engine, project JSON schema, device profiles, simulation scoring and file-save APIs are not changed.
 
 ## Tokens
 

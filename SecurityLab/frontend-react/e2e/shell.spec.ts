@@ -4,16 +4,16 @@ const watch=(page:Page)=>{const errs:string[]=[];page.on('dialog',d=>{void d.acc
 
 test('shell: left navigation focuses the matching dock tab and plan view',async({page})=>{
  const errs=watch(page);await page.goto('/');
- const nav=page.getByRole('navigation',{name:'Sections'});
- await nav.getByRole('button',{name:'Network'}).click();
+ const nav=page.getByRole('navigation',{name:'Primary activities'});
+ await nav.getByRole('button',{name:'Connect'}).click();
  await expect(page.getByRole('button',{name:'Network Topology'})).toHaveAttribute('aria-pressed','true');
  await expect(page.getByText('SIMULATED IPV4 CONNECTIVITY PROBE')).toBeVisible();
- await nav.getByRole('button',{name:'Alarms'}).click();
+ await nav.getByRole('button',{name:'Simulate'}).click();
  await expect(page.getByRole('button',{name:'Floor Plan'})).toHaveAttribute('aria-pressed','true');
- await nav.getByRole('button',{name:'Scenarios'}).click();
+ await nav.getByRole('button',{name:'Design'}).click();
  await expect(page.getByLabel('Practical scenario requirements')).toBeVisible();
- await nav.getByRole('button',{name:'Assessment'}).click();
- await nav.getByRole('button',{name:'Equipment'}).click();
+ await nav.getByRole('button',{name:'Assess'}).click();
+ await nav.getByRole('button',{name:'Simulate'}).click();
  await expect(page.getByLabel('Realtime status')).toBeVisible();
  expect(errs).toEqual([]);
 });
@@ -72,6 +72,7 @@ test('shell: device properties show tabs; Coverage edits the camera; close clear
  await page.locator('svg[role=application] g[data-device]').first().focus();
  await page.keyboard.press('Enter');
  const props=page.getByRole('complementary',{name:'Properties'});
+ await props.getByRole('button',{name:'Advanced',exact:true}).click();
  await expect(props).toContainText('Device Properties');
  await props.getByRole('tab',{name:'Network'}).click();
  await props.getByRole('tab',{name:'Coverage'}).click();
@@ -91,10 +92,12 @@ test('shell: camera coverage fields live under the Coverage tab and drive the si
  const cam=(await nav.locator('option').allTextContents()).find(t=>/IP Bullet/.test(t))!;
  await nav.selectOption({label:cam});
  const props=page.getByRole('complementary',{name:'Properties'});
+ await props.getByRole('button',{name:'Advanced',exact:true}).click();
  await props.getByRole('tab',{name:'Coverage'}).click();
  const fov=props.getByLabel('Field of View (°)');
  await expect(fov).toBeVisible();
  await fov.fill('40');
+ await fov.locator('..').getByRole('button',{name:'Apply',exact:true}).click();
  await props.getByRole('tab',{name:'General'}).click();
  await props.getByRole('tab',{name:'Coverage'}).click();
  await expect(props.getByLabel('Field of View (°)')).toHaveValue('40');
@@ -176,13 +179,13 @@ test('canvas-first: phone shows plan before equipment catalog without a 250px to
 
 test('navigation highlights reflect actual dock selection rather than stale rail clicks',async({page})=>{
  await page.goto('/');
- const nav=page.getByRole('navigation',{name:'Sections'});
- const network=nav.getByRole('button',{name:'Network'});
- const equipment=nav.getByRole('button',{name:'Equipment'});
+ const nav=page.getByRole('navigation',{name:'Primary activities'});
+ const network=nav.getByRole('button',{name:'Connect'});
+ const equipment=nav.getByRole('button',{name:'Simulate'});
  await network.click();
  await expect(network).toHaveAttribute('aria-current','page');
  await dock(page,'Tools');
- await expect(network).not.toHaveAttribute('aria-current','page');
+ await expect(network).toHaveAttribute('aria-current','page');
  await dock(page,'Realtime');
  await expect(equipment).toHaveAttribute('aria-current','page');
  await expect(network).not.toHaveAttribute('aria-current','page');

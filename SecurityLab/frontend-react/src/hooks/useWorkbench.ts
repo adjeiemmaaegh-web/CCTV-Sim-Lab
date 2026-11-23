@@ -1,8 +1,9 @@
+import {activityFor,type Activity} from '../workspace/activities.js';
 import {withEmbeddedProfiles} from '../../../src/tools/profilePack.js';
-import {stampNewItems} from '../../../src/tools/floors.js';
+import {cableRiseM,stampNewItems} from '../../../src/tools/floors.js';
 import {recordAudit} from '../../../src/tools/audit.js';
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
-import type {Device,Project,Wall,Room,Point,SiteElement,FloorplanSettings,AccessMethod,AccessIdentity,AssessmentRecord,FieldTrial,FieldIssue} from '../../../src/domain/types.js';
+import type {Cable,Device,Project,Wall,Room,Point,SiteElement,FloorplanSettings,AccessMethod,AccessIdentity,AssessmentRecord,FieldTrial,FieldIssue} from '../../../src/domain/types.js';
 import {bounded,distance,scaleOf,normalizeRoom,shiftRoom,resizeRoom,roomEdges,transformRoomWalls,shiftWall,wallEndpoint,replaceWallWithOpening,propertyTemplate,DEFAULT_FLOORPLAN,sanitizeFloorplan} from '../../../src/property/editor.js';
 import type {PropertyTemplate} from '../../../src/property/editor.js';
 import {createDevice,profile} from '../../../src/domain/catalog.js';
@@ -51,7 +52,17 @@ export function useWorkbench(){
  const [mode,setMode]=useState<Mode>('select');
  const [placing,setPlacing]=useState<string|null>(null);
  const [cableStart,setCableStart]=useState<string|null>(null);
- const [tab,setTab]=useState<'systems'|'diagnostics'|'network'|'events'|'recordings'|'alarm'|'access'|'power'|'scenario'|'assessment'|'field-review'|'tools'>('systems');
+ const [canvasLocks,setCanvasLocks]=useState<Set<string>>(new Set());
+ const [activity,setActivity]=useState<Activity>('design');
+ const [tab,setTabState]=useState<'systems'|'diagnostics'|'network'|'events'|'recordings'|'alarm'|'access'|'power'|'scenario'|'assessment'|'field-review'|'tools'>('systems');
+ const setTab=(next:typeof tab)=>{setTabState(next);setActivity(activityFor(next));};
+ const [focusRequest,setFocusRequest]=useState<{entity:NonNullable<Selectable>;serial:number}|null>(null);
+ const locate=(entity:NonNullable<Selectable>)=>{setSelected(entity);setMode('select');setPlacing(null);setFocusRequest({entity,serial:Date.now()});};
+ const [pendingCable,setPendingCable]=useState<{cable:Cable;baseline:Project}|null>(null);
+ const [replay,setReplay]=useState<{id:string;at:string;label:string;before:Project;after:Project}[]>([]);
+ const [dialog,setDialog]=useState<{message:string;initial?:string;resolve:(value:string|null)=>void}|null>(null);
+ const dialogBusy=useRef(false);
+ const ask=(message:string,initial?:string)=>new Promise<string|null>(resolve=>{dialogBusy.current=true;setDialog({message,initial,resolve:value=>{dialogBusy.current=false;resolve(value);}});});
  const [listOpen,setListOpen]=useState(false);
  const [backups,setBackups]=useState<Checkpoint[]>([]);
  const [autosave,setAutosave]=useState(false);
@@ -71,22 +82,25 @@ export function useWorkbench(){
   if(savedSignature.current===null&&pristine.current===now)return false;
   return saveState!=='saved'||savedSignature.current!==now;
  };
- const confirmDiscard=(action:string)=>{
+ const confirmDiscard=async(action:string)=>{
   if(savePromise.current){setNotice('A project-file write is in progress. Finish saving before changing projects.');return false;}
   if(!dirty())return true;
-  if(window.confirm(`Changes are not confirmed saved to a project file. ${action} will discard the current in-memory draft. Continue?`))return true;
+  if(await ask(`Changes are not confirmed saved to a project file. ${action} will discard the current in-memory draft. Continue?`)!==null){if(savePromise.current){setNotice('A file write started while confirmation was open. Finish saving before changing projects.');return false;}return true;}
   setNotice(`${action} cancelled. Your current project and unsaved edits are unchanged.`);
   return false;
  };
  const markDirty=()=>{setSaveState('unsaved');setSaveError('');setGeneration(x=>x+1);};
  const commit=useCallback((next:Project,message?:string)=>{
    if(blocked){setNotice('Editing paused after a file-save error. Use Save As or Export Backup before proceeding.');return false;}
+   const before=currentRef.current;
    const valid=history.current.dispatch({type:'replace',project:recordAudit(currentRef.current,withEmbeddedProfiles(stampNewItems(currentRef.current,next,floorRef.current)))});currentRef.current=valid;setProject(valid);
+   setReplay(items=>[...items,{id:crypto.randomUUID(),at:new Date().toISOString(),label:message||'Configuration changed',before,after:valid}].slice(-40));
    markDirty();if(message)setNotice(message);return true;
  },[blocked]);
  const undo=()=>{if(blocked)return;const p=history.current.undo();if(p){setProject(p);currentRef.current=p;markDirty();}};
  const redo=()=>{if(blocked)return;const p=history.current.redo();if(p){setProject(p);currentRef.current=p;markDirty();}};
  const saveCurrent=async(saveAs=false,interactive=true):Promise<boolean>=>{
+  if(dialogBusy.current){setNotice('Complete the current confirmation before starting another file save.');return false;}
   if(savePromise.current)await savePromise.current;
   // An explicit Save must check the actual file, even when the editor has no new
   // changes; a stale in-memory fingerprint must never bypass conflict detection.
@@ -127,7 +141,7 @@ export function useWorkbench(){
   const ok=await saveCurrent(false,true);
   if(!ok)throw new Error('No confirmed file save. Keep a separate downloaded backup before updating.');
  };
- const adopt=(next:Project,isSaved:boolean,acceptedSession:ProjectFileSession=fileSession.current)=>{
+ const adopt=(next:Project,isSaved:boolean,acceptedSession:ProjectFileSession=fileSession.current,pristineDraft=false)=>{
   // Keep untrusted extensions out of the live registry until the file was
   // validated, checksummed, and the asynchronous import accepted by this editor.
   const validated=validateProject(next);
@@ -138,14 +152,14 @@ export function useWorkbench(){
   fileSession.current=acceptedSession;
   currentRef.current=clean;setProject(clean);
   setRevision(acceptedSession.revision);setFileName(acceptedSession.name);
-  savedSignature.current=isSaved?JSON.stringify(clean):null;pristine.current=isSaved?null:JSON.stringify(clean);
+  savedSignature.current=isSaved?JSON.stringify(clean):null;pristine.current=pristineDraft?JSON.stringify(clean):null;
   setSaveState(isSaved?'saved':'unsaved');setSaveError('');setAutosave(false);
-  setSelected(null);setCableStart(null);setPlacing(null);setMode('select');setListOpen(false);setGeneration(x=>x+1);
+  setSelected(null);setCanvasLocks(new Set());setFloor(0);setReplay([]);setPendingCable(null);setFocusRequest(null);setCableStart(null);setPlacing(null);setMode('select');setListOpen(false);setGeneration(x=>x+1);
  };
  // Read a new file into an isolated session first. File dialogs and File.text() are
  // asynchronous; edits made while a picker is open must not be silently replaced.
  const openNative=async()=>{
-  if(!confirmDiscard('Opening another file'))return;
+  if(!await confirmDiscard('Opening another file'))return;
   const previous=currentRef.current;
   const candidate=new ProjectFileSession();
   const parsed=await candidate.openNative();
@@ -156,7 +170,7 @@ export function useWorkbench(){
   setNotice(`Opened ${parsed.name}. Changes remain in memory until saved back to the file.`);
  };
  const openFile=async(file:File)=>{
-  if(!confirmDiscard('Opening another file'))return;
+  if(!await confirmDiscard('Opening another file'))return;
   const previous=currentRef.current;
   const candidate=new ProjectFileSession();
   const parsed=await candidate.openFile(file);
@@ -167,19 +181,19 @@ export function useWorkbench(){
   setNotice(`Opened ${parsed.name}. Save As will select a writable file where supported; otherwise a new JSON download is required.`);
  };
  const openList=()=>{setBackups(fileSession.current.backups);setListOpen(true);};
- const restoreBackup=(index:number)=>{
-  if(!confirmDiscard('Restoring a checkpoint'))return;
+ const restoreBackup=async(index:number)=>{
+  if(!await confirmDiscard('Restoring a checkpoint'))return;
   const snapshot=fileSession.current.backups[index];if(!snapshot)throw new Error('Checkpoint missing');
   const at=new Date().toISOString();const fresh={...snapshot.project,id:crypto.randomUUID(),title:`${snapshot.project.title} (restored r${snapshot.revision})`,createdAt:at,updatedAt:at};
   fileSession.current.detach();adopt(fresh,false);setNotice('Checkpoint recovered as an independent unsaved project. Save As a new file.');
  };
- const newBlank=()=>{
-  if(!confirmDiscard('Creating a new project'))return;
-  const p=newProject(currentRef.current.scenarioId);fileSession.current.detach();adopt(p,false);
+ const newBlank=async()=>{
+  if(!await confirmDiscard('Creating a new project'))return;
+  const p=newProject(currentRef.current.scenarioId);fileSession.current.detach();adopt(p,false,fileSession.current,true);
  };
  const switchScenario=async(id:string)=>{
-  if(!confirmDiscard('Switching scenarios'))return;
-  const p=newProject(id);fileSession.current.detach();adopt(p,false);
+  if(!await confirmDiscard('Switching scenarios'))return;
+  const p=newProject(id);fileSession.current.detach();adopt(p,false,fileSession.current,true);
  };
  const update=useCallback((id:string,fields:Partial<Device>)=>{
    const p=currentRef.current;commit({...p,devices:p.devices.map(d=>d.id===id?{...d,...fields,id:d.id}:d)});
@@ -225,10 +239,11 @@ export function useWorkbench(){
    if(allocation&&!allocation.ok){setNotice(allocation.reason);return;}
    const cable={id:crypto.randomUUID(),a:powerLink?.a||a.id,b:powerLink?.b||b.id,connected:true,medium,
      ...(allocation?{aPort:allocation.aPort,bPort:allocation.bPort}:{}),
-     lengthMeters:Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/scaleOf(old)))};
-   const warning=allocation?.notes.find(n=>n.includes('does not supply PoE')||n.includes('exceeds'));
-   if(commit({...old,cables:[...old.cables,cable]},(medium==='coax'?'Coaxial video':medium==='alarm'?'Alarm terminal':medium==='access'?'Access control circuit':'Ethernet')+' connection installed; inspect its ports and simulation status'+(warning?'. '+warning:'')))setSelected({kind:'cable',id:cable.id});
+     lengthMeters:Math.max(1,Math.ceil((Math.hypot(a.x-b.x,a.y-b.y)/scaleOf(old)+cableRiseM(a,b))))};
+   setPendingCable({cable,baseline:old});
+   setNotice('Review the proposed connection before installing it.');
  };
+ const confirmCable=()=>{if(!pendingCable)return;if(currentRef.current!==pendingCable.baseline){setPendingCable(null);setNotice('Project changed. Select endpoints again to recalculate the preview.');return;}const cable=pendingCable.cable;if(commit({...currentRef.current,cables:[...currentRef.current.cables,cable]},'Reviewed connection installed'))setSelected({kind:'cable',id:cable.id});setPendingCable(null);};
  const doMotion=(p:Point,intensity=75)=>{const r=triggerMotion(currentRef.current,p,undefined,intensity,floorRef.current);const alarm=triggerAlarmStimulus(r.project,'motion',p,intensity,floorRef.current);commit(alarm.project,`${r.detected} camera(s) detected movement; ${alarm.detected} alarm PIR(s) reacted; ${alarm.alerts} alert(s)`);setTab(alarm.detected?'alarm':'events');};
  const [view,setView]=useState<'floor'|'topology'>('floor');
  const [toolId,setToolId]=useState('cli');
@@ -472,10 +487,10 @@ export function useWorkbench(){
     setNotice('Field review export requested. Verify the download; this is not confirmation of real-world validation.');}
   catch(e){setNotice(`Cannot export review: ${String(e)}`);}
  };
- const workedExample=()=>{
-  if(!confirmDiscard('Loading the worked example'))return;
+ const workedExample=async()=>{
+  if(!await confirmDiscard('Loading the worked example'))return;
   const example=recordAudit(currentRef.current,exampleProject(currentRef.current));
-  fileSession.current.detach();adopt(example,false);
+  fileSession.current.detach();adopt(example,false,fileSession.current,true);
   setNotice('Worked example opened as an independent unsaved project. It cannot overwrite your previously opened file. Assisted examples cannot earn a competency pass.');
  };
  const jsonExport=()=>{fileSession.current.downloadBackup(currentRef.current);setNotice('Backup JSON download requested. Confirm the file is present before closing.');};
@@ -491,7 +506,7 @@ export function useWorkbench(){
  const jsonImport=async(file:File)=>{
   if(file.size>16_000_000)throw new Error('Project import limit: 16MB');
   const parsed=parseProjectText(await file.text(),file.name);
-  if(!confirmDiscard('Importing a new project'))return;
+  if(!await confirmDiscard('Importing a new project'))return;
   const now=new Date().toISOString(),p={...parsed.project,id:crypto.randomUUID(),title:`${parsed.project.title} (imported)`,createdAt:now,updatedAt:now};
   fileSession.current.detach();adopt(p,false);setNotice('Imported a separate project copy. Choose Save Project to keep it.');
  };
@@ -502,14 +517,14 @@ export function useWorkbench(){
  };
  const reload=async()=>{
   if(savePromise.current){setNotice('A save is in progress. Reload after the file operation finishes.');return;}
-  if(!window.confirm('Discard this draft and load the current contents of the selected local file?'))return;
+  if(await ask('Discard this draft and load the current contents of the selected local file?')===null)return;
   const previous=currentRef.current;
   const parsed=await fileSession.current.reload(()=>currentRef.current===previous&&!savePromise.current);
   adopt(parsed.project,true);
  };
  const updateRoom=(id:string,fields:Partial<Room>)=>{const p=currentRef.current,old=p.rooms.find(r=>r.id===id);if(!old)return;const changed=normalizeRoom({...old,...fields,id});commit({...p,rooms:p.rooms.map(r=>r.id===id?changed:r),walls:transformRoomWalls(p.walls,old,changed)});};
  const updateWall=(id:string,fields:Partial<Wall>)=>{const p=currentRef.current,old=p.walls.find(w=>w.id===id),removeAccess=old?.kind==='door'&&fields.kind!==undefined&&fields.kind!=='door';const states={...p.accessDoorStates};if(removeAccess)delete states[id];commit({...p,walls:p.walls.map(w=>w.id===id?{...w,...fields,id,roomId:undefined}:w),accessDoorStates:states,devices:removeAccess?p.devices.map(d=>d.accessController?.doorWallId===id?{...d,accessController:{...d.accessController,doorWallId:''}}:d):p.devices});};
- return {view,setView,toolId,setToolId,running:isRunning,runLeft,toggleRun,floor,setFloor,hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
+ return {canvasLocks,setCanvasLocks,activity,setActivity,dialog,setDialog,ask,replay,focusRequest,locate,pendingCable,setPendingCable,confirmCable,view,setView,toolId,setToolId,running:isRunning,runLeft,toggleRun,floor,setFloor,hasUnsavedWork:dirty,project,result,assessment,scenario,scenarioProgress,systems,fieldReadiness:reviewReadiness,recordFieldTrial,recordFieldIssue,changeFieldIssueStatus,downloadFieldReview,isAllowedProfile,SCENARIOS,loaded,saveState,revision,fileName,saveError,blocked,notice,setNotice,selected,setSelected,mode,setMode,placing,setPlacing,
   cableStart,setCableStart,tab,setTab,listOpen,setListOpen,backups,openList,restoreBackup,canUndo,canRedo,generation,
   undo,redo,flush,saveCurrent,openNative,openFile,newBlank,switchScenario,update,removeSelection,install,selectOrCable,doMotion,addWall,addRoom,
   runFault,runAssessment,downloadAssessment,advanceTime,alarmCommand,alarmStimulus,alarmTime,alarmFault,loadAlarmRig,accessPresent,accessExit,accessDoor,accessAcknowledge,accessTime,accessFault,addIdentity,updateIdentity,removeIdentity,loadAccessRig,setPowerSettings,powerTime,powerFault,loadPowerRig,workedExample,jsonExport,jsonImport,imageImport,retrySave,fork,reload,commit,updateRoom,updateWall,

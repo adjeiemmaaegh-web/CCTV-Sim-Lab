@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+import {simulate} from '../../../src/engine/simulator.js';
+import React,{useEffect,useState} from 'react';
 import {guidedDiagnostics} from '../../../src/tools/diagnostics-guide.js';
 import type {DiagnosticArea} from '../../../src/tools/diagnostics-guide.js';
 import type {Workbench} from '../hooks/useWorkbench.js';
@@ -14,6 +15,10 @@ const areas:{id:DiagnosticArea|'all';label:string}[]=[
  * these steps never mutate the project or pretend to perform physical repairs.
  */
 export function GuidedDiagnostics({w}:{w:Workbench}){
+ const [recheck,setRecheck]=useState('');
+ const [watched,setWatched]=useState<{id:string;title:string}|null>(null);
+ useEffect(()=>{setWatched(null);setRecheck('');},[w.project.id]);
+ const rerun=(item:{id:string;title:string})=>{setWatched(item);const found=guidedDiagnostics(w.project,simulate(w.project)).find(f=>f.id===item.id);setRecheck(`${item.title}: ${found?'Still needs attention — '+found.evidence:'Original finding cleared. Review remaining checks.'}`);};
  const [area,setArea]=useState<DiagnosticArea|'all'>('all');
  const findings=guidedDiagnostics(w.project,w.result);
  const filtered=area==='all'?findings:findings.filter(f=>f.area===area);
@@ -26,13 +31,16 @@ export function GuidedDiagnostics({w}:{w:Workbench}){
    </select></label>
   </header>
   <p className="guided-caveat">Evidence below is recalculated from this saved simulation model. It is not a physical test, compliance check or professional installation sign-off.</p>
+  {watched&&<div className="guided-actions"><strong>Selected check: {watched.title}</strong><button onClick={()=>rerun(watched)}>Rerun selected check</button></div>}
+  {recheck&&<p role="status">{recheck}</p>}
   {filtered.length===0?<p className="good">No current modeled findings in this category. This does not prove that equipment is safe or configured correctly.</p>:
    <div className="guided-findings">{filtered.map(f=><article key={f.id} className={'guided-finding '+f.severity}>
     <div className="guided-finding-title"><span className="guided-severity">{f.severity==='critical'?'HIGH':f.severity==='warning'?'CHECK':'INFO'}</span><strong>{f.title}</strong></div>
     <p><b>Simulated evidence:</b> {f.evidence}</p>
     <p><b>Next investigation:</b> {f.nextStep}</p>
     <div className="guided-actions">
-     {f.entity&&<button disabled={w.blocked} onClick={()=>{w.setSelected(f.entity!);w.setMode('select');}}>{f.entity.kind==='cable'?'Inspect connection':'Inspect device'}</button>}
+     {f.entity&&<button disabled={w.blocked} onClick={()=>{setWatched({id:f.id,title:f.title});w.locate(f.entity!);}}>{f.entity.kind==='cable'?'Inspect connection':'Inspect device'}</button>}
+     <button onClick={()=>rerun(f)}>Rerun this check</button>
      {f.route!=='diagnostics'&&<button onClick={()=>w.setTab(f.route)}>Open {f.route} view</button>}
     </div>
    </article>)}</div>}

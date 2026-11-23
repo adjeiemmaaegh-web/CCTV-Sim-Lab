@@ -82,6 +82,13 @@ describe('cable engineering (feature 5)',()=>{
   const long={...p,cables:p.cables.map((c,i)=>i===0?{...c,lengthMeters:180}:c)};
   const f=analyseCables(long);expect(f[0].ok).toBe(false);expect(f[0].messages.join()).toMatch(/exceeds/);
  });
+ it('reports virtual tester faults and blocks an Ethernet link',()=>{
+  const p=exampleProject(newProject('home4'));
+  const faulty={...p,cables:p.cables.map((c,i)=>i===0?{...c,termination:'split-pair' as const}:c)};
+  const finding=analyseCables(faulty)[0];
+  expect(finding.ok).toBe(false);expect(finding.messages.join(' ')).toMatch(/split pair/i);
+  expect(simulate(faulty).cables[faulty.cables[0].id].reason).toMatch(/wire-map failed/i);
+ });
 });
 
 describe('storage planner (feature 6)',()=>{

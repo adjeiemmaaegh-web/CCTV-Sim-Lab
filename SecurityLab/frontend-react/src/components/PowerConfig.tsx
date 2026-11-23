@@ -1,3 +1,4 @@
+import {SafeNumber} from './SafeNumber.js';
 import React from 'react';
 import type {Workbench} from '../hooks/useWorkbench.js';
 import type {Device,PowerConfig} from '../../../src/domain/types.js';
@@ -13,8 +14,7 @@ export function PowerConfigPanel({w,device}:{w:Workbench;device:Device}){
   w.update(device.id,{powerConfig:next});
  };
  const numeric=(key:keyof Pick<PowerConfig,'ratedW'|'capacityWh'|'chargeWh'|'efficiency'|'chargeLimitW'|'dischargeLimitW'>,label:string,min:number,max:number,step=1)=><label className="prop-field" key={key}>
-  <span>{label}</span><input aria-label={label} type="number" min={min} max={max} step={step} disabled={w.blocked} value={config[key]}
-   onChange={e=>{const n=Number(e.target.value);if(Number.isFinite(n)&&n>=min&&n<=max)update(key,n);}}/>
+  <span>{label}</span><SafeNumber label={label} min={min} max={max} step={step} disabled={w.blocked} value={config[key]} onApply={n=>update(key,n)}/>
  </label>;
  return <div className="power-config"><div className="section-heading">STAGE 8 • ELECTRICAL DEVICE MODEL</div>
   <p className="editor-muted">{spec.model} · {spec.powerInputType?.toUpperCase()||'NONE'} {spec.powerInputV||0} V input → {spec.powerOutputType?.toUpperCase()||'NONE'} {spec.powerOutputV||0} V output. All terminals are simulated.</p>
