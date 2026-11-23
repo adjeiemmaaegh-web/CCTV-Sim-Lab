@@ -1,6 +1,6 @@
-# SecurityLab roadmap and acceptance status (18 November 2026)
+# SecurityLab roadmap and acceptance status (23 November 2026)
 
-**Authoritative production-source baseline (as verified 18 November 2026):** `main` commit `3bf0bda3ef11702285e9506e9ba38ef9ad9df9b3`, including reliability hardening and PWA update-consent safeguards. Refresh GitHub's `main` SHA before any future code change or release judgment. The active application is `SecurityLab/frontend-react` with simulation/domain code in `SecurityLab/src`. `source-history/` is preserved history, **not** active build input. The Vercel public address is an educational preview, **not** certification or professional acceptance.
+**Active integrated source (checked 23 November 2026):** `main` commit `bd60b4c074cd6af3d49c78ac843b6b84f54d9514`. The application is `SecurityLab/frontend-react` with simulation/domain modules in `SecurityLab/src`; `source-history/` is inactive archival source. Task-based workspace PR #21 and unified UX/mobile PR #19 are merged. On this exact `main` commit, [Linux CI](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/45164884052) and [artifact-only packaging](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/45164884109) passed. The QA-trigger change on this branch adds automatic supplemental Windows Server and Firefox/Linux WebKit checks for future integrated commits. Those supplemental checks did **not** automatically run on the cited `main` SHA. Existing Vercel hosting is an educational preview, not professional acceptance. All physical A/B/C/D and owner E gates remain open.
 
 | Workstream / stage label | Verified engineering evidence | Acceptance status |
 |---|---|---|
@@ -13,7 +13,8 @@
 | Engineering stages 3–4 | Five-step optional task strip and evidence-linked diagnostics (`docs/STAGES_2_3_4_ENGINEERING_HANDOFF.md`) | Source and simulated tests; learner/technician acceptance open |
 | First-page UX continuation | Merged PR #7, commit `af883b33bf00b5bfa0d81a9b0bb19e35a4600acb`; onboarding and adjustable panels | CI verified; real-device UX acceptance open |
 | Reliability-hardening increment | PR #8 merged to `main` (`2ad0a41a1c83b438efe2643666732d5fd3cbb397`); pure project extension validation, accepted-only activation, scoped browser file-write lock and regression tests | Source/automated CI verified; **physical file-save acceptance still open** |
-| Cross-browser acceptance continuation | Draft PR #9 adds 38 Firefox and 38 Linux WebKit automated tests; [run 43950976466](https://github.com/adjeiemmaaegh-web/CCTV-Sim-Lab/actions/runs/43950976466) **76/76 PASS** with WebKit stopped-origin offline shell fallback; [register](docs/ACCEPTANCE_EXECUTION_2026-11-16.md) | Browser-engine evidence only; Safari/iPad, Edge, Windows and professional gates **not signed off** |
+| Cross-browser acceptance continuation | PR #9 and later QA branches added Firefox/Linux WebKit checks; 76/76 browser-engine checks were previously reported passing. This branch schedules those checks for each integrated `main` commit. | Exact-head supplemental QA needs verification; physical Safari/iPad and Windows acceptance remain open |
+| Integrated workspace PRs #19/#21 | Merged 18–23 November 2026; task-based tools, learning guidance, event replay, project center, and responsive/keyboard design improvements | Automated evidence only; owner visual and physical-device acceptance still open |
 
 ## Required completion gates (do not infer PASS from a code change)
 
