@@ -19,6 +19,7 @@ test('one active CSS entry retains the historic cascade and exposes design token
 
 test('guide explains training, scenario scoring and a file-based finish',async({page})=>{
  await page.goto('/');
+ await page.getByRole('button',{name:'Show getting started'}).click();
  const guide=page.getByRole('complementary',{name:'Getting started'});
  await expect(guide).toContainText('Pick a challenge');
  await expect(guide).toContainText('Test and repair');
@@ -35,6 +36,7 @@ test('guide explains training, scenario scoring and a file-based finish',async({
 
 test('equipment selection reveals edit context and direct placement without overriding existing mode',async({page})=>{
  await page.goto('/');
+ await page.getByRole('button',{name:'Show getting started'}).click();
  await page.getByRole('complementary',{name:'Getting started'}).getByRole('button',{name:'Start designing'}).click();
  await page.locator('.catalog-scroll button.equipment').first().click();
  const tool=page.getByRole('region',{name:'Active workspace tool'});
@@ -52,6 +54,7 @@ test('equipment selection reveals edit context and direct placement without over
 
 test('keyboard zoom is reversible, while save/undo shortcuts remain delegated to app',async({page})=>{
  await page.goto('/');
+ await page.getByRole('button',{name:'Show getting started'}).click();
  await page.getByRole('complementary',{name:'Getting started'}).getByRole('button',{name:'Start designing'}).click();
  await page.locator('svg[role=application]').focus();
  await page.evaluate(()=>{(document.activeElement as HTMLElement|null)?.blur?.();});
@@ -74,6 +77,7 @@ test.describe('dedicated mobile navigation',()=>{
    return result.violations.filter(v=>['serious','critical'].includes(v.impact||'')).map(v=>v.id);
   };
   await expect.poll(axe).toEqual([]);
+  await page.getByRole('button',{name:'Show getting started'}).tap();
   await page.getByRole('complementary',{name:'Getting started'}).getByRole('button',{name:'Start designing'}).tap();
   await page.getByRole('navigation',{name:'Mobile workspace navigation'}).getByRole('button',{name:'Devices'}).tap();
   await page.locator('.catalog-scroll button.equipment').first().tap();
