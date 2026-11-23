@@ -62,7 +62,10 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  const [guideReopened,setGuideReopened]=useState(false);
  const [intensity,setIntensity]=useState(75);
  useEffect(()=>{
-  const down=(e:KeyboardEvent)=>{if(e.code==='Space'&&!(e.target as HTMLElement)?.closest('input,textarea,select,button'))setSpaceDown(true);};
+  const down=(e:KeyboardEvent)=>{
+    if(e.code!=='Space'||(e.target as HTMLElement)?.closest('input,textarea,select,button,[role="button"],[contenteditable="true"]'))return;
+    e.preventDefault();setSpaceDown(true);
+   };
   const up=(e:KeyboardEvent)=>{if(e.code==='Space')setSpaceDown(false);};
   window.addEventListener('keydown',down);window.addEventListener('keyup',up);
   return()=>{window.removeEventListener('keydown',down);window.removeEventListener('keyup',up);};
@@ -182,6 +185,16 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
   return()=>element.removeEventListener('wheel',wheel);
  },[zoom]);
  const fit=()=>{setZoom(1);setCenter({x:500,y:325});};
+  useEffect(()=>{
+   const key=(e:KeyboardEvent)=>{
+    const target=e.target as HTMLElement;
+    if(e.ctrlKey||e.metaKey||e.altKey||target?.closest('input,textarea,select,button,[contenteditable="true"],[role="button"]'))return;
+    if(e.key==='+'||e.key==='='){e.preventDefault();zoomTo(zoom*1.25);}
+    else if(e.key==='-'){e.preventDefault();zoomTo(zoom*.8);}
+    else if(e.key==='0'){e.preventDefault();setZoom(1);setCenter({x:500,y:325});}
+   };
+   window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);
+  },[zoom]);
  const switchView=(next:View)=>{setView(next);fit();};
  const onDrop=(e:React.DragEvent<HTMLDivElement>)=>{
   e.preventDefault();if(view!=='floor'||w.blocked)return;
@@ -232,6 +245,10 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
  const traceIds=new Set(networkTraces.flatMap(([,value])=>value.links));
  const trace=wb.project.cables.filter(c=>traceIds.has(c.id)||c.id===wb.selected?.id||selectedDevice&&(c.a===selectedDevice||c.b===selectedDevice));
  const worldScale=scaleOf(w.project);
+  const selectedEntity=w.selected;
+  const selectedInfo=selectedEntity?.kind==='device'?w.project.devices.find(d=>d.id===selectedEntity.id):undefined;
+  const selectedLabel=selectedInfo?.name||(selectedEntity?.kind==='room'?w.project.rooms.find(r=>r.id===selectedEntity.id)?.name:undefined)||(selectedEntity?selectedEntity.kind.replace('-', ' '):'');
+  const contextActive=!!(w.placing||w.mode==='cable'||w.selected);
  return <section className="canvas-panel panel" id="securitylab-workspace" aria-label="Installation workspace">
   <div className="canvas-toolbar">
    <div className="view-tabs" role="group" aria-label="Plan view">
@@ -256,6 +273,12 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
    <button className={`tool-btn text-btn ${showOpts?'active':''}`} aria-expanded={showOpts} onClick={()=>setShowOpts(v=>!v)}><Icon name="grid" size={18}/><span>Layers &amp; tools</span><Icon name="chevron" size={14}/></button>
   </div>
   <WorkflowStrip w={wb} onChoose={onWorkflow}/>
+   <div className="mobile-canvas-actions" role="toolbar" aria-label="Quick touch tools">
+    <button type="button" aria-label="Select tool (mobile)" aria-pressed={w.mode==='select'} onClick={()=>changeMode('select')}><Icon name="select" size={19}/>Select</button>
+    <button type="button" aria-label="Pan tool (mobile)" aria-pressed={w.mode==='pan'} onClick={()=>changeMode('pan')}><Icon name="pan" size={19}/>Pan</button>
+    <button type="button" aria-label="Cable tool (mobile)" aria-pressed={w.mode==='cable'} disabled={w.blocked} onClick={()=>changeMode('cable')}><Icon name="cable" size={19}/>Wire</button>
+    <button type="button" aria-label="Fit plan (mobile)" onClick={fit}><Icon name="focus" size={19}/>Fit plan</button>
+   </div>
    <div className="canvas-context">  <div className="floor-breadcrumb" role="navigation" aria-label="Floor breadcrumbs"><span>{wb.project.title}</span><span> / {floorList(wb.project).find(f=>f.id===wb.floor)?.name??'Ground floor'}</span></div>
   <SceneNavigator w={wb} hidden={hidden} locked={locked} isolated={isolated} onHide={id=>toggleSet(setHidden,id)} onLock={id=>toggleSet(setLocked,id)} onIsolate={id=>setIsolated(old=>old===id?null:id)} onReset={()=>{setHidden(new Set());setLocked(new Set());setIsolated(null);}}/>
   <LearningGuide w={wb} onChoose={onWorkflow}/>
@@ -294,9 +317,9 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
   </div>}
   {hasFloors(wb.project)&&<FloorBar w={wb}/>}
   <div className="canvas-body" onDragOver={e=>{if(view==='floor')e.preventDefault();}} onDrop={onDrop}>
-   <svg ref={svg} viewBox={viewBox} role="application" aria-label="Professional floor plan. Use Navigate elements to select equipment without a mouse and arrow keys to reposition; use zoom and Fit buttons." onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={e=>{gesture.current=null;setPreview(null);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);}}>
-    <defs><pattern id="sl-grid-s" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0L0 0 0 10" fill="none" stroke="#23405b" strokeWidth=".45"/></pattern><pattern id="sl-grid-l" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0L0 0 0 100" fill="none" stroke="#456078" strokeWidth=".8"/></pattern></defs>
-    <rect x="-2000" y="-2000" width="5000" height="5000" fill="#0b2035"/>
+   <svg ref={svg} viewBox={viewBox} tabIndex={0} role="application" aria-label="Engineering plan. Choose a device with Navigate elements under Layers and tools; use arrows to reposition it. Plus and minus zoom, 0 fits, Space drag pans." onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={e=>{gesture.current=null;setPreview(null);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);}}>
+    <defs><pattern id="sl-grid-s" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0L0 0 0 10" fill="none" stroke="#35546c" strokeWidth=".55"/></pattern><pattern id="sl-grid-l" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0L0 0 0 100" fill="none" stroke="#60849a" strokeWidth=".85"/></pattern></defs>
+    <rect x="-2000" y="-2000" width="5000" height="5000" fill="#112a3e"/>
     {layers.grid&&view==='floor'&&<g pointerEvents="none"><rect x="0" y="0" width="1000" height="650" fill="url(#sl-grid-s)"/><rect x="0" y="0" width="1000" height="650" fill="url(#sl-grid-l)"/></g>}
     {view==='floor'?<>
      {w.project.floorplanImage&&layers.image&&<g data-reference="floorplan"><image pointerEvents="none" href={w.project.floorplanImage} x={(w.project.floorplanSettings?.x??0)+(active?.kind==='move'&&active.entity==='reference'?dx:0)} y={(w.project.floorplanSettings?.y??0)+(active?.kind==='move'&&active.entity==='reference'?dy:0)} width={w.project.floorplanSettings?.width??1000} height={w.project.floorplanSettings?.height??650} opacity={w.project.floorplanSettings?.opacity??0.36} preserveAspectRatio="none"/>{!w.project.floorplanSettings?.locked&&<rect data-reference="floorplan" x={w.project.floorplanSettings?.x??0} y={w.project.floorplanSettings?.y??0} width={w.project.floorplanSettings?.width??1000} height={w.project.floorplanSettings?.height??650} fill="transparent" stroke={w.selected?.kind==='reference'?'#20deb8':'none'} strokeDasharray="6 5"/>}</g>}
@@ -340,8 +363,9 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
      {w.project.devices.map(d=>{
       const kind=profile(d.profileId).kind,delta=offset('move',d.id),status=w.result.devices[d.id],on=status?.networkOk||(kind!=='camera'&&status?.powered);
       const alarmActive=kind==='alarm-output'&&Object.values(w.result.alarm?.panels||{}).some(panel=>panel.activeOutputs.includes(d.id));
-      return <g key={d.id} data-device={d.id} transform={`translate(${d.x+delta.x} ${d.y+delta.y})`} tabIndex={0} role="button" aria-label={`${d.name} ${on?'online':'offline'}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}>
-       <circle r="19" fill="#102d46" stroke={w.selected?.id===d.id?'#fefefe':alarmActive?'#ff6178':on?'#28d8b5':'#f5aa64'} strokeWidth="3"/><text y="6" pointerEvents="none" textAnchor="middle" fill="#ebf9fa" fontSize="18">{kind==='camera'?'◉':kind.startsWith('alarm-')?'⚑':kind.startsWith('access-')?'⌑':kind.startsWith('power-')?'⚡':kind==='switch'?'▤':kind==='router'?'⇆':kind==='ap'?'◌':'▣'}</text><text pointerEvents="none" textAnchor="middle" y="37" fill="#cee4f0" fontSize="12">{d.name.slice(0,25)}</text>
+      return <g key={d.id} data-device={d.id} transform={`translate(${d.x+delta.x} ${d.y+delta.y})`} tabIndex={0} role="button" aria-pressed={w.selected?.kind==='device'&&w.selected.id===d.id} aria-label={`${d.name} ${on?'online':'offline'}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}>
+       {w.selected?.kind==='device'&&w.selected.id===d.id&&<circle r="25" fill="none" stroke="#ffe18a" strokeWidth="2" strokeDasharray="5 3" pointerEvents="none"/>}
+        <circle r="19" fill="#102d46" stroke={w.selected?.id===d.id?'#fefefe':alarmActive?'#ff6178':on?'#28d8b5':'#f5aa64'} strokeWidth="3"/><text y="6" pointerEvents="none" textAnchor="middle" fill="#ebf9fa" fontSize="18">{kind==='camera'?'◉':kind.startsWith('alarm-')?'⚑':kind.startsWith('access-')?'⌑':kind.startsWith('power-')?'⚡':kind==='switch'?'▤':kind==='router'?'⇆':kind==='ap'?'◌':'▣'}</text><text pointerEvents="none" textAnchor="middle" y="37" fill="#cee4f0" fontSize="12">{d.name.slice(0,25)}</text>
       </g>;
      })}
      {active?.kind==='draw'&&preview&&active.tool==='wall'&&<line x1={active.start.x} y1={active.start.y} x2={preview.x} y2={preview.y} stroke="#22e3c3" strokeWidth="4" strokeDasharray="6 5" pointerEvents="none"/>}
@@ -361,10 +385,31 @@ export function Canvas({w:wb,focusMode,onToggleFocus,onWorkflow,layout}:{w:Workb
       if(!a||!b)return null;const p1=topologyPosition(a),p2=topologyPosition(b);
       return <g key={link.clientId} pointerEvents="none"><line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#b8b2ff" strokeWidth="3" strokeDasharray="7 5"/><text x={(p1.x+p2.x)/2} y={(p1.y+p2.y)/2-8} fill="#ded0ff" fontSize="12">Wi-Fi {link.signalPercent}%</text></g>;
      })}
-     {w.project.devices.filter(d=>!isAlarm(d)&&!profile(d.profileId).kind.startsWith('power-')).map(d=>{const kind=profile(d.profileId).kind,{x,y}=topologyPosition(d),addr=w.result.network?.addresses[d.id];return <g key={d.id} data-device={d.id} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Select network device ${d.name}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}><rect x="-66" y="-36" width="132" height="72" rx="8" fill="#173650" stroke={w.result.devices[d.id]?.networkOk?'#25daba':'#e1aa64'} strokeWidth="2"/><text y="-14" textAnchor="middle" fill="#d0eef3" fontSize="12" pointerEvents="none">{kind==='camera'?(signalOf(d)==='analog'?'ANALOG CAM':'IP CAMERA'):kind==='switch'?'SWITCH':kind==='router'?'ROUTER':kind==='ap'?'Wi-Fi AP':kind==='server'?'SERVER':kind==='dvr'?'DVR':'NVR'}</text><text y="4" textAnchor="middle" fill="#9bbed0" fontSize="11" pointerEvents="none">{d.name.slice(0,19)}</text><text y="22" textAnchor="middle" fill="#6bd8ce" fontSize="10" pointerEvents="none">{addr?.ip?`${addr.ip} · V${addr.vlanId}`:`VLAN ${addr?.vlanId??10}`}</text></g>;})}
+     {w.project.devices.filter(d=>!isAlarm(d)&&!profile(d.profileId).kind.startsWith('power-')).map(d=>{const kind=profile(d.profileId).kind,{x,y}=topologyPosition(d),addr=w.result.network?.addresses[d.id];return <g key={d.id} data-device={d.id} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Select network device ${d.name}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();w.selectOrCable(d.id);}}}><rect x="-66" y="-36" width="132" height="72" rx="8" fill="#173650" stroke={w.selected?.kind==='device'&&w.selected.id===d.id?'#ffe18a':w.result.devices[d.id]?.networkOk?'#25daba':'#e1aa64'} strokeWidth="2"/><text y="-14" textAnchor="middle" fill="#d0eef3" fontSize="12" pointerEvents="none">{kind==='camera'?(signalOf(d)==='analog'?'ANALOG CAM':'IP CAMERA'):kind==='switch'?'SWITCH':kind==='router'?'ROUTER':kind==='ap'?'Wi-Fi AP':kind==='server'?'SERVER':kind==='dvr'?'DVR':'NVR'}</text><text y="4" textAnchor="middle" fill="#9bbed0" fontSize="11" pointerEvents="none">{d.name.slice(0,19)}</text><text y="22" textAnchor="middle" fill="#6bd8ce" fontSize="10" pointerEvents="none">{addr?.ip?`${addr.ip} · V${addr.vlanId}`:`VLAN ${addr?.vlanId??10}`}</text></g>;})}
     </>}
    <g pointerEvents="none" role="group" aria-label="Selected component connection path">{trace.map(c=>{const a=deviceById.get(c.a),b=deviceById.get(c.b);if(!a||!b)return null;const p1=view==='floor'?a:topologyPosition(a),p2=view==='floor'?b:topologyPosition(b);return <g key={c.id}><line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={wb.result.cables[c.id]?.up?'#61e1c2':'#ff8491'} strokeWidth="7" strokeDasharray="7 5" opacity=".8"/><title>{wb.result.cables[c.id]?.reason}</title></g>;})}</g>
    </svg>
+   {contextActive&&<div className={`selection-context ${w.placing?'placing':w.mode==='cable'?'wiring':'inspecting'}`} role="region" aria-label="Active workspace tool">
+    {w.placing?<>
+     <span className="selection-context-name">Placing equipment</span>
+     <span className="selection-context-hint">Tap or click the plan to position the selected device.</span>
+     {view==='floor'&&<button className="selection-context-cta" disabled={w.blocked} onClick={()=>w.install(w.placing!,snapped(bounded(center),true))}>Place at view center</button>}
+     <button onClick={()=>{w.setPlacing(null);w.setMode('select');}}>Cancel placement</button>
+    </>:w.mode==='cable'?<>
+     <span className="selection-context-name">{w.cableStart?'Second endpoint needed':'Connect equipment'}</span>
+     <span className="selection-context-hint">{w.cableStart?'Select a different device to complete the cable.':'Select two devices; the simulation will check port and cable compatibility.'}</span>
+     <button onClick={()=>{w.setCableStart(null);w.setMode('select');}}>Exit cable tool</button>
+    </>:w.selected?<>
+     <span className="selection-context-name">Selected: {selectedLabel}</span>
+     <span className="selection-context-hint">Edit settings in Properties, or move with arrow keys (Shift = 10 units).</span>
+     <button className="selection-context-cta" onClick={()=>{
+      if(focusMode)onToggleFocus();
+      if(!layout.inspectorVisible)layout.toggleInspector();
+      if(window.matchMedia('(max-width:900px)').matches)window.requestAnimationFrame(()=>document.querySelector('.inspector')?.scrollIntoView({behavior:'smooth',block:'start'}));
+     }}>Show properties</button>
+     <button onClick={()=>w.setSelected(null)}>Clear selection</button>
+    </>:null}
+   </div>}
    {showMinimap&&<svg className="scene-minimap" viewBox="0 0 1000 650" role="img" aria-label="Canvas minimap; click to navigate" onClick={e=>{const rect=e.currentTarget.getBoundingClientRect();setCenter({x:(e.clientX-rect.left)/rect.width*1000,y:(e.clientY-rect.top)/rect.height*650});}}><rect width="1000" height="650" fill="#102637"/>{w.project.rooms.map(r=><rect key={r.id} x={r.x} y={r.y} width={r.w} height={r.h} fill="none" stroke="#63849a" strokeWidth="5"/>)}{w.project.devices.map(d=>{const pt=view==='floor'?d:topologyPosition(d);return <circle key={d.id} cx={pt.x} cy={pt.y} r="12" fill={wb.selected?.id===d.id?'#fff':'#4edcba'}/>;})}<rect x={center.x-viewWidth/2} y={center.y-viewHeight/2} width={viewWidth} height={viewHeight} fill="#45cbb31a" stroke="#fff" strokeWidth="6"/></svg>}
    {wb.activity==='troubleshoot'&&networkTraces.length>0&&<div className="fault-trace-readout" role="status">{networkTraces.map(([key,trace])=><span key={key}>Network trace: {trace.ok?'Reachable':trace.reason} · {trace.links.length} traversed links. Red overlays show failing physical links.</span>)}</div>}
    <div className="canvas-tool-readout" aria-live="polite"><strong>{label(w.placing?'place':w.mode)} mode</strong><span>{w.placing?'Choose a position on the plan':w.mode==='cable'?'Choose two compatible endpoints':w.mode==='select'?'Select equipment or a wall to edit':'Follow the hint for this tool'}</span></div>

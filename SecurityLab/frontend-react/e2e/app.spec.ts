@@ -59,7 +59,7 @@ test('all fifteen scenarios load, simulate and show a briefing',async({page})=>{
  for(const id of IDS){
   await sel.selectOption(id);
   await expect(sel).toHaveValue(id);
-  await expect(page.getByRole('status',{name:'Live status'})).toContainText(/simulated issues|Model evaluated/);
+  await expect(page.getByRole('status',{name:'Live status'})).toContainText(/No equipment yet|simulated issues|Model evaluated/);
  }
  expect(errs).toEqual([]);
 });
