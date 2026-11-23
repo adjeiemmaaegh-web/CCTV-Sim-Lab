@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {sha256} from '../src/persistence/sha256.js';
-import {parseProjectText,serializeProject,MAX_BACKUPS} from '../src/persistence/file-projects.js';
+import {parseProjectText,serializeProject,suggestedFilename,MAX_BACKUPS} from '../src/persistence/file-projects.js';
 import {newProject,exampleProject,SCENARIOS} from '../src/scenarios/index.js';
 import {simulate} from '../src/engine/simulator.js';
 import {assess} from '../src/engine/assessment.js';
@@ -75,6 +75,16 @@ describe('project file safety',()=>{
   const cps=Array.from({length:MAX_BACKUPS+4},(_,i)=>({revision:i+1,at:new Date().toISOString(),project:p}));
   const opened=parseProjectText(serializeProject(p,100,cps));
   expect(opened.checkpoints.length).toBeLessThanOrEqual(MAX_BACKUPS);
+ });
+ it('avoids Windows reserved device names even with extensions or spaces',()=>{
+  for(const title of ['CON','CON.txt','con .report','PRN.txt','AUX','NUL','COM1.notes','lpt9.hidden']){
+   const p=base();p.title=title;
+   expect(suggestedFilename(p),title).toBe('SecurityLab.securitylab.json');
+  }
+  for(const title of ['Conveyor','COM10.backup','Company.notes']){
+   const p=base();p.title=title;
+   expect(suggestedFilename(p),title).toBe(`${title}.securitylab.json`);
+  }
  });
  it('rejects invalid revision',()=>{
   expect(()=>serializeProject(base(),0)).toThrow();
