@@ -1,33 +1,31 @@
-> **Current (16 November 2026):** SecurityLab is a browser-based, free, offline-first
-> **educational security-system simulator**, publicly hosted as a static preview at
-> https://securitylab-theta.vercel.app/. Its active React workstation is in
-> `frontend-react/` and pure simulation/domain modules are in `../src/`. Learner
-> projects use local JSON files; there are no accounts, online project database,
-> real equipment integrations or telemetry.
+> **Current (23 November 2026):** SecurityLab is a free, offline-first,
+> browser-based **educational electronic-security simulator**. The React/TypeScript
+> workstation lives in `frontend-react/`, with the active simulation/domain code
+> in `../src/`. Learner projects are local JSON files; there is no account,
+> cloud project database, production device control or telemetry.
 >
-> **Current workstation:** Canvas-first Stage 18 UI, virtual wiring/task-flow/
-> troubleshooting improvements, and the first-page onboarding/adjustable panels
-> merged to `main` in PR #7 (`af883b33bf00b5bfa0d81a9b0bb19e35a4600acb`).
-> Use **Focus canvas / Restore workstation panels** to adjust drawing space.
-> See `../SECURITYLAB_ROADMAP_STATUS.md` for stages and accepted-source scope.
+> **Current integrated workstation:** The merged task-based workspace enhancements
+> (PR #21), unified accessible design/mobile controls (PR #19), and the earlier
+> reliability/file-conflict and service-worker consent safeguards are on `main`.
+> See `../SECURITYLAB_ROADMAP_STATUS.md` and
+> `../docs/ACCEPTANCE_EXECUTION_2026-11-16.md` for engineering evidence.
 >
-> **Draft reliability increment (PR #8, not merged):** untrusted import validation
-> no longer mutates the live profile/scenario catalogue before accepted adoption;
-> cooperating tabs serialize native file writes with origin-scoped Web Locks.
-> A second browser profile, separate origin, desktop editor or OS process is
-> **not** protected by that browser lock. Only one editor should modify any
-> physical project file at a time; when in doubt export a separate backup before
-> reopening or saving. See `../docs/RELIABILITY_HARDENING_2026-11-16.md`.
+> **File safeguards:** A successful native project save requires a writable handle,
+> exclusive cooperating-browser lock, file comparison and readback. The download
+> fallback is **not** a verified disk save. Web Locks do not protect different
+> browser profiles, OS editors or non-cooperating processes; keep one physical
+> file writer at a time, and export a separate backup on conflicts.
 >
-> **Release remains NO-GO for professional use.** Follow
-> `../docs/MANUAL_ACCEPTANCE.md` for Windows native save/recovery, installed/offline
-> PWA restart, browsers, phones, screen readers, low-memory performance and
-> qualified technician-review gates. French localization review and a source-
-> licensing decision are deferred from the current V1 completion target. A hosted preview or green CI is
-> **not** evidence of real-world installation approval or professional competency.
+> **Release remains NO-GO for professional/certified installation use.** Genuine
+> Windows 11 picker and disk tests, installed PWA offline cold relaunch/update,
+> physical browser/touch/8-GB performance and assistive technology checks,
+> qualified security-installer review and owner release authorization remain open.
+> French review and source-licensing decisions are deferred from active V1 gates.
+> Follow `../docs/MANUAL_ACCEPTANCE.md` and issue #12. Green CI and preview
+> hosting alone do **not** close those gates.
 >
-> The original Stage 15 source notes below are retained for provenance, not
-> as the up-to-date verification status.
+> The original Stage 15 source notes below are historical; do not interpret
+> their former dependency/build limitations as the current status.
 
 # SecurityLab — active integrated source
 
