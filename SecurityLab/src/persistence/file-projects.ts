@@ -75,7 +75,9 @@ export function serializeProject(projectInput:Project,revision:number,checkpoint
 }
 export function suggestedFilename(project:Project):string{
  const cleaned=(project.title||'SecurityLab').replace(/[^\p{L}\p{N}._ -]/gu,'').trim().replace(/^[. ]+|[. ]+$/g,'').slice(0,64);
- const title=!cleaned||/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/i.test(cleaned)?'SecurityLab':cleaned;
+ // Windows reserves these device stems even when followed by an extension (e.g. CON.txt).
+ const reserved=/^(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])\s*(?:\.|$)/i.test(cleaned);
+ const title=!cleaned||reserved?'SecurityLab':cleaned;
  return `${title}.securitylab.json`;
 }
 export function downloadText(text:string,filename:string,mime='application/json;charset=utf-8'){

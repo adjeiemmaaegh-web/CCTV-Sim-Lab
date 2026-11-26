@@ -2,6 +2,8 @@ name: Cross-browser acceptance (Firefox and WebKit)
 # Supplemental automated checks only: Linux WebKit is not a physical iPad/Safari
 # acceptance test, and downloads cannot substitute for Windows native file pickers.
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
